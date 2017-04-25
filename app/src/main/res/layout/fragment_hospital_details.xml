@@ -1,0 +1,491 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/titulo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Buscador de empresas Sector Sanitario"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textColor="@color/gris_title_ht"
+            android:layout_marginTop="18dp"
+            android:layout_marginLeft="16.7dp"
+            android:layout_marginStart="16.7dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@drawable/fondo_blanco"
+            android:layout_marginLeft="8.7dp"
+            android:layout_marginRight="8.7dp"
+            android:layout_marginTop="12dp"
+            android:padding="8.5dp">
+
+            <TextView
+                android:id="@+id/buscador"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Buscar empresa"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:layout_marginTop="5dp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="10dp">
+
+                <AutoCompleteTextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:id="@+id/campoBuscador"
+                    android:layout_marginRight="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:background="@color/gris_et_bg_ht"
+                    android:padding="8dp" />
+
+                <Button
+                    android:id="@+id/B_Buscar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="clip_horizontal"
+                    android:background="@drawable/boton_degradado"
+                    android:drawableTop="@drawable/search"
+                    android:paddingBottom="4.3dp"
+                    android:paddingLeft="18.3dp"
+                    android:paddingRight="18.3dp"
+                    android:paddingTop="10dp" />
+
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/textBuscadorIncluir"
+                android:hint="Si el servicio que estás buscando no aparece en esta lista de los servicios ofrecidos para la empresa,
+                puede proponer que se añada mediante 5 simples datos."
+                android:layout_marginTop="13dp"
+                android:textSize="12sp" />
+
+            <Button
+                android:id="@+id/busqueda_boton_mas"
+                android:layout_width="wrap_content"
+                android:layout_height="35dp"
+                android:layout_marginTop="16dp"
+                android:layout_gravity="center_horizontal"
+                android:gravity="center"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
+                android:background="@drawable/boton_azul_opinion"
+                android:textColor="#fff"
+                android:textSize="14sp"
+                android:text="AÑADIR SERVICIOS"
+                fontPath="OpenSans-Bold.ttf" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.6dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="16dp"
+                android:background="@color/grisDeLinea" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <com.facebook.drawee.view.SimpleDraweeView xmlns:fresco="http://schemas.android.com/apk/res-auto"
+                    android:id="@+id/img"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginRight="16dp"
+                    android:background="@drawable/marco_image_view"
+                    android:src="@drawable/logocompany"
+                    fresco:fadeDuration="300"
+                    fresco:placeholderImage="@drawable/cargando"
+                    fresco:failureImage="@drawable/logocompany"
+                    fresco:retryImage="@drawable/logocompany"
+                    fresco:roundAsCircle="true" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/tvCompanyName"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="14sp"
+                        fontPath="OpenSans-Bold.ttf" />
+
+                    <TextView
+                        android:id="@+id/tvCompanyCity"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="18sp"
+                        fontPath="OpenSans-Bold.ttf" />
+
+                    <TextView
+                        android:id="@+id/tvActivityName"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+
+                    <LinearLayout
+                        android:id="@+id/lyAvg"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginBottom="5dp" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:layout_marginTop="10dp"
+                android:background="@color/grisDeLinea" />
+
+            <ToggleButton
+                android:id="@+id/btnVerMapa"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:textColor="@color/colorPrimaryDark"
+                android:background="@android:color/transparent"
+                android:textAllCaps="false"
+                android:textOff="@string/ver_mapa"
+                android:textOn="@string/ocultar_mapa"
+                android:textSize="14sp"
+                android:text="Ver mapa" />
+
+            <LinearLayout
+                android:id="@+id/lyMapa"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <FrameLayout
+                    android:id="@+id/mapFragment"
+                    android:layout_width="match_parent"
+                    android:layout_height="250dp" />
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:layout_marginTop="10dp"
+                android:background="@color/grisDeLinea" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.3"
+                    android:layout_gravity="center_vertical"
+                    android:text="Excelente"
+                    android:layout_marginRight="24dp" />
+
+                <ProgressBar
+                    android:id="@+id/progressExcelente"
+                    android:layout_width="0dp"
+                    android:layout_height="12dp"
+                    android:layout_weight="0.7"
+                    android:layout_gravity="center_vertical"
+                    android:max="100"
+                    android:progressDrawable="@drawable/progressbar_hospital"
+                    style="?android:attr/progressBarStyleHorizontal" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginBottom="8dp">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.3"
+                    android:layout_gravity="center_vertical"
+                    android:text="Muy Bueno"
+                    android:layout_marginRight="24dp" />
+
+                <ProgressBar
+                    android:id="@+id/progressMuyBueno"
+                    android:layout_width="0dp"
+                    android:layout_height="12dp"
+                    android:layout_weight="0.7"
+                    android:layout_gravity="center_vertical"
+                    android:max="100"
+                    android:progressDrawable="@drawable/progressbar_hospital"
+                    style="?android:attr/progressBarStyleHorizontal" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginBottom="8dp">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.3"
+                    android:layout_gravity="center_vertical"
+                    android:text="Normal"
+                    android:layout_marginRight="24dp" />
+
+                <ProgressBar
+                    android:id="@+id/progressNormal"
+                    android:layout_width="0dp"
+                    android:layout_height="12dp"
+                    android:layout_weight="0.7"
+                    android:layout_gravity="center_vertical"
+                    android:max="100"
+                    android:progressDrawable="@drawable/progressbar_hospital"
+                    style="?android:attr/progressBarStyleHorizontal" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginBottom="8dp">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.3"
+                    android:layout_gravity="center_vertical"
+                    android:text="Malo"
+                    android:layout_marginRight="24dp" />
+
+                <ProgressBar
+                    android:id="@+id/progressMalo"
+                    android:layout_width="0dp"
+                    android:layout_height="12dp"
+                    android:layout_weight="0.7"
+                    android:layout_gravity="center_vertical"
+                    android:max="100"
+                    android:progressDrawable="@drawable/progressbar_hospital"
+                    style="?android:attr/progressBarStyleHorizontal" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.3"
+                    android:layout_gravity="center_vertical"
+                    android:text="Muy Malo"
+                    android:layout_marginRight="24dp" />
+
+                <ProgressBar
+                    android:id="@+id/progressMuyMalo"
+                    android:layout_width="0dp"
+                    android:layout_height="12dp"
+                    android:layout_weight="0.7"
+                    android:layout_gravity="center_vertical"
+                    android:max="100"
+                    android:progressDrawable="@drawable/progressbar_hospital"
+                    style="?android:attr/progressBarStyleHorizontal" />
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.6dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="16dp"
+                android:background="@color/grisDeLinea" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:id="@+id/ivNotes"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="8dp"
+                    android:src="@drawable/ic_notes" />
+
+                <TextView
+                    android:id="@+id/tvServicios"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_toRightOf="@+id/ivNotes"
+                    android:textColor="?attr/colorPrimary"
+                    android:textSize="14sp"
+                    android:text="Servicios" />
+
+                <ImageView
+                    android:id="@+id/arrowServicios"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_alignParentRight="true"
+                    android:src="@drawable/down_arrow_4" />
+
+            </RelativeLayout>
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/listServices"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <LinearLayout
+                android:id="@+id/lyServicios"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginTop="8dp"
+                android:visibility="gone" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.6dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="16dp"
+                android:background="@color/grisDeLinea" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:id="@+id/ivOpinions"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="8dp"
+                    android:src="@drawable/ic_opinions" />
+
+                <TextView
+                    android:id="@+id/tvOpiniones"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_toRightOf="@+id/ivOpinions"
+                    android:textColor="?attr/colorPrimary"
+                    android:textSize="14sp"
+                    android:text="Opiniones" />
+
+                <ImageView
+                    android:id="@+id/arrowOpiniones"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_alignParentRight="true"
+                    android:src="@drawable/down_arrow_4" />
+
+            </RelativeLayout>
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/listReviews"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <LinearLayout
+                android:id="@+id/lyOpiniones"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.6dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="16dp"
+                android:background="@color/grisDeLinea" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:id="@+id/ivFotos"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="8dp"
+                    android:src="@drawable/ic_notes" />
+
+                <TextView
+                    android:id="@+id/tvFotos"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_toRightOf="@+id/ivFotos"
+                    android:textColor="?attr/colorPrimary"
+                    android:textSize="14sp"
+                    android:text="Fotos" />
+
+                <ImageView
+                    android:id="@+id/arrowFotos"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_alignParentRight="true"
+                    android:src="@drawable/down_arrow_4" />
+
+            </RelativeLayout>
+
+            <LinearLayout
+                android:id="@+id/lyFotos"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <!--
+                <com.daimajia.slider.library.SliderLayout xmlns:custom="http://schemas.android.com/apk/res-auto"
+                    android:id="@+id/slider"
+                    android:layout_width="match_parent"
+                    android:layout_height="210dp"
+                    custom:auto_cycle="false"
+                    custom:indicator_visibility="visible" />
+                    -->
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</ScrollView>

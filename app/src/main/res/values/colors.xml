@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#0091d2</color>
+    <color name="colorPrimaryDark">#00c0e2</color>
+    <color name="colorAccent">#2295a1</color>
+    <color name="colorPrimaryText">#8790a3</color>
+    <color name="colorBackground">#dce5e7</color> <!-- color de fondo de toda la app -->
+    <color name="ColorDeBackGround">#dce5e7</color> <!-- color de fondo de toda la app -->
+    <color name="divisor">#e2e2e2</color>
+    <color name="facebook">#3b5998</color>
+    <color name="google">#d34836</color>
+    <color name="azulfooter">#0091d2</color>
+    <color name="fondoPedazos">#f5f5f5</color>
+    <color name="blanco">#ffff</color>
+    <color name="grey200">#f5f5f5</color>
+    <color name="negro">#000</color>
+    <color name="grisDeLinea">#e1e1e1</color>
+    <color name="azulVerdoso">#58949f</color>
+    <color name="rojoGoogle">#b7493a</color>
+    <color name="azulFacebook">#475995</color>
+    <color name="colorAzul">#2295a1</color>
+    <color name="verdeBrillante">#28c93c</color>
+    <color name="RojoNo">#f02807</color>
+    <color name="grisOscuro">#8d8d91</color>
+    <color name="azul">#337ab7</color>
+    <color name="naranja">#f1974b</color>
+    <color name="colorButton">#4e8acb</color>
+
+    <!-- Hospitalk -->
+    <color name="gris_title_ht">#8790a3</color>
+    <color name="gris_text_ht">#8491a5</color>
+    <color name="gris_bg_ht">#dce5e7</color>
+    <color name="gris_et_bg_ht">#f5f7f7</color>
+    <color name="azul_tittle_ht">#4a90e2</color>
+    <color name="turquesa_ht">#00c0e2</color>
+
+</resources>

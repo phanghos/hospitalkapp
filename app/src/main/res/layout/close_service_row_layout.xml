@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <View
+        android:id="@+id/line"
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:background="@color/grisDeLinea" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/line">
+
+        <TextView
+            android:id="@+id/tvNombreServicio"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:gravity="center_horizontal"
+            android:textSize="14sp"
+            android:textColor="@color/colorPrimaryText"
+            fontPath="OpenSans-Bold.ttf" />
+
+        <TextView
+            android:id="@+id/tvNombreHospital"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tvNombreServicio"
+            android:layout_centerHorizontal="true"
+            android:gravity="center_horizontal"
+            android:textSize="14sp"
+            android:textColor="@color/colorPrimaryText" />
+
+        <Button
+            android:id="@+id/btnVer"
+            android:layout_width="wrap_content"
+            android:layout_height="35dp"
+            android:layout_below="@+id/tvNombreHospital"
+            android:layout_marginTop="16dp"
+            android:layout_centerHorizontal="true"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:background="@drawable/boton_azul_opinion"
+            android:textColor="#fff"
+            android:textSize="14sp"
+            android:text="VER"
+            fontPath="OpenSans-Bold.ttf" />
+
+        <TextView
+            android:id="@+id/tvOpiniones"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/btnVer"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="16dp" />
+
+    </RelativeLayout>
+
+</RelativeLayout>

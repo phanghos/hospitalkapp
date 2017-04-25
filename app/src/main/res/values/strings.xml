@@ -1,0 +1,269 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="buscar">Buscar</string>
+    <string name="buscando">Buscando…</string>
+    <string name="consultando">Consultando…</string>
+    <string name ="buscador_hospitales"><b>Buscar empresa</b></string>
+    <string name="resultado_hospitales">RESULTADOS DE BUSQUEDA</string>
+    <string name="empresanoaparece1">Si no aparece en la lista, rellena este </string>
+    <string name="empresanoaparece2"> y en breve será dada de alta en nuestra base de datos</string>
+    <string name="formulario">Formulario</string>
+    <string name="app_name">Hospitalk</string>
+    <string name="crear_servicio">Crear Servicio</string>
+    <string name="crear">\t(Crear)</string>
+    <string name="action_settings">Settings</string>
+    <string name="facebook">Acceder con Facebook</string>
+    <string name="google">Acceder con Google+</string>
+    <string name="informacion_basica">INFORMACIÓN BÁSICA</string>
+    <string name="nombre">Nombre(s)*</string>
+    <string name="actividad">Actividad*</string>
+    <string name="solicitar_servicio">Solicitar nuevo servicio*</string>
+    <string name="asteristico">*</string>
+    <string name="puntuacion">Tu puntuación general del servicio*</string>
+    <string name="tu_opinion">Tu opinión sobre el servicio recibido</string>
+    <string name="compartir_opinion">Al compartir tus experiencias, estás ayudando a otros usuarios a tomar decisiones informadas y a contribuir a mejorar la eficiencia del sector. ¡Muchas Gracias!</string>
+    <string name="puntuar">Click para puntuar</string>
+    <string name="titulo">Título*</string>
+    <string name="capacidad">0/1000</string>
+    <string name="vista_previa">Vista previa de tu opinión</string>
+    <string name="debe_estar_logueado">Debe estar logueado</string>
+    <string name="certifico">Certifico que esta opinión está basada en mi propia experiencia
+                        que refleja mi opinión sincera sobre este establecimiento, que no tengo ninguna
+                        relación, ya sea personal o empresarial con el mismo y no me ha ofrecido incentivo
+                        o pago alguno por escribirla. Del mismo modo, entiendo la politica de tolerancia
+                        cero con las opiniones falsas.</string>
+    <string name="mas_informacion"><u>Obtener más información.</u></string>
+    <string name="enviar_opinion">Enviar Opinión</string>
+    <string name="parentesis_abierto">(</string>
+    <string name="parentesis_cerrado">)</string>
+    <string name="campo_obligatorio_form">*Campos obligatorios</string>
+    <string name="campos_con_asteriscos">Los campos que contienen asterisco son obligatorios</string>
+    <string name ="serivicios"><b>Servicios</b></string>
+    <string name="servicionoaparece">Si el servicio que esta buscando no aparece en esta lista, puede proponer</string>
+    <string name="queseincluyan"> que se incluya en nuestra base de datos</string>
+    <string name="ciudad">Ciudad*</string>
+    <string name="informacion_registro">INFORMACIÓN DE REGISTRO</string>
+    <string name="correo_1">Correo Electrónico*</string>
+    <string name="passw">Contraseña*</string>
+    <string name="passwConfirmar">Confirmar Contraseña*</string>
+    <string name="imagen">IMAGEN</string>
+    <string name="subirImagen">Subir Imagen \u0020</string>
+    <string name="asterisco">*Campos obligatorios</string>
+    <string name="crearCuenta">Crear Cuenta</string>
+    <string name="ubucacion">UBICACIÓN</string>
+    <string name="cuerpoUbicacionDialog">ScoutService desea conocer tu ubicación para ofrecerte toda la información de tu alrededor. <b>¿Permitir?</b></string>
+    <string name="opiniones">Opiniones</string>
+    <string name="opinionSubjetiva">Esta es una opinión subjetiva de un miembro de ScoutService</string>
+    <string name="calificacion_visitante">CALIFICACIÓN DE LOS VISITANTES</string>
+    <string name="buscar_empresa">Buscar Empresa</string>
+    <string name="texto_buscar">Si el servicio que esta buscando no aparece en esta lista de los servicios ofrecidos para la empresa, puede proponer que se añada mediante 5 simples datos. </string>
+    <string name="texto_calificacion">CALIFICACIÓN DE LOS VISITANTES</string>
+    <string name="hace">Hace</string>
+    <string name="crearServicio">Crear Servicio</string>
+    <string name="error_loguin">Usuario y/o clave incorrecto</string>
+    <string name="error_loguin_facebook">Hubo un error al hacer loguin con facebook, intente de nuevo</string>
+    <string name="dias">días</string>
+    <string name="resolver_como">Necesita resolver una duda como…*</string>
+    <string name="ayudarlo">¿Como podemos ayudarte?</string>
+    <string name="empresa">Empresa</string>
+    <string name="usuario">Usuario</string>
+
+    <!-- para el dialog de la denuncia-->
+    <string name="lenguage_inapropiado">Lenguaje/Contenido inapropiado</string>
+    <string name="opinion_negocio">Esta persona ya escribió una opinión sobre este negocio</string>
+    <string name="opinion_original">No es una opinión original</string>
+    <string name="experiencia_usuario">No es una experiencia propia del usuario</string>
+    <string name="tema_irrelevante">Fuera de tema o irrelevante</string>
+    <string name="contenido_promocional">Contenido promocional o comercial</string>
+    <string name="opinion_coherente">La opinión no es coherente con la calificación</string>
+
+    <string name="miembro_personal">Opinión escrita por el propietario o un miembro del personal</string>
+    <string name="escrita_competidor">Opinión escrita por un competidor</string>
+    <string name="cambio_opinion">El establecimiento ofrece incentivos a cambio de opiniones</string>
+    <string name="ninguno_anterior">Otro/Ninguno de los anteriores</string>
+
+    <!-- Miselaneos -->
+
+
+
+
+    <string name="ubicaciondefault">Será usado una ubicación por defecto</string>
+    <string name="experiencia">Tu experiencia es muy valiosa para otros usuarios</string>
+    <string name="util">¿Ha sido útil esta opinión?</string>
+    <string name="problemaopinion">¿ALGÚN PROBLEMA CON ESTA OPINIÓN?</string>
+    <string name="opinionespecificaciones">La opinión no cumple con las especificaciones</string>
+    <string name="opinionsospechosa">La opinión es sospechosa</string>
+    <string name="viola">¿De qué manera esta opinión viola nuestras especificaciones?</string>
+    <string name="sospechosa">¿Por qué esta opinión es sospechosa?</string>
+    <string name="informacionespecifica">La información específica (p. ej., sitios web, direcciones de correo electrónico, nombres del personal) ayudará para nuestra investigación.</string>
+    <string name="descripcion">Descripcion</string>
+    <string name="mi_perfil"><b>MI PERFIL</b></string>
+    <string name="debe_estar_logueado_denunciar"><b>Debe estar logueado para poder reportar este comentario</b></string>
+    <string name="paso_1_opinar_sobre">1. Escoge un sector o actividad sobre la que desees opinar.</string>
+    <string name="paso_2_opinar_sobre">2. Introduce o selecciona la empresa que deseas valorar y el servicio de dicha empresa sobre el que registrar tu opinión. Utiliza este link si solo deseas recomendarnos una empresa sin realizar una valoración.</string>
+    <string name="paso_3_opinar_sobre">3. Selecciona el país, estado/comunidad y ciudad en la que se encuentra la empresa/servicio a valorar.</string>
+    <string name="nombre_de_empresa_buscar">Nombre de la empresa*</string>
+    <string name="solicitar_nuevo_servicio">Solicitar nuevo servicio</string>
+    <string name="compartir_pagina_scout">Encuentra la mejor opción gracias a las experiencias de otros usuarios</string>
+    <string name="formulario_contacto">Formulario de contacto</string>
+    <string name="email_contacto">Email contacto</string>
+    <string name="empresa_opcional">Empresa (Opcional)</string>
+
+
+    <!-- botones -->
+    <string name="ver_opiniones">Ver Opiniones</string>
+    <string name="ver_mas">Ver más</string>
+    <string name="ver_mapa"><u>Ver Mapa</u></string>
+    <string name="ver_resultados">Ver Resultados</string>
+    <string name="ver_filtro">Buscar…</string>
+    <string name="ocultar_mapa"><u>Ocultar Mapa</u></string>
+    <string name="buscar_hospitales">Buscar Hospitales</string>
+    <string name="buscador_hint">Buscador de servicios Sector\nSanitario</string>
+    <string name="opinar_sobre">Opinar Sobre…</string>
+    <string name="buscar_servicios">Buscar Servicios</string>
+    <string name="buscador_hint_hospitales"><b>BUSCADOR DE EMPRESAS</b> \n<b>SECTOR SANITARIO</b></string>
+    <string name="buscar_hospital_cerca_de_mi">Buscar hospital cerca de mi</string>
+    <string name="ver_cerca_de_mi">Ver cerca de mí</string>
+    <string name="iniciarSesion"><b>Iniciar sesión</b></string>
+    <string name="cerrarSesion"><b>Cerrar sesión</b></string>
+    <string name="cerrandoSesion"><b>Cerrando sesión</b></string>
+    <string name="registrarme"><b>Registrarse</b></string>
+    <string name="checkBuscarCerca">Buscar Servicio cerca de mí</string>
+    <string name="filtrar">Filtrar por </string>
+    <string name="limpiarfiltros"><u>Limpiar filtros</u> </string>
+    <string name="scoutservices">SCOUTSERVICES©</string>
+    <string name="contacto"><b>Contacto</b></string>
+    <string name="termino"><b>Términos y condiciones generales</b></string>
+    <string name="privacidad"><b>Política de privacidad</b></string>
+    <string name="proteccion"><b>Política de protección de datos</b></string>
+    <string name="punto">•</string>
+    <string name="si">Si</string>
+    <string name="no">No</string>
+    <string name="aceptar">Aceptar</string>
+    <string name="seguroCerrarSesion">¿Seguro desea cerrar sesión y salir de la aplicacion?</string>
+    <string name="cargarmasopiniones">Cargar más opiniones</string>
+    <string name="cargarmashospitales">Cargar más hospitales</string>
+    <string name="VerDetalle">Ver detalle</string>
+    <string name="cerca_de_mi">Cerca de mi</string>
+    <string name="ver_todo">Ver Todo</string>
+    <string name="compartir">Compartir</string>
+    <string name="enviar">Enviar</string>
+    <string name="actualizarInformacion">Actualizar Perfil</string>
+    <string name="ultimas">OPINIONES REALIZADAS</string>
+    <string name="ultimas_sobre_hospitales"><b>ÚLTIMAS OPINIONES REALIZADAS SOBRE HOSPITALES</b></string>
+    <string name="opiniones_recientes"><b>OPINIONES MÁS RECIENTES</b></string>
+    <string name="escribe_opinion"><b>Escribe tu opinión</b></string>
+    <string name="ver_perfil">Ver Perfil</string>
+    <string name="cancelar">Cancelar</string>
+    <string name="recuperar_contasenna_titulo"><b>Recuperar contaseña</b></string>
+    <string name="recuperar_contasenna"><b>Escriba el correo para recuperar la contaseña</b></string>
+    <string name="recuperando_clave">Recuperando contraseña…</string>
+    <string name="recuperando_clave_correo">Los pasos para recuperar su contraseña se a enviado a su correo electrónico</string>
+    <string name="servicio_creado">Servicio creado, esperando por su aprobación</string>
+    <string name="code_no_state">States could not be found</string>
+
+
+    <!-- hints -->
+    <string name="hintCorreo">usuario@nombre.com</string>
+    <string name="error_emailnotvalid">Error en email, favor seguir el formato indicado</string>
+    <string name="respuestaEmpresa">Respuesta de la empresa</string>
+    <string name="votosutiles">Votos útiles</string>
+    <string name="serviciosdestacadodelaempresa">SERVICIOS DESTACADOS DE LA EMPRESA</string>
+    <string name="sector_empresas">SECTOR</string>
+    <string name="ingrese">Ingrese un dato</string>
+    <string name="excelente">Excelente</string>
+    <string name="muy_bueno">Muy Bueno</string>
+    <string name="normal">Normal</string>
+    <string name="malo">Malo</string>
+    <string name="muy_malo">Muy Malo</string>
+    <string name="anadirServicio"><b>Añadir Servicios</b></string>
+    <string name="servicios">\tServicios</string>
+    <string name="opiniones1">\tOpiniones</string>
+    <string name="videos">\tVideos</string>
+    <string name="fotos">\tFotos </string>
+    <string name="promociones">\tPromociones</string>
+    <string name="hintBuscar">Nombre de la empresa*</string>
+    <string name="n_opiniones">N° opiniones</string>
+    <string name="ascendente">Ascendente</string>
+    <string name="descendente">Descendente</string>
+    <string name="valoracion">Valoracion</string>
+    <string name="peor_valorado">Peores valoradas (de 1 a 5)</string>
+    <string name="mejor_valorado">Mejores valorados (de 6 a 10)</string>
+
+    <!-- Mensajes de Error de volley -->
+    <string name="generic_server_down">Hubo un error inesperado con el servidor</string>
+    <string name="no_internet">Al parecer… no se encuentra conectado a internet</string>
+    <string name="generic_error">Hubo un error inesperado</string>
+
+    <!-- IDS -->
+    <!-- <string name="facebook_app_id">226079300911671</string> -->
+    <string name="facebook_app_id">800761173410559</string>
+    <string name="fb_login_protocol_scheme">fb800761173410559</string>
+
+    <string name="googleMapsKey">AIzaSyDvm9XPjHCJTVIr7UHUYF2wuGcUlOBBajg</string>
+    <!--<string name="googleMapsKey">AIzaSyDwsbJNEaQM0f-28MhoOqk-S0QQLU-ORxs</string>-->
+
+    <!--Mensajes validaciones -->
+    <string name="campo_obligatorio">Este campo no puede estar vacio</string>
+    <string name="campo_alpha">Debe Introducir solo letras</string>
+    <string name="campo_telefono">Solo debe incluir codigo de área y números</string>
+    <string name="campo_fecha">Debe ser formato DD-MM-AAAA</string>
+    <string name="campo_correo">Debe ser en formato usuario@dominio.algo</string>
+    <string name="campo_passw">La contraseña solo puede contener letras y numeros</string>
+    <string name="correo_vacio">El correo no puede estar vacio</string>
+
+    <!--Hospitalk -->
+
+    <!--Splash -->
+    <string name="sp_1"><b>Encuentra la\u0020</b></string>
+    <string name="sp_2"><b>mejor opción</b></string>
+    <string name="sp_3"><b>gracias a otras experiencias.</b></string>
+    <string name="sp_4"><b>CARGANDO</b></string>
+    <string name="logo_hospitalk">Logo_Hospitalk</string>
+    <!--Iniciar Sesion -->
+    <string name="correo">Correo electrónico</string>
+    <string name="contrasenna">Contraseña</string>
+    <string name="contrasena">••••••••••</string>
+    <string name="olvidar"><u>¿Has olvidado la contraseña?</u></string>
+    <string name="InicioSesion">Iniciar sesión</string>
+    <string name="accederFacebook">Acceder con Facebook</string>
+    <string name="registrarme2">Registrarme</string>
+    <string name="accederGoogle">Acceder con Google+</string>
+
+    <!--Registro Usuario-->
+    <string name="registro_usuario">Registro Usuario</string>
+    <string name="informaci_n">Información</string>
+    <string name="RU_basica">Básica</string>
+    <string name="RU_nombre">Nombre*</string>
+    <string name="ingreseDato">Introduce campo</string>
+    <string name="RU_primer_apellido">Primer Apellido*</string>
+    <string name="segundoApellido">Segundo Apellido</string>
+    <string name="telefono">Teléfono*</string>
+    <string name="telef">+34 123 456 789</string>
+    <string name="fechaNacimiento">Fecha de Nacimiento*</string>
+    <string name="fecha">DD-MM-AAAA</string>
+    <string name="pais">País*</string>
+    <string name="estado">Estado/Provincia*</string>
+    <string name="comunidad">Estado/Comunidad*</string>
+    <string name="RUinformaci_n">Información</string>
+    <string name="RUde_registro">de registro</string>
+    <string name="RUde_perfil">De Perfil</string>
+    <!--Menu-->
+    <string name="inicio">Inicio</string>
+    <string name="registrarse">Registrarse</string>
+    <string name="salir">Salir</string>
+    <!--Crear Servicio-->
+    <string name="CS_st1">1. Escoge un sector o actividad sobre la que desees opinar.</string>
+    <string name="CS_abrir_listado">Abrir listado</string>
+
+    <string name="footer_contacto">Contacto</string>
+    <string name="footer_terminos">Términos y condiciones generales</string>
+    <string name="footer_privacidad">Política de privacidad</string>
+    <string name="footer_datos">Política de protección de datos</string>
+    <string name="footer">Hospitalk© 2016 | Contacto | Términos y condiciones generales\n
+    Política de privacidad | Política de protección de datos</string>
+
+
+</resources>
+
+

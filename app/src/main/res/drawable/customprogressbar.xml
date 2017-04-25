@@ -1,0 +1,36 @@
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+
+    <!-- Color de fondo azul -->
+    <item android:id="@android:id/background">
+        <shape>
+
+
+            <gradient
+                android:angle="270"
+                android:centerColor="@color/gris_et_bg_ht"
+                android:centerY="0.75"
+                android:endColor="@color/gris_et_bg_ht"
+                android:startColor="@color/gris_et_bg_ht" />
+
+        </shape>
+    </item>
+
+    <!-- Color de la barra amarillo -->
+    <item android:id="@android:id/progress">
+        <clip>
+            <shape>
+                <!-- radius of secundary progress -->
+
+                <gradient
+                    android:angle="270"
+                    android:centerColor="@color/azul_tittle_ht"
+                    android:centerY="0.75"
+                    android:endColor="@color/azul_tittle_ht"
+                    android:startColor="@color/azul_tittle_ht" />
+            </shape>
+        </clip>
+    </item>
+
+
+</layer-list>
