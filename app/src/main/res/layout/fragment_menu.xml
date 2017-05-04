@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="36dp"
+    android:background="@color/gris_bg_ht">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_gravity="center_horizontal"
+        android:gravity="center_horizontal"
+        android:background="@drawable/fondo_blanco">
+
+        <Button
+            android:id="@+id/btnHome"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/height_menu_superior"
+            android:background="@android:color/transparent"
+            android:textAllCaps="false"
+            android:textColor="@color/gris_title_ht"
+            android:textSize="@dimen/text_size_header"
+            android:text="@string/inicio" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:background="@color/grisDeLinea" />
+
+        <Button
+            android:id="@+id/btnLogin"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/height_menu_superior"
+            android:textAllCaps="false"
+            android:background="@android:color/transparent"
+            android:textColor="@color/gris_title_ht"
+            android:textSize="@dimen/text_size_header"
+            android:text="@string/InicioSesion" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:background="@color/grisDeLinea" />
+
+        <Button
+            android:id="@+id/btnSignUp"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/height_menu_superior"
+            android:textAllCaps="false"
+            android:background="@android:color/transparent"
+            android:textColor="@color/gris_title_ht"
+            android:textSize="@dimen/text_size_header"
+            android:text="@string/registrarse" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:background="@color/grisDeLinea" />
+
+        <Button
+            android:id="@+id/btnLogout"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/height_menu_superior"
+            android:background="@android:color/transparent"
+            android:textAllCaps="false"
+            android:textColor="@color/gris_title_ht"
+            android:textSize="@dimen/text_size_header"
+            android:text="@string/salir" />
+
+        <com.facebook.share.widget.ShareButton
+            android:id="@+id/btnShare"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/height_menu_superior"
+            android:paddingLeft="36dp"
+            android:paddingRight="36dp"
+            android:background="@drawable/boton_facebook"
+            android:contentDescription="@string/compartir"
+            android:textAllCaps="false"
+            android:textSize="@dimen/text_size_header" />
+
+    </LinearLayout>
+
+</LinearLayout>
+

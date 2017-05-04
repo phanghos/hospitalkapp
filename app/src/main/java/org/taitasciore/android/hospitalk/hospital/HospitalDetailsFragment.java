@@ -1,26 +1,40 @@
 package org.taitasciore.android.hospitalk.hospital;
 
 import android.app.ProgressDialog;
+import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AutoCompleteTextView;
+import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.ToggleButton;
 
+import com.dgreenhalgh.android.simpleitemdecoration.linear.DividerItemDecoration;
+
 import org.greenrobot.eventbus.EventBus;
-import org.taitasciore.android.event.AttachPresenterEvent;
-import org.taitasciore.android.event.SavePresenterEvent;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+import org.taitasciore.android.event.LoadMoreReviewsEvent;
+import org.taitasciore.android.event.LoadMoreServicesEvent;
 import org.taitasciore.android.hospitalk.ActivityUtils;
+import org.taitasciore.android.hospitalk.MapFragment;
 import org.taitasciore.android.hospitalk.R;
+import org.taitasciore.android.hospitalk.StorageUtils;
 import org.taitasciore.android.hospitalk.review.SmallReviewAdapter;
+import org.taitasciore.android.hospitalk.review.WriteReviewFragment;
 import org.taitasciore.android.hospitalk.service.ServiceAdapter;
 import org.taitasciore.android.model.Hospital;
 import org.taitasciore.android.model.Review;
@@ -30,6 +44,7 @@ import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 /**
  * Created by roberto on 19/04/17.
@@ -40,6 +55,8 @@ public class HospitalDetailsFragment extends Fragment implements HospitalDetails
     private int mOffsetServices;
     private int mOffsetReviews;
     private int mOffsetPhotos;
+    private double lat;
+    private double lon;
     private Hospital mHospital;
     private ArrayList<ServiceResponse.Service> mServices;
     private ArrayList<Review> mReviews;
@@ -53,6 +70,14 @@ public class HospitalDetailsFragment extends Fragment implements HospitalDetails
 
     @BindView(R.id.listServices) RecyclerView mRecyclerViewServices;
     @BindView(R.id.listReviews) RecyclerView mRecyclerViewReviews;
+
+    @BindView(R.id.mainContent) LinearLayout mMainContent;
+    @BindView(R.id.lyMap) LinearLayout mLyMap;
+
+    @BindView(R.id.tvSearch) AutoCompleteTextView mTvSearch;
+    @BindView(R.id.btnSearch) Button mBtnSearch;
+
+    @BindView(R.id.btnAddService) Button mBtnAddService;
 
     @BindView(R.id.tvCompanyName) TextView mTvName;
     @BindView(R.id.tvCompanyCity) TextView mTvCity;
@@ -81,62 +106,69 @@ public class HospitalDetailsFragment extends Fragment implements HospitalDetails
         return f;
     }
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setRetainInstance(true);
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_hospital_details, container, false);
         ButterKnife.bind(this, v);
         initViews();
-        if (savedInstanceState != null) {
-            if (savedInstanceState.containsKey("hospital")) {
-                mHospital = (Hospital) savedInstanceState.getSerializable("hospital");
-            }
-            if (savedInstanceState.containsKey("services")) {
-                mServices = (ArrayList<ServiceResponse.Service>)
-                        savedInstanceState.getSerializable("services");
-            }
-            if (savedInstanceState.containsKey("reviews")) {
-                mReviews = (ArrayList<Review>)
-                        savedInstanceState.getSerializable("reviews");
-            }
-            mOffsetServices = savedInstanceState.getInt("offset_services");
-            mOffsetReviews = savedInstanceState.getInt("offset_reviews");
-        }
         return v;
     }
 
     @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        if (mHospital != null) outState.putSerializable("hospital", mHospital);
-        if (mServices != null) outState.putSerializable("services", mServices);
-        if (mReviews != null) outState.putSerializable("reviews", mReviews);
-        outState.putInt("offset_services", mOffsetServices);
-        outState.putInt("offset_reviews", mOffsetReviews);
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (mPresenter == null) mPresenter = new HospitalDetailsPresenter(this);
+        else mPresenter.bindView(this);
+    }
+
+    @Override
+    public void onDetach() {
+        hideProgress();
+        super.onDetach();
+        if (mPresenter != null) mPresenter.unbindView();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void loadMoreServices(LoadMoreServicesEvent event) {
+        mPresenter.getHospitalServices(getArguments().getInt("id"), mOffsetServices);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void loadMoreReviews(LoadMoreReviewsEvent event) {
+        mPresenter.getHospitalServices(getArguments().getInt("id"), mOffsetReviews);
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        EventBus.getDefault().post(new AttachPresenterEvent(this));
 
         if (mHospital == null) {
             mPresenter.getHospitalDetails(getArguments().getInt("id"));
         } else {
             showHospitalDetails(mHospital);
+            showMainContent();
             if (mServices != null) setServices(mServices);
             if (mReviews != null) setReviews(mReviews);
         }
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        if (mPresenter != null) {
-            mPresenter.unbindView();
-            EventBus.getDefault().post(new SavePresenterEvent(mPresenter));
-        }
-        hideProgress();
     }
 
     @Override
@@ -166,29 +198,38 @@ public class HospitalDetailsFragment extends Fragment implements HospitalDetails
     }
 
     @Override
+    public void showMainContent() {
+        mMainContent.setVisibility(View.VISIBLE);
+    }
+
+    @Override
     public void showHospitalDetails(Hospital hospital) {
         mHospital = hospital;
-        mTvName.setText(hospital.getComapnyName());
-        mTvCity.setText(hospital.getCompanyCity());
-        mTvActivityName.setText(hospital.getActivityName());
+        lat = hospital.getLatitide();
+        lon = hospital.getLongitude();
+        mTvName.setText(hospital.getComapnyName()+"");
+        mTvCity.setText(hospital.getCompanyCity()+"");
+        mTvActivityName.setText(hospital.getActivityName()+"");
 
-        Hospital.RatingDetail ratingDetail = hospital.getRatingDetail().get(0);
+        if (hospital.getRatingDetail().size() > 0) {
+            Hospital.RatingDetail ratingDetail = hospital.getRatingDetail().get(0);
 
-        switch (ratingDetail.getValue()) {
-            case 1:
-                mPbExc.setProgress(ratingDetail.getTotal() * 10);
-                break;
-            case 2:
-                mPbMuyBueno.setProgress(ratingDetail.getTotal() * 10);
-                break;
-            case 3:
-                mPbNormal.setProgress(ratingDetail.getTotal() * 10);
-                break;
-            case 4:
-                mPbMalo.setProgress(ratingDetail.getTotal() * 10);
-                break;
-            case 5:
-                mPbMuyMalo.setProgress(ratingDetail.getTotal() * 10);
+            switch (ratingDetail.getValue()) {
+                case 1:
+                    mPbExc.setProgress(ratingDetail.getTotal() * 10);
+                    break;
+                case 2:
+                    mPbMuyBueno.setProgress(ratingDetail.getTotal() * 10);
+                    break;
+                case 3:
+                    mPbNormal.setProgress(ratingDetail.getTotal() * 10);
+                    break;
+                case 4:
+                    mPbMalo.setProgress(ratingDetail.getTotal() * 10);
+                    break;
+                case 5:
+                    mPbMuyMalo.setProgress(ratingDetail.getTotal() * 10);
+            }
         }
     }
 
@@ -238,9 +279,71 @@ public class HospitalDetailsFragment extends Fragment implements HospitalDetails
         mRecyclerViewReviews.animate().alpha(0f);
     }
 
+    @Override
+    public void launchNewServiceFragment() {
+        getActivity().getSupportFragmentManager().beginTransaction()
+                .replace(R.id.container, new WriteReviewFragment())
+                .addToBackStack(null).commit();
+    }
+
+    @OnClick(R.id.btnAddService) void onNewServiceClicked() {
+        if (StorageUtils.isUserLogged(getActivity())) {
+            launchNewServiceFragment();
+        } else {
+            showUserNotLoggedError();
+        }
+    }
+
+    @OnClick(R.id.btnSearch) void onSearchClicked() {
+        String query = mTvSearch.getText().toString();
+        if (!query.isEmpty()) {
+            SearchHospitalsFragment f = SearchHospitalsFragment.newInstance(query);
+            getActivity().getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.container, f).addToBackStack(null).commit();
+        }
+    }
+
+    @Override
+    public void showNetworkError() {
+        Toast.makeText(getActivity(), getString(R.string.network_error), Toast.LENGTH_SHORT).show();
+        getActivity().onBackPressed();
+    }
+
+    @Override
+    public void showNetworkFailedError() {
+        Toast.makeText(getActivity(), getString(R.string.network_failed_error), Toast.LENGTH_SHORT).show();
+        getActivity().onBackPressed();
+    }
+
+    @Override
+    public void showPlayServicesError() {
+        Toast.makeText(getActivity(), getString(R.string.play_services_error), Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void showLocationNotAvailableError() {
+        Toast.makeText(getContext(), getString(R.string.location_not_available_error), Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void showNoServicesError() {
+        Toast.makeText(getActivity(), "No hay servicios que mostrar", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void showNoReviewsError() {
+        Toast.makeText(getActivity(), "No hay opiniones que mostrar", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void showUserNotLoggedError() {
+        Toast.makeText(getActivity(), getString(R.string.user_not_logged_error), Toast.LENGTH_SHORT).show();
+    }
+
     private void initViews() {
         initArrows();
         initRecyclerViews();
+        initMapListener();
     }
 
     private void initArrows() {
@@ -281,5 +384,36 @@ public class HospitalDetailsFragment extends Fragment implements HospitalDetails
     private void initRecyclerViews() {
         mRecyclerViewServices.setLayoutManager(new LinearLayoutManager(getActivity()));
         mRecyclerViewReviews.setLayoutManager(new LinearLayoutManager(getActivity()));
+        mRecyclerViewServices.setNestedScrollingEnabled(false);
+        mRecyclerViewReviews.setNestedScrollingEnabled(false);
+        Drawable divider = ContextCompat.getDrawable(getActivity(), R.drawable.divider);
+        mRecyclerViewServices.addItemDecoration(new DividerItemDecoration(divider));
+        mRecyclerViewReviews.addItemDecoration(new DividerItemDecoration(divider));
+    }
+
+    private void initMapListener() {
+        mBtnVerMapa.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
+                if (checked) {
+                    if (ActivityUtils.isGoogleApiAvailable(getActivity())) {
+                        if (lat != 0 && lon != 0) {
+                            MapFragment f = MapFragment.newInstance(lat, lon);
+                            getActivity().getSupportFragmentManager().beginTransaction()
+                                    .replace(R.id.mapContainer, f).commit();
+                            mLyMap.setVisibility(View.VISIBLE);
+                        } else {
+                            showLocationNotAvailableError();
+                        }
+                    } else {
+                        showPlayServicesError();
+                        mLyMap.setVisibility(View.GONE);
+                    }
+                }
+                 else {
+                    mLyMap.setVisibility(View.GONE);
+                }
+            }
+        });
     }
 }

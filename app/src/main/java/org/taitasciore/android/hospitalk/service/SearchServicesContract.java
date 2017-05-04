@@ -31,12 +31,16 @@ public interface SearchServicesContract {
         void showServicesFilter(ArrayList<ServiceFilter> servicesFilter);
         void showServices(ArrayList<ServiceResponse.Service> hospitals);
         void addServices(ArrayList<ServiceResponse.Service> hospitals);
+        void blockFilter();
+        void unblockFilter();
+        void showNetworkError();
+        void showNetworkFailedError();
     }
 
     interface Presenter extends BasePresenter<View> {
 
         void getCountries();
         void searchServices(String countryId, String cityId, String serviceId, String reviewOrder,
-                             String reviewRank, int offset);
+                             String reviewRank, int offset, String query);
     }
 }

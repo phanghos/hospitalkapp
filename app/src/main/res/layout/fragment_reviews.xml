@@ -3,15 +3,15 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="8dp">
+    android:padding="@dimen/margin">
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
-        android:layout_marginBottom="5dp"
+        android:layout_marginBottom="@dimen/margin"
         android:textColor="@color/colorPrimaryText"
-        android:textSize="21sp"
+        android:textSize="@dimen/text_size_header"
         android:text="@string/ultimas_sobre_hospitales"
         fontPath="OpenSans-Bold.ttf" />
 

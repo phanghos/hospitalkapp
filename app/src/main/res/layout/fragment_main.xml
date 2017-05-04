@@ -7,21 +7,22 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:padding="@dimen/margin_large">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="16dp">
+            android:layout_marginBottom="@dimen/margin_large">
 
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:layout_weight="0.5"
-                android:layout_marginRight="16dp"
                 android:layout_gravity="center_horizontal"
-                android:padding="10dp"
+                android:layout_marginRight="@dimen/margin_large"
+                android:padding="@dimen/margin"
                 android:background="@drawable/rounded_corners">
 
                 <RelativeLayout
@@ -29,7 +30,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:layout_marginBottom="8dp"
+                    android:layout_marginBottom="@dimen/margin"
+                    android:padding="@dimen/margin_large"
                     android:background="@drawable/oval_5">
 
                     <ImageView
@@ -45,8 +47,8 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
                     android:textColor="@color/colorPrimaryText"
+                    android:textSize="@dimen/text_size_small"
                     android:text="Ver opiniones"
-                    android:lines="1"
                     fontPath="OpenSans-Bold.ttf" />
 
             </LinearLayout>
@@ -57,7 +59,7 @@
                 android:orientation="vertical"
                 android:layout_weight="0.5"
                 android:layout_gravity="center_horizontal"
-                android:padding="10dp"
+                android:padding="@dimen/margin"
                 android:background="@drawable/rounded_corners">
 
                 <RelativeLayout
@@ -65,7 +67,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:layout_marginBottom="8dp"
+                    android:layout_marginBottom="@dimen/margin"
+                    android:padding="@dimen/margin_large"
                     android:background="@drawable/oval_5">
 
                     <ImageView
@@ -77,14 +80,13 @@
                 </RelativeLayout>
 
                 <TextView
-                    android:id="@+id/textView3"
-                    fontPath="OpenSans-Bold.ttf"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
+                    android:textColor="@color/colorPrimaryText"
+                    android:textSize="@dimen/text_size_small"
                     android:text="Buscar Hospitales"
-                    android:lines="1"
-                    android:textColor="@color/colorPrimaryText" />
+                    fontPath="OpenSans-Bold.ttf" />
 
             </LinearLayout>
 
@@ -92,26 +94,24 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp">
+            android:layout_height="wrap_content">
 
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginRight="16dp"
-                android:layout_weight="0.5"
-                android:background="@drawable/rounded_corners"
                 android:orientation="vertical"
-                android:padding="10dp">
+                android:layout_weight="0.5"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginRight="@dimen/margin_large"
+                android:padding="@dimen/margin"
+                android:background="@drawable/rounded_corners">
 
                 <RelativeLayout
                     android:id="@+id/ly_opinar"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:layout_marginBottom="8dp"
+                    android:layout_marginBottom="@dimen/margin"
                     android:background="@drawable/oval_5">
 
                     <ImageView
@@ -123,14 +123,13 @@
                 </RelativeLayout>
 
                 <TextView
-                    android:id="@+id/textView6"
-                    fontPath="OpenSans-Bold.ttf"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
-                    android:lines="1"
+                    android:textColor="@color/colorPrimaryText"
+                    android:textSize="@dimen/text_size_small"
                     android:text="Opinar sobre..."
-                    android:textColor="@color/colorPrimaryText" />
+                    fontPath="OpenSans-Bold.ttf" />
 
             </LinearLayout>
 
@@ -140,7 +139,7 @@
                 android:orientation="vertical"
                 android:layout_weight="0.5"
                 android:layout_gravity="center_horizontal"
-                android:padding="10dp"
+                android:padding="@dimen/margin"
                 android:background="@drawable/rounded_corners">
 
                 <RelativeLayout
@@ -148,7 +147,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:layout_marginBottom="8dp"
+                    android:layout_marginBottom="@dimen/margin"
+                    android:padding="@dimen/margin_large"
                     android:background="@drawable/oval_5">
 
                     <ImageView
@@ -164,7 +164,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
                     android:textColor="@color/colorPrimaryText"
-                    android:lines="1"
+                    android:textSize="@dimen/text_size_small"
                     android:text="Buscar Servicios"
                     fontPath="OpenSans-Bold.ttf" />
 
@@ -176,8 +176,11 @@
             android:id="@+id/ly_cerca"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="16dp"
-            android:padding="16dp"
+            android:layout_marginTop="@dimen/margin_large"
+            android:paddingLeft="@dimen/margin_large"
+            android:paddingRight="@dimen/margin_large"
+            android:paddingTop="@dimen/margin"
+            android:paddingBottom="@dimen/margin"
             android:background="@drawable/rounded_corners">
 
             <TextView
@@ -185,7 +188,7 @@
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:textColor="@color/colorPrimaryText"
-                android:textSize="16sp"
+                android:textSize="@dimen/text_size_small"
                 android:text="Ver cerca de mí"
                 fontPath="OpenSans-Bold.ttf" />
 

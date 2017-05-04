@@ -1,20 +1,30 @@
 package org.taitasciore.android.hospitalk.main;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
+import android.text.SpannableStringBuilder;
+import android.text.Spanned;
+import android.text.method.LinkMovementMethod;
+import android.text.style.ClickableSpan;
 import android.util.Log;
 import android.view.View;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
+import android.widget.ToggleButton;
 
+import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
@@ -24,33 +34,48 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 import org.taitasciore.android.event.AttachPresenterEvent;
-import org.taitasciore.android.event.RequestCountryAndCityEvent;
+import org.taitasciore.android.event.RequestCityEvent;
+import org.taitasciore.android.event.RequestCountryEvent;
+import org.taitasciore.android.event.RequestDeterminedLocationEvent;
 import org.taitasciore.android.event.RequestLocationEvent;
 import org.taitasciore.android.event.SavePresenterEvent;
 import org.taitasciore.android.event.SendCityEvent;
+import org.taitasciore.android.event.SendCountryEvent;
+import org.taitasciore.android.event.SendDeterminedLocationEvent;
 import org.taitasciore.android.event.SendLocationEvent;
+import org.taitasciore.android.event.UploadImageEvent;
 import org.taitasciore.android.hospitalk.ActivityUtils;
 import org.taitasciore.android.hospitalk.BasePresenter;
 import org.taitasciore.android.hospitalk.BaseView;
+import org.taitasciore.android.hospitalk.CustomClickableSpan;
+import org.taitasciore.android.hospitalk.HospitalkApp;
 import org.taitasciore.android.hospitalk.PresenterState;
 import org.taitasciore.android.hospitalk.R;
 import org.taitasciore.android.hospitalk.close.CloseContract;
 import org.taitasciore.android.hospitalk.close.ClosePresenter;
+import org.taitasciore.android.hospitalk.dialog.ContactDialogFragment;
+import org.taitasciore.android.hospitalk.dialog.FooterDialogFragment;
 import org.taitasciore.android.hospitalk.hospital.HospitalDetailsContract;
 import org.taitasciore.android.hospitalk.hospital.HospitalDetailsPresenter;
 import org.taitasciore.android.hospitalk.hospital.SearchHospitalsContract;
 import org.taitasciore.android.hospitalk.hospital.SearchHospitalsPresenter;
-import org.taitasciore.android.hospitalk.menu.MenuContract;
+import org.taitasciore.android.hospitalk.login.LoginContract;
+import org.taitasciore.android.hospitalk.login.LoginPresenter;
+import org.taitasciore.android.hospitalk.mainmenu.MainMenuContract;
+import org.taitasciore.android.hospitalk.mainmenu.MainMenuFragment;
+import org.taitasciore.android.hospitalk.mainmenu.MainMenuPresenter;
 import org.taitasciore.android.hospitalk.menu.MenuFragment;
-import org.taitasciore.android.hospitalk.menu.MenuPresenter;
 import org.taitasciore.android.hospitalk.review.ReviewDetailsContract;
 import org.taitasciore.android.hospitalk.review.ReviewDetailsPresenter;
 import org.taitasciore.android.hospitalk.review.ReviewsContract;
 import org.taitasciore.android.hospitalk.review.ReviewsPresenter;
+import org.taitasciore.android.hospitalk.review.WriteReviewFragment;
 import org.taitasciore.android.hospitalk.service.SearchServicesContract;
 import org.taitasciore.android.hospitalk.service.SearchServicesPresenter;
 import org.taitasciore.android.hospitalk.service.ServiceDetailsContract;
 import org.taitasciore.android.hospitalk.service.ServiceDetailsPresenter;
+import org.taitasciore.android.hospitalk.signup.SignupContract;
+import org.taitasciore.android.hospitalk.signup.SignupPresenter;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -64,8 +89,8 @@ public class MainActivity extends AppCompatActivity implements
 
     private double lat;
     private double lon;
-    private String mCountry;
-    private String mCity;
+    private String mCountryId = "";
+    private String mCity = "";
     private boolean mDeterminedLocation;
 
     private PresenterState mPresenterState;
@@ -77,6 +102,8 @@ public class MainActivity extends AppCompatActivity implements
 
     @BindView(R.id.ping) ImageView mPing;
     @BindView(R.id.tvHeader) TextView mTvHeader;
+    @BindView(R.id.btnMenu) ToggleButton mBtnToggle;
+    @BindView(R.id.tvFooter) TextView mTvFooter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,23 +111,39 @@ public class MainActivity extends AppCompatActivity implements
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
         restorePresenter();
+        setSpans();
 
         if (savedInstanceState == null) {
-            MenuFragment f = new MenuFragment();
             getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.container, new MenuFragment()).commit();
+                    .add(R.id.container, new MainMenuFragment()).commit();
         } else {
             lat = savedInstanceState.getDouble("lat");
             lon = savedInstanceState.getDouble("lon");
-            mCountry = savedInstanceState.getString("country");
+            mCountryId = savedInstanceState.getString("country");
             mCity = savedInstanceState.getString("city");
         }
 
         if (lat == 0 && lon == 0) {
             setupGoogleApiClient();
-        } else if (mCountry != null && mCity != null) {
-            updateLocation(mCountry, mCity);
+        } else if (!mCountryId.isEmpty() && !mCity.isEmpty()) {
+            updateLocation(mCountryId, mCity);
+            showPing();
         }
+
+        mBtnToggle.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
+                Fragment f = getSupportFragmentManager().findFragmentByTag("menu");
+
+                if (f != null) {
+                    onBackPressed();
+                } else {
+                    getSupportFragmentManager().beginTransaction()
+                            .replace(R.id.container, new MenuFragment(), "menu")
+                            .addToBackStack(null).commit();
+                }
+            }
+        });
     }
 
     @Override
@@ -113,7 +156,7 @@ public class MainActivity extends AppCompatActivity implements
         super.onSaveInstanceState(outState);
         outState.putDouble("lat", lat);
         outState.putDouble("lon", lon);
-        outState.putString("country", mCountry);
+        outState.putString("country", mCountryId);
         outState.putString("city", mCity);
     }
 
@@ -130,20 +173,25 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     private void setupGoogleApiClient() {
-        GoogleApiAvailability apiAvailability = GoogleApiAvailability.getInstance();
+        if (ActivityUtils.isGoogleApiAvailable(this)) {
+            GoogleSignInOptions gso = new GoogleSignInOptions.Builder(
+                    GoogleSignInOptions.DEFAULT_SIGN_IN)
+                    .requestEmail()
+                    .build();
 
-        if (apiAvailability.isGooglePlayServicesAvailable(this) ==
-                ConnectionResult.SUCCESS) {
             mGoogleApiClient = new GoogleApiClient.Builder(this)
                     .enableAutoManage(this, this)
                     .addConnectionCallbacks(this)
                     .addApi(LocationServices.API)
+                    .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
                     .build();
+            ((HospitalkApp) getApplication()).setGoogleApiClient(mGoogleApiClient);
         } else {
             lat = 40.4116767;
             lon = -3.7130291;
+            updateLocation("ES", "Madrid");
+            showPing();
             EventBus.getDefault().post(new SendLocationEvent(lat, lon));
-            mLocationPresenter.getLocation(lat, lon);
         }
     }
 
@@ -155,7 +203,6 @@ public class MainActivity extends AppCompatActivity implements
 
     @Override
     public Object onRetainCustomNonConfigurationInstance() {
-        //return mLocationPresenter;
         return mPresenterState;
     }
 
@@ -178,65 +225,13 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void attachPresenter(AttachPresenterEvent event) {
-        BaseView view = event.fragment;
-
-        if (view instanceof MenuContract.View) {
-            MenuContract.Presenter presenter = mPresenterState.getMenuPresenter();
-            if (presenter == null) presenter = new MenuPresenter((MenuContract.View) view);
-            view.bindPresenter(presenter);
-        } else if (view instanceof ReviewsContract.View) {
-            ReviewsContract.Presenter presenter = mPresenterState.getReviewsPresenter();
-            if (presenter == null) presenter = new ReviewsPresenter((ReviewsContract.View) view);
-            view.bindPresenter(presenter);
-        } else if(view instanceof ReviewDetailsContract.View) {
-            ReviewDetailsContract.Presenter presenter = mPresenterState.getReviewDetailsPresenter();
-            if (presenter == null) presenter = new ReviewDetailsPresenter((ReviewDetailsContract.View) view);
-            view.bindPresenter(presenter);
-        } else if (view instanceof CloseContract.View) {
-            CloseContract.Presenter presenter = mPresenterState.getClosePresenter();
-            if (presenter == null) presenter = new ClosePresenter((CloseContract.View) view);
-            view.bindPresenter(presenter);
-        } else if (view instanceof HospitalDetailsContract.View) {
-            HospitalDetailsContract.Presenter presenter = mPresenterState.getHospitalDetailsPresenter();
-            if (presenter == null) presenter = new HospitalDetailsPresenter((HospitalDetailsContract.View) view);
-            view.bindPresenter(presenter);
-        } else if (view instanceof SearchHospitalsContract.View) {
-            SearchHospitalsContract.Presenter presenter = mPresenterState.getSearchHospitalsPresenter();
-            if (presenter == null) presenter = new SearchHospitalsPresenter((SearchHospitalsContract.View) view);
-            view.bindPresenter(presenter);
-        } else if (view instanceof SearchServicesContract.View) {
-            SearchServicesContract.Presenter presenter = mPresenterState.getSearchServicesPresenter();
-            if (presenter == null) presenter = new SearchServicesPresenter((SearchServicesContract.View) view);
-            view.bindPresenter(presenter);
-        } else if (view instanceof ServiceDetailsContract.View) {
-            ServiceDetailsContract.Presenter presenter = mPresenterState.getServiceDetailsPresenter();
-            if (presenter == null) presenter = new ServiceDetailsPresenter((ServiceDetailsContract.View) view);
-            view.bindPresenter(presenter);
-        }
+    public void sendDeterminedLocation(RequestDeterminedLocationEvent event) {
+        EventBus.getDefault().post(new SendDeterminedLocationEvent(mDeterminedLocation));
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void savePresenter(SavePresenterEvent event) {
-        BasePresenter presenter = event.presenter;
-
-        if (presenter instanceof MenuContract.Presenter) {
-            mPresenterState.setMenuPresenter((MenuContract.Presenter) presenter);
-        } else if (presenter instanceof ReviewsContract.Presenter) {
-            mPresenterState.setReviewsPresenter((ReviewsContract.Presenter) presenter);
-        } else if (presenter instanceof ReviewDetailsContract.Presenter) {
-            mPresenterState.setReviewDetailsPresenter((ReviewDetailsContract.Presenter) presenter);
-        } else if (presenter instanceof CloseContract.Presenter) {
-            mPresenterState.setClosePresenter((CloseContract.Presenter) presenter);
-        } else if (presenter instanceof HospitalDetailsContract.Presenter) {
-            mPresenterState.setHospitalDetailsPresenter((HospitalDetailsContract.Presenter) presenter);
-        } else if (presenter instanceof SearchHospitalsContract.Presenter) {
-            mPresenterState.setSearchHospitalsPresenter((SearchHospitalsContract.Presenter) presenter);
-        } else if (presenter instanceof SearchServicesContract.Presenter) {
-            mPresenterState.setSearchServicesPresenter((SearchServicesContract.Presenter) presenter);
-        } else if (presenter instanceof ServiceDetailsContract.Presenter) {
-            mPresenterState.setServiceDetailsPresenter((ServiceDetailsContract.Presenter) presenter);
-        }
+    public void sendCountry(RequestCountryEvent event) {
+        EventBus.getDefault().post(new SendCountryEvent(mCountryId));
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -245,7 +240,7 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void sendCountryAndCity(RequestCountryAndCityEvent event) {
+    public void sendCountryAndCity(RequestCityEvent event) {
         EventBus.getDefault().post(new SendCityEvent(mCity));
     }
 
@@ -261,17 +256,118 @@ public class MainActivity extends AppCompatActivity implements
 
     @Override
     public void updateLocation(String code, String city) {
-        mCountry = code;
         mCity = city;
         mDeterminedLocation = true;
         mTvHeader.setText(code + ", " + city);
+        EventBus.getDefault().post(new SendLocationEvent(lat, lon));
+    }
+
+    @Override
+    public void setCountry(String countryId) {
+        mCountryId = countryId;
+    }
+
+    @Override
+    public void setSpans() {
+        String footer = mTvFooter.getText().toString();
+        Log.i("footer", footer);
+        SpannableStringBuilder ssb = new SpannableStringBuilder(footer);
+        CustomClickableSpan clickableSpan;
+        int start;
+        int end;
+
+        start = footer.indexOf(getString(R.string.footer_contacto));
+        end = start + getString(R.string.footer_contacto).length();
+        clickableSpan = new CustomClickableSpan(this) {
+            @Override
+            public void onClick(View view) {
+                showContactDialog();
+            }
+        };
+        ssb.setSpan(clickableSpan, start, end, Spanned.SPAN_INCLUSIVE_INCLUSIVE);
+
+        start = footer.indexOf(getString(R.string.footer_terminos));
+        end = start + getString(R.string.footer_terminos).length();
+        clickableSpan = new CustomClickableSpan(this) {
+            @Override
+            public void onClick(View view) {
+                FooterDialogFragment f = FooterDialogFragment.newInstance(
+                        getString(R.string.footer_terminos), 1);
+                showFooterDialog(f);
+            }
+        };
+        ssb.setSpan(clickableSpan, start, end, Spanned.SPAN_INCLUSIVE_INCLUSIVE);
+
+        start = footer.indexOf(getString(R.string.footer_privacidad));
+        end = start + getString(R.string.footer_privacidad).length();
+        clickableSpan = new CustomClickableSpan(this) {
+            @Override
+            public void onClick(View view) {
+                FooterDialogFragment f = FooterDialogFragment.newInstance(
+                        getString(R.string.footer_privacidad), 2);
+                showFooterDialog(f);
+            }
+        };
+        ssb.setSpan(clickableSpan, start, end, Spanned.SPAN_INCLUSIVE_INCLUSIVE);
+
+        start = footer.indexOf(getString(R.string.footer_datos));
+        end = start + getString(R.string.footer_datos).length();
+        clickableSpan = new CustomClickableSpan(this) {
+            @Override
+            public void onClick(View view) {
+                FooterDialogFragment f = FooterDialogFragment.newInstance(
+                        getString(R.string.footer_datos), 3);
+                showFooterDialog(f);
+            }
+        };
+        ssb.setSpan(clickableSpan, start, end, Spanned.SPAN_INCLUSIVE_INCLUSIVE);
+
+        mTvFooter.setText(ssb, TextView.BufferType.SPANNABLE);
+        mTvFooter.setMovementMethod(LinkMovementMethod.getInstance());
+    }
+
+    @Override
+    public void showContactDialog() {
+        ContactDialogFragment f = new ContactDialogFragment();
+        f.show(getSupportFragmentManager(), "contact");
+    }
+
+    @Override
+    public void showFooterDialog(FooterDialogFragment f) {
+        f.show(getSupportFragmentManager(), "footer");
+    }
+
+    @Override
+    public void showNetworkError() {
+        Toast.makeText(this, getString(R.string.network_error), Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void showLocationFailedError() {
+        Toast.makeText(this, getString(R.string.location_error), Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        Log.i("debug", "onActivityResult in activity");
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == WriteReviewFragment.REQUEST_UPLOAD_IMAGE) {
+            EventBus.getDefault().post(new UploadImageEvent(resultCode, data));
+        }
     }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        Log.i("debug", "onRequestPermissionsResult in activity");
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
         if (requestCode == ActivityUtils.REQUEST_LOCATION &&
                 grantResults[0] == PackageManager.PERMISSION_GRANTED) {
             requestLocationUpdates();
+        } else if (requestCode == ActivityUtils.REQUEST_WRITE_EXTERNAL_STORAGE &&
+                grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
         }
     }
 

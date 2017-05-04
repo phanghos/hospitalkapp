@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.observers.DisposableObserver;
 import io.reactivex.schedulers.Schedulers;
+import retrofit2.Response;
 
 /**
  * Created by roberto on 24/04/17.
@@ -50,18 +51,25 @@ public class SearchServicesPresenter implements SearchServicesContract.Presenter
         mService.getCountries()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new DisposableObserver<ArrayList<LocationResponse.Country>>() {
+                .subscribe(new DisposableObserver<Response<ArrayList<LocationResponse.Country>>>() {
                     @Override
-                    public void onNext(ArrayList<LocationResponse.Country> countries) {
+                    public void onNext(Response<ArrayList<LocationResponse.Country>> response) {
+                        Log.i("result code", response.code()+"");
+
                         if (mView != null) {
                             mView.hideProgress();
-                            mView.showCountries(countries);
+
+                            if (response.isSuccessful()) mView.showCountries(response.body());
+                            else mView.showNetworkFailedError();
                         }
                     }
 
                     @Override
                     public void onError(Throwable e) {
-                        if (mView != null) mView.hideProgress();
+                        if (mView != null) {
+                            mView.hideProgress();
+                            mView.showNetworkError();
+                        }
                     }
 
                     @Override
@@ -73,41 +81,48 @@ public class SearchServicesPresenter implements SearchServicesContract.Presenter
 
     @Override
     public void searchServices(String countryId, String cityId, String serviceId,
-                                String reviewOrder, String reviewRank, final int offset) {
+                                String reviewOrder, String reviewRank, final int offset, String query) {
         Log.i("debug", "fetching services...");
 
         mView.showProgress();
 
         mService.searchServices(countryId, cityId, serviceId, reviewOrder, reviewRank,
-                offset, LIMIT, 1)
+                offset, LIMIT, query)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new DisposableObserver<SearchResponse>() {
+                .subscribe(new DisposableObserver<Response<SearchResponse>>() {
                     @Override
-                    public void onNext(SearchResponse searchResponse) {
-                        ArrayList<ServiceResponse.Service> services = searchResponse.getServices();
-                        ArrayList<City> cities = searchResponse.getCities();
-                        ArrayList<ServiceFilter> servicesFilter = searchResponse.getServicesFilter();
+                    public void onNext(Response<SearchResponse> response) {
+                        Log.i("result code", response.code()+"");
 
                         if (mView != null) {
                             mView.hideProgress();
-                            mView.showCities(cities);
-                            mView.showServicesFilter(servicesFilter);
-                            if (offset == 0) mView.showServices(services);
-                            else mView.addServices(services);
-                            mView.incrementOffset();
-                            if (services.size() > 0) {
-                                mView.showFab();
-                            }
-                            else {
-                                mView.showNoResultsMessage();
+
+                            if (response.isSuccessful()) {
+                                ArrayList<ServiceResponse.Service> services = response.body().getServices();
+                                ArrayList<City> cities = response.body().getCities();
+                                ArrayList<ServiceFilter> servicesFilter = response.body().getServicesFilter();
+
+                                mView.showCities(cities);
+                                mView.showServicesFilter(servicesFilter);
+                                if (offset == 0) mView.showServices(services);
+                                else mView.addServices(services);
+                                mView.incrementOffset();
+
+                                if (services.size() > 0) mView.showFab();
+                                else mView.showNoResultsMessage();
+                            } else {
+                                mView.showNetworkFailedError();
                             }
                         }
                     }
 
                     @Override
                     public void onError(Throwable e) {
-                        if (mView != null) mView.hideProgress();
+                        if (mView != null) {
+                            mView.hideProgress();
+                            mView.showNetworkError();
+                        }
                     }
 
                     @Override

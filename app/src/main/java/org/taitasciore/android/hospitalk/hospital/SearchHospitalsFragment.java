@@ -1,6 +1,7 @@
 package org.taitasciore.android.hospitalk.hospital;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
@@ -13,12 +14,25 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
+import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.toptoche.searchablespinnerlibrary.SearchableSpinner;
+
 import org.greenrobot.eventbus.EventBus;
-import org.taitasciore.android.event.AttachPresenterEvent;
-import org.taitasciore.android.event.SavePresenterEvent;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+import org.taitasciore.android.event.RequestCountryEvent;
+import org.taitasciore.android.event.RequestDeterminedLocationEvent;
+import org.taitasciore.android.event.RequestLocationEvent;
+import org.taitasciore.android.event.SendCountryEvent;
+import org.taitasciore.android.event.SendDeterminedLocationEvent;
+import org.taitasciore.android.event.SendLocationEvent;
 import org.taitasciore.android.hospitalk.ActivityUtils;
 import org.taitasciore.android.hospitalk.R;
 import org.taitasciore.android.model.Activity;
@@ -27,7 +41,7 @@ import org.taitasciore.android.model.Hospital;
 import org.taitasciore.android.model.LocationResponse;
 
 import java.util.ArrayList;
-import java.util.List;
+import java.util.ConcurrentModificationException;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -39,6 +53,8 @@ import butterknife.OnClick;
 
 public class SearchHospitalsFragment extends Fragment implements SearchHospitalsContract.View {
 
+    private double lat;
+    private double lon;
     private int mOffset;
     private String mCountryId = "";
     private int mCountryPos;
@@ -50,7 +66,9 @@ public class SearchHospitalsFragment extends Fragment implements SearchHospitals
     private int mReviewOrderPos;
     private String mReviewRank = "";
     private int mReviewRankPos;
+    private String mQuery = "";
     private boolean mChangedCountry;
+    private boolean mDeterminedLocation;
     private ArrayList<LocationResponse.Country> mCountries;
     private ArrayList<City> mCities;
     private ArrayList<Activity> mActivities;
@@ -70,12 +88,34 @@ public class SearchHospitalsFragment extends Fragment implements SearchHospitals
     private RecyclerView.LayoutManager mLayoutMngr;
     private SearchHospitalAdapter mAdapter;
 
+    @BindView(R.id.tvSearch) AutoCompleteTextView mTvSearch;
+    @BindView(R.id.btnSearch) Button mBtnSearch;
+
+    @BindView(R.id.tvResetFilters) TextView mTvResetFilters;
+
     @BindView(R.id.fab) FloatingActionButton mFab;
-    @BindView(R.id.spCountry) Spinner mSpCountry;
-    @BindView(R.id.spCity) Spinner mSpCity;
+
+    @BindView(R.id.cbCloseHospitals) CheckBox mCbCloseHospitals;
+
+    @BindView(R.id.spCountry) SearchableSpinner mSpCountry;
+    @BindView(R.id.spCity) SearchableSpinner mSpCity;
     @BindView(R.id.spRating) Spinner mSpRating;
     @BindView(R.id.spActivity) Spinner mSpActivity;
     @BindView(R.id.spOption) Spinner mSpOption;
+
+    public static SearchHospitalsFragment newInstance(String query) {
+        SearchHospitalsFragment f = new SearchHospitalsFragment();
+        Bundle args = new Bundle();
+        args.putString("query", query);
+        f.setArguments(args);
+        return f;
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setRetainInstance(true);
+    }
 
     @Nullable
     @Override
@@ -84,63 +124,38 @@ public class SearchHospitalsFragment extends Fragment implements SearchHospitals
         ButterKnife.bind(this, v);
         initRecyclerView();
         initAdapters();
-        if (savedInstanceState != null) {
-            if (savedInstanceState.containsKey("countries")) {
-                mCountries = (ArrayList<LocationResponse.Country>)
-                        savedInstanceState.getSerializable("countries");
-            }
-            if (savedInstanceState.containsKey("cities")) {
-                mCities = (ArrayList<City>)
-                        savedInstanceState.getSerializable("cities");
-            }
-            if (savedInstanceState.containsKey("activities")) {
-                mActivities = (ArrayList<Activity>)
-                        savedInstanceState.getSerializable("activities");
-            }
-            if (savedInstanceState.containsKey("hospitals")) {
-                mHospitals = (ArrayList<Hospital>)
-                        savedInstanceState.getSerializable("hospitals");
-            }
 
-            mOffset = savedInstanceState.getInt("offset");
-            mCountryId = savedInstanceState.getString("id_country", "");
-            mCountryPos = savedInstanceState.getInt("pos_country");
-            mCityId = savedInstanceState.getString("id_city", "");
-            mCityPos = savedInstanceState.getInt("pos_city");
-            mReviewOrder = savedInstanceState.getString("review_order", "");
-            mReviewOrderPos = savedInstanceState.getInt("pos_review_order");
-            mActivityId = savedInstanceState.getString("id_activity", "");
-            mActivityPos = savedInstanceState.getInt("pos_activity");
-            mReviewRank = savedInstanceState.getString("review_rank", "");
-            mReviewRankPos = savedInstanceState.getInt("pos_review_rank");
-        }
+        mSpCountry.setTitle("Seleccione un país");
+        mSpCountry.setPositiveButton("cerrar");
+        mSpCity.setTitle("Seleccione una ciudad");
+        mSpCity.setPositiveButton("cerrar");
+
         return v;
     }
 
     @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        if (mCountries != null) outState.putSerializable("countries", mCountries);
-        if (mCities != null) outState.putSerializable("cities", mCities);
-        if (mActivities != null) outState.putSerializable("activities", mActivities);
-        if (mHospitals != null) outState.putSerializable("hospitals", mHospitals);
-        outState.putInt("offset", mOffset);
-        outState.putString("id_country", mCountryId);
-        outState.putInt("pos_country", mCountryPos);
-        outState.putString("id_city", mCityId);
-        outState.putInt("pos_city", mCityPos);
-        outState.putString("review_order", mReviewOrder);
-        outState.putInt("pos_review_order", mReviewOrderPos);
-        outState.putString("id_activity", mActivityId);
-        outState.putInt("pos_activity", mActivityPos);
-        outState.putString("review_rank", mReviewRank);
-        outState.putInt("pos_review_rank", mReviewRankPos);
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (mPresenter == null) mPresenter = new SearchHospitalsPresenter(this);
+        else mPresenter.bindView(this);
+    }
+
+    @Override
+    public void onDetach() {
+        hideProgress();
+        super.onDetach();
+        if (mPresenter != null) mPresenter.unbindView();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        EventBus.getDefault().post(new AttachPresenterEvent(this));
 
         mSpOption.setSelection(mReviewOrderPos, false);
         mSpRating.setSelection(mReviewRankPos, false);
@@ -162,23 +177,35 @@ public class SearchHospitalsFragment extends Fragment implements SearchHospitals
 
         if (mHospitals != null) addHospitals(mHospitals);
 
+        if (getArguments() != null && getArguments().containsKey("query")) {
+            mQuery = getArguments().getString("query");
+            mTvSearch.setText(mQuery);
+        }
+
         initListeners();
     }
 
     @Override
     public void onStop() {
         super.onStop();
+        EventBus.getDefault().unregister(this);
         clearListeners();
     }
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        if (mPresenter != null) {
-            mPresenter.unbindView();
-            EventBus.getDefault().post(new SavePresenterEvent(mPresenter));
-        }
-        hideProgress();
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void determinedLocation(SendDeterminedLocationEvent event) {
+        mDeterminedLocation = event.determined;
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void getLocation(SendLocationEvent event) {
+        lat = event.lat;
+        lon = event.lon;
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void getCountry(SendCountryEvent event) {
+        mCountryId = event.country;
     }
 
     @Override
@@ -220,7 +247,7 @@ public class SearchHospitalsFragment extends Fragment implements SearchHospitals
 
     @Override
     public void initAdapters() {
-        List<String> list = new ArrayList<>();
+        ArrayList<String> list = new ArrayList<>();
         list.add("País");
         mAdapterCountries = new ArrayAdapter<>(
                 getActivity(), android.R.layout.simple_spinner_item, list);
@@ -269,6 +296,32 @@ public class SearchHospitalsFragment extends Fragment implements SearchHospitals
 
     @Override
     public void initListeners() {
+        mCbCloseHospitals.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
+                if (checked) {
+                    EventBus.getDefault().post(new RequestDeterminedLocationEvent());
+                    EventBus.getDefault().post(new RequestLocationEvent());
+                    EventBus.getDefault().post(new RequestCountryEvent());
+
+                    mAdapter = new SearchHospitalAdapter(getActivity());
+                    mRecyclerView.setAdapter(mAdapter);
+
+                    if (mDeterminedLocation && !mCountryId.equals("") && mCountries != null) {
+                        Log.i("country id", mCountryId);
+                        int pos = getCountryPosition(mCountryId);
+
+                        if (pos > -1) {
+                            blockFilter();
+                            mSpCountry.setSelection(pos + 1, false);
+                        }
+                    }
+                } else {
+                    unblockFilter();
+                }
+            }
+        });
+
         mSpCountry.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int pos, long l) {
@@ -277,8 +330,12 @@ public class SearchHospitalsFragment extends Fragment implements SearchHospitals
                     mOffset = 0;
                     mCountryId = mCountries.get(pos - 1).getCountryid();
                     mCountryPos = pos;
+                    mCityId = "";
+                    mCityPos = 0;
+                    mSpCity.setSelection(0, false);
                     Log.i("country id", mCountryId);
-                    search();
+                    if (mQuery.equals("")) mPresenter.getCities(mCountryId);
+                    else search();
                 }
             }
 
@@ -358,15 +415,41 @@ public class SearchHospitalsFragment extends Fragment implements SearchHospitals
 
             }
         });
+
+        mTvResetFilters.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mCountryId = "";
+                mCountryPos = 0;
+                mCityId = "";
+                mCityPos = 0;
+                mReviewRank = "";
+                mReviewRankPos = 0;
+                mReviewOrder = "";
+                mReviewOrderPos = 0;
+                mActivityId = "";
+                mActivityPos = 0;
+                mQuery = "";
+
+                mSpCountry.setSelection(0, false);
+                mSpCity.setSelection(0, false);
+                mSpRating.setSelection(0, false);
+                mSpActivity.setSelection(0, false);
+                mSpOption.setSelection(0, false);
+                mTvSearch.setText("");
+            }
+        });
     }
 
     @Override
     public void clearListeners() {
+        mCbCloseHospitals.setOnCheckedChangeListener(null);
         mSpCountry.setOnItemSelectedListener(null);
         mSpCity.setOnItemSelectedListener(null);
         mSpOption.setOnItemSelectedListener(null);
         mSpActivity.setOnItemSelectedListener(null);
         mSpRating.setOnItemSelectedListener(null);
+        mTvResetFilters.setOnClickListener(null);
     }
 
     @Override
@@ -382,21 +465,25 @@ public class SearchHospitalsFragment extends Fragment implements SearchHospitals
 
     @Override
     public void showCities(ArrayList<City> cities) {
+        mCities = cities;
+        mAdapterCities.clear();
+        mAdapterCities.add("Ciudad");
+        for (City c : cities) mAdapterCities.add(c.getCityName());
+
         if (mChangedCountry) {
-            mCities = cities;
-            mAdapterCities.clear();
-            mAdapterCities.add("Ciudad");
-            for (City c : cities) mAdapterCities.add(c.getCityName());
+
         }
     }
 
     @Override
     public void showActivities(ArrayList<Activity> activities) {
+        mActivities = activities;
+        mAdapterActivities.clear();
+        mAdapterActivities.add("Actividad");
+        for (Activity a : activities) mAdapterActivities.add(a.getActivityName());
+
         if (mChangedCountry) {
-            mActivities = activities;
-            mAdapterActivities.clear();
-            mAdapterActivities.add("Actividad");
-            for (Activity a : activities) mAdapterActivities.add(a.getActivityName());
+
         }
     }
 
@@ -411,12 +498,53 @@ public class SearchHospitalsFragment extends Fragment implements SearchHospitals
     @Override
     public void addHospitals(ArrayList<Hospital> hospitals) {
         mChangedCountry = false;
-        for (Hospital h : hospitals) mAdapter.add(h);
-        mHospitals = mAdapter.getList();
+        try {
+            for (Hospital h : hospitals) mAdapter.add(h);
+            mHospitals = mAdapter.getList();
+        } catch (ConcurrentModificationException e){}
+    }
+
+    @Override
+    public void blockFilter() {
+        mSpCountry.setEnabled(false);
+    }
+
+    @Override
+    public void unblockFilter() {
+        mSpCountry.setEnabled(true);
+    }
+
+    @Override
+    public void showNetworkError() {
+        Toast.makeText(getActivity(), getString(R.string.network_error), Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void showNetworkFailedError() {
+        Toast.makeText(getActivity(), getString(R.string.network_failed_error), Toast.LENGTH_SHORT).show();
+    }
+
+    @OnClick(R.id.btnSearch) void onSearchClicked() {
+        String query = mTvSearch.getText().toString();
+        if (!query.isEmpty()) {
+            mQuery = query;
+            search();
+        }
     }
 
     private void search() {
         mPresenter.searchHospitals(
-                mCountryId, mCityId, mActivityId, mReviewOrder, mReviewRank, mOffset);
+                mCountryId, mCityId, mActivityId, mReviewOrder, mReviewRank, mOffset, mQuery);
+    }
+
+    private int getCountryPosition(String countryId) {
+        int i = 0;
+
+        for (LocationResponse.Country c : mCountries) {
+            if (c.getCountryid().equalsIgnoreCase(countryId)) return i;
+            i++;
+        }
+
+        return -1;
     }
 }

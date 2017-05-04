@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@drawable/fondo_blanco">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_large"
+            android:textColor="@color/azul_tittle_ht"
+            android:textSize="@dimen/text_size_normal"
+            android:text="@string/puntuacion" />
+
+        <LinearLayout
+            android:id="@+id/lyAvg"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_gravity="center_horizontal"
+            android:gravity="center_horizontal"
+            android:layout_marginTop="@dimen/margin_large"
+            android:layout_marginBottom="@dimen/margin_large" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:textSize="@dimen/text_size_small"
+            android:text="Toca para puntuar" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_marginTop="@dimen/margin_large"
+            android:layout_marginBottom="@dimen/margin_large"
+            android:background="@color/grisDeLinea" />
+
+        <Button
+            android:id="@+id/btnUploadImage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="@dimen/margin_large"
+            android:paddingRight="@dimen/margin_large"
+            android:paddingLeft="@dimen/margin_large"
+            android:background="@drawable/boton_iniciar_sesion"
+            android:drawableRight="@drawable/image_icon"
+            android:textColor="@color/blanco"
+            android:textSize="@dimen/text_size_normal"
+            android:text="@string/subirImagen" />
+
+        <ImageView
+            android:id="@+id/ivPreview"
+            android:layout_width="@dimen/preview_size"
+            android:layout_height="@dimen/preview_size"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="@dimen/margin_large"
+            android:visibility="gone" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/text_size_small"
+            android:text="@string/titulo"/>
+
+        <EditText
+            android:id="@+id/etTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/margin"
+            android:background="@color/gris_et_bg_ht"
+            android:hint="@string/ingreseDato"
+            android:inputType="textCapSentences|textAutoComplete"
+            android:textSize="@dimen/text_size_small" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_large"
+            android:textSize="@dimen/text_size_small"
+            android:text="@string/descripcion" />
+
+        <EditText
+            android:id="@+id/etDescription"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/margin"
+            android:gravity="top"
+            android:background="@color/gris_et_bg_ht"
+            android:hint="@string/compartir_opinion"
+            android:inputType="textCapSentences|textMultiLine"
+            android:maxLength="1000"
+            android:textSize="@dimen/text_size_small" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="right"
+            android:layout_marginBottom="@dimen/margin_large"
+            android:background="@color/gris_et_bg_ht">
+
+            <TextView
+                android:id="@+id/tvCharCounter"
+                android:layout_width="wrap_content"
+                android:layout_height="20sp"
+                android:layout_gravity="right"
+                android:textColor="@color/grisOscuro"
+                android:text="@string/capacidad" />
+
+        </LinearLayout>
+
+        <CheckBox
+            android:id="@+id/cbConditions"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:buttonTint="@color/azul"
+            android:textColor="#8491a5"
+            android:textSize="@dimen/text_size_small"
+            android:text="@string/certifico"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="30dp"
+            android:textColor="@color/turquesa_ht"
+            android:textSize="@dimen/text_size_small"
+            android:text="@string/mas_informacion"
+            android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/btnSendReview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="@dimen/margin_large"
+            android:layout_marginBottom="@dimen/margin_large"
+            android:paddingLeft="@dimen/margin_large"
+            android:paddingRight="@dimen/margin_large"
+            android:background="@drawable/boton_azul_opinion"
+            android:textColor="@color/blanco"
+            android:textStyle="bold"
+            android:text="@string/enviar_opinion"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/text_size_small"
+            android:text="@string/campo_obligatorio_form"/>
+
+    </LinearLayout>
+
+</LinearLayout>

@@ -1,14 +1,18 @@
 package org.taitasciore.android.hospitalk.close;
 
 import android.app.Activity;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import org.greenrobot.eventbus.EventBus;
+import org.taitasciore.android.event.LoadMoreServicesEvent;
 import org.taitasciore.android.hospitalk.R;
 import org.taitasciore.android.hospitalk.service.ServiceDetailsFragment;
 import org.taitasciore.android.model.ServiceResponse;
@@ -56,11 +60,34 @@ public class CloseServiceAdapter extends RecyclerView.Adapter<CloseServiceAdapte
                         .addToBackStack(null).commit();
             }
         });
+
+        if (position == getItemCount() - 1) {
+            holder.fab.setVisibility(View.VISIBLE);
+            holder.fab.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    EventBus.getDefault().post(new LoadMoreServicesEvent());
+                }
+            });
+        } else {
+            holder.fab.setVisibility(View.GONE);
+            holder.fab.setOnClickListener(null);
+        }
     }
 
     @Override
     public int getItemCount() {
         return mServices.size();
+    }
+
+    public void add(ServiceResponse.Service s) {
+        mServices.add(s);
+        notifyItemInserted(getItemCount());
+        notifyItemRangeChanged(0, getItemCount());
+    }
+
+    public ArrayList<ServiceResponse.Service> getList() {
+        return mServices;
     }
 
     static class ServiceVH extends RecyclerView.ViewHolder {
@@ -69,6 +96,7 @@ public class CloseServiceAdapter extends RecyclerView.Adapter<CloseServiceAdapte
         @BindView(R.id.tvNombreHospital) TextView hospitalName;
         @BindView(R.id.tvOpiniones) TextView reviews;
         @BindView(R.id.btnVer) Button details;
+        @BindView(R.id.fab) FloatingActionButton fab;
 
         public ServiceVH(View itemView) {
             super(itemView);

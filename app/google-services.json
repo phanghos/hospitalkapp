@@ -1,0 +1,87 @@
+{
+  "project_info": {
+    "project_number": "221528892932",
+    "project_id": "scout-service"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:221528892932:android:ff2098503bb16391",
+        "android_client_info": {
+          "package_name": "org.taitasciore.android.hospitalk"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "221528892932-31sjaa2r7jeckth3730sav35pc73fnqe.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "org.taitasciore.android.hospitalk",
+            "certificate_hash": "37c4a5762e0a77bf476ae80f246154587de17877"
+          }
+        },
+        {
+          "client_id": "221528892932-4h94vcnqr1140d6naaosnlalkgm84j05.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBB_dQzo8BcIehMYEmSlSwsNA4xXdTgPGs"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 1
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:221528892932:android:49af009c37df041e",
+        "android_client_info": {
+          "package_name": "com.example.usuario.scout"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "221528892932-isduu4kr2v0da9odhf8hu9kpbmuq2kud.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.usuario.scout",
+            "certificate_hash": "37c4a5762e0a77bf476ae80f246154587de17877"
+          }
+        },
+        {
+          "client_id": "221528892932-4h94vcnqr1140d6naaosnlalkgm84j05.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBB_dQzo8BcIehMYEmSlSwsNA4xXdTgPGs"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 1
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -20,4 +20,16 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/tvUsr" />
 
+    <android.support.design.widget.FloatingActionButton
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvOpinion"
+        android:layout_alignParentRight="true"
+        android:src="@mipmap/ic_add_white_24dp"
+        app:elevation="0dp"
+        app:fabSize="mini" />
+
 </RelativeLayout>

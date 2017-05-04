@@ -38,11 +38,11 @@ public class Service implements Serializable {
     @SerializedName("company_city")
     private String companyCity;
     @SerializedName("company_latitude")
-    private String companyLatitude;
+    private double companyLatitude;
     @SerializedName("company_longitude")
-    private String companyLongitude;
-    //@SerializedName("rating_detail")
-    //private List<RatingDetail> ratingDetail;
+    private double companyLongitude;
+    @SerializedName("rating_detail")
+    private List<Hospital.RatingDetail> ratingDetail;
     @SerializedName("total_ratings")
     private String totalRatings;
 
@@ -150,31 +150,29 @@ public class Service implements Serializable {
         this.companyCity = companyCity;
     }
 
-    public String getCompanyLatitude() {
+    public double getCompanyLatitude() {
         return companyLatitude;
     }
 
-    public void setCompanyLatitude(String companyLatitude) {
+    public void setCompanyLatitude(double companyLatitude) {
         this.companyLatitude = companyLatitude;
     }
 
-    public String getCompanyLongitude() {
+    public double getCompanyLongitude() {
         return companyLongitude;
     }
 
-    public void setCompanyLongitude(String companyLongitude) {
+    public void setCompanyLongitude(double companyLongitude) {
         this.companyLongitude = companyLongitude;
     }
 
-    /*
-    public List<RatingDetail> getRatingDetail() {
+    public List<Hospital.RatingDetail> getRatingDetail() {
         return ratingDetail;
     }
 
-    public void setRatingDetail(List<RatingDetail> ratingDetail) {
+    public void setRatingDetail(List<Hospital.RatingDetail> ratingDetail) {
         this.ratingDetail = ratingDetail;
     }
-    */
 
     public String getTotalRatings() {
         return totalRatings;

@@ -1,9 +1,12 @@
 package org.taitasciore.android.hospitalk.close;
 
 import android.app.ProgressDialog;
+import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -12,14 +15,18 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.dgreenhalgh.android.simpleitemdecoration.linear.DividerItemDecoration;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
-import org.taitasciore.android.event.AttachPresenterEvent;
-import org.taitasciore.android.event.RequestCountryAndCityEvent;
+import org.taitasciore.android.event.LoadMoreBestRatedHospitalsEvent;
+import org.taitasciore.android.event.LoadMoreServicesEvent;
+import org.taitasciore.android.event.LoadMoreWorstRatedHospitalsEvent;
+import org.taitasciore.android.event.RequestCityEvent;
 import org.taitasciore.android.event.RequestLocationEvent;
-import org.taitasciore.android.event.SavePresenterEvent;
 import org.taitasciore.android.event.SendCityEvent;
 import org.taitasciore.android.event.SendLocationEvent;
 import org.taitasciore.android.hospitalk.ActivityUtils;
@@ -40,7 +47,7 @@ public class CloseFragment extends Fragment implements CloseContract.View {
 
     private double lat;
     private double lon;
-    private String mCity;
+    private String mCity = "";
     private int mOffsetBest;
     private int mOffsetWorst;
     private int mOffsetPopular;
@@ -72,29 +79,32 @@ public class CloseFragment extends Fragment implements CloseContract.View {
     private RecyclerView mRecyclerViewWorst;
     private RecyclerView mRecyclerViewPopular;
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setRetainInstance(true);
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_close, container, false);
         ButterKnife.bind(this, v);
-        if (savedInstanceState != null) {
-            if (savedInstanceState.containsKey("best_rated")) {
-                mBestRated = (ArrayList<Hospital>)
-                        savedInstanceState.getSerializable("best_rated");
-            }
-            if (savedInstanceState.containsKey("worst_rated")) {
-                mWorstRated = (ArrayList<Hospital>)
-                        savedInstanceState.getSerializable("worst_rated");
-            }
-            if (savedInstanceState.containsKey("most_popular")) {
-                mPopularServices = (ArrayList<ServiceResponse.Service>)
-                        savedInstanceState.getSerializable("most_popular");
-            }
-            mOffsetBest = savedInstanceState.getInt("offset_best");
-            mOffsetWorst = savedInstanceState.getInt("offset_worst");
-            mOffsetPopular = savedInstanceState.getInt("offset_popular");
-        }
         return v;
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (mPresenter == null) mPresenter = new ClosePresenter(this);
+        else mPresenter.bindView(this);
+    }
+
+    @Override
+    public void onDetach() {
+        hideProgress();
+        super.onDetach();
+        if (mPresenter != null) mPresenter.bindView(this);
     }
 
     @Override
@@ -120,23 +130,26 @@ public class CloseFragment extends Fragment implements CloseContract.View {
         mCity = event.city;
     }
 
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        if (mBestRated != null) outState.putSerializable("best_rated", mBestRated);
-        if (mWorstRated != null) outState.putSerializable("worst_rated", mWorstRated);
-        if (mPopularServices != null) outState.putSerializable("most_popular", mPopularServices);
-        outState.putInt("offset_best", mOffsetBest);
-        outState.putInt("offset_worst", mOffsetWorst);
-        outState.putInt("offset_popular", mOffsetPopular);
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void loadMoreBestRatedHospitals(LoadMoreBestRatedHospitalsEvent event) {
+        mPresenter.getBestRatedHospitals(mOffsetBest, lat, lon);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void loadMoreWorstRatedHospitals(LoadMoreWorstRatedHospitalsEvent event) {
+        mPresenter.getWorstRatedHospitals(mOffsetWorst, lat, lon);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void loadMoreServices(LoadMoreServicesEvent event) {
+        mPresenter.getPopularServices(mOffsetPopular, lat, lon);
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        EventBus.getDefault().post(new AttachPresenterEvent(this));
         EventBus.getDefault().post(new RequestLocationEvent());
-        EventBus.getDefault().post(new RequestCountryAndCityEvent());
+        EventBus.getDefault().post(new RequestCityEvent());
 
         initViews();
         initRecyclerViews();
@@ -150,16 +163,6 @@ public class CloseFragment extends Fragment implements CloseContract.View {
         if (mPopularServices != null) {
             setPopularServices(mPopularServices);
         }
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        if (mPresenter != null) {
-            mPresenter.unbindView();
-            EventBus.getDefault().post(new SavePresenterEvent(mPresenter));
-        }
-        hideProgress();
     }
 
     @Override
@@ -186,7 +189,8 @@ public class CloseFragment extends Fragment implements CloseContract.View {
     @Override
     public void setBestRatedHospitals(ArrayList<Hospital> list) {
         mBestRated = list;
-        mAdapterBest = new CloseHospitalAdapter(getActivity(), list);
+        mAdapterBest = new CloseHospitalAdapter(
+                getActivity(), list, CloseHospitalAdapter.TYPE_BEST_RATED);
         mRecyclerViewBest.setAdapter(mAdapterBest);
     }
 
@@ -214,7 +218,8 @@ public class CloseFragment extends Fragment implements CloseContract.View {
     @Override
     public void setWorstRatedHospitals(ArrayList<Hospital> list) {
         mWorstRated = list;
-        mAdapterWorst = new CloseHospitalAdapter(getActivity(), list);
+        mAdapterWorst = new CloseHospitalAdapter(
+                getActivity(), list, CloseHospitalAdapter.TYPE_WORST_RATED);
         mRecyclerViewWorst.setAdapter(mAdapterWorst);
     }
 
@@ -260,6 +265,44 @@ public class CloseFragment extends Fragment implements CloseContract.View {
         mRecyclerViewPopular.setAlpha(1f);
         mRecyclerViewPopular.setVisibility(View.GONE);
         mRecyclerViewPopular.animate().alpha(0f);
+    }
+
+    @Override
+    public void addBestRatedHospitals(ArrayList<Hospital> hospitals) {
+        for (Hospital h : hospitals) mAdapterBest.add(h);
+        mBestRated = mAdapterBest.getList();
+    }
+
+    @Override
+    public void addWorstRatedHospitals(ArrayList<Hospital> hospitals) {
+        for (Hospital h : hospitals) mAdapterWorst.add(h);
+        mWorstRated = mAdapterWorst.getList();
+    }
+
+    @Override
+    public void addPopularServices(ArrayList<ServiceResponse.Service> services) {
+        for (ServiceResponse.Service s : services) mAdapterServices.add(s);
+        mPopularServices = mAdapterServices.getList();
+    }
+
+    @Override
+    public void showNetworkError() {
+        Toast.makeText(getActivity(), getString(R.string.network_error), Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void showNetworkFailedError() {
+        Toast.makeText(getActivity(),getString(R.string.network_failed_error), Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void showNoMoreHospitalsError() {
+        Toast.makeText(getActivity(), "No hay hospitales que mostrar", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void showNoMoreServicesError() {
+        Toast.makeText(getActivity(), "No hay servicios que mostrar", Toast.LENGTH_SHORT).show();
     }
 
     private void initViews() {
@@ -329,5 +372,12 @@ public class CloseFragment extends Fragment implements CloseContract.View {
         mRecyclerViewBest.setLayoutManager(new LinearLayoutManager(getActivity()));
         mRecyclerViewWorst.setLayoutManager(new LinearLayoutManager(getActivity()));
         mRecyclerViewPopular.setLayoutManager(new LinearLayoutManager(getActivity()));
+        mRecyclerViewBest.setNestedScrollingEnabled(false);
+        mRecyclerViewWorst.setNestedScrollingEnabled(false);
+        mRecyclerViewPopular.setNestedScrollingEnabled(false);
+        Drawable divider = ContextCompat.getDrawable(getActivity(), R.drawable.divider);
+        mRecyclerViewBest.addItemDecoration(new DividerItemDecoration(divider));
+        mRecyclerViewWorst.addItemDecoration(new DividerItemDecoration(divider));
+        mRecyclerViewPopular.addItemDecoration(new DividerItemDecoration(divider));
     }
 }

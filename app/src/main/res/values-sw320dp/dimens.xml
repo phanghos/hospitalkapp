@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="margin_splash">24dp</dimen>
+    <!--<dimen name="text_size_header">16sp</dimen>-->
+    <!--<dimen name="text_size_small">10sp</dimen>-->
+    <!--<dimen name="text_size_normal">12sp</dimen>-->
+    <!--<dimen name="text_size_large">14sp</dimen>-->
+    <dimen name="img_size">80dp</dimen>
+    <dimen name="icon_size">20dp</dimen>
+    <dimen name="arrow_size">8dp</dimen>
+    <dimen name="preview_size">120dp</dimen>
+    <dimen name="height_menu_superior">48dp</dimen>
+    <dimen name="margin">5dp</dimen>
+    <dimen name="margin_large">10dp</dimen>
+    <dimen name="margin_separation">3dp</dimen>
+</resources>

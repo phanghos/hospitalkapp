@@ -1,6 +1,7 @@
 package org.taitasciore.android.hospitalk.service;
 
 import android.app.Activity;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -10,6 +11,8 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import org.greenrobot.eventbus.EventBus;
+import org.taitasciore.android.event.LoadMoreServicesEvent;
 import org.taitasciore.android.hospitalk.R;
 import org.taitasciore.android.hospitalk.StarUtils;
 import org.taitasciore.android.model.ServiceResponse;
@@ -60,6 +63,18 @@ public class ServiceAdapter extends RecyclerView.Adapter<ServiceAdapter.ServiceV
                         .addToBackStack(null).commit();
             }
         });
+
+        if (position == getItemCount() - 1) {
+            holder.fab.setVisibility(View.VISIBLE);
+            holder.fab.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    EventBus.getDefault().post(new LoadMoreServicesEvent());
+                }
+            });
+        } else {
+            holder.fab.setVisibility(View.GONE);
+        }
     }
 
     @Override
@@ -74,6 +89,7 @@ public class ServiceAdapter extends RecyclerView.Adapter<ServiceAdapter.ServiceV
         @BindView(R.id.tvOpiniones) TextView reviews;
         @BindView(R.id.btnVerMas) Button details;
         @BindView(R.id.lyAvg) LinearLayout avg;
+        @BindView(R.id.fab) FloatingActionButton fab;
 
         public ServiceVH(View itemView) {
             super(itemView);

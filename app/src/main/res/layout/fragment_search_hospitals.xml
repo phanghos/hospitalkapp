@@ -7,109 +7,105 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:padding="@dimen/margin_large">
 
         <TextView
             android:id="@+id/titulo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="18dp"
+            android:layout_gravity="center_horizontal"
+            android:gravity="center_horizontal"
+            android:layout_marginBottom="@dimen/margin"
             android:textColor="@color/gris_title_ht"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            android:text="Buscador de empresas sector sanitario" />
+            android:textSize="@dimen/text_size_header"
+            android:text="Buscador de empresas sector sanitario"
+            fontPath="OpenSans-Bold.ttf" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:background="@drawable/fondo_blanco"
-            android:layout_margin="8dp"
-            android:padding="8dp">
+            android:padding="@dimen/margin_large"
+            android:background="@drawable/fondo_blanco">
 
             <TextView
                 android:id="@+id/buscador"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Buscar empresa"
-                android:textSize="14sp"
+                android:textSize="@dimen/text_size_normal"
                 android:textStyle="bold"
-                android:layout_marginTop="5dp" />
+                android:layout_marginTop="@dimen/margin" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:layout_marginTop="10dp">
+                android:layout_marginTop="@dimen/margin"
+                android:layout_marginBottom="@dimen/margin">
 
                 <AutoCompleteTextView
+                    android:id="@+id/tvSearch"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:id="@+id/campoBuscador"
-                    android:layout_marginRight="16dp"
-                    android:layout_marginEnd="16dp"
-                    android:background="@color/gris_et_bg_ht"
-                    android:padding="8dp" />
+                    android:layout_marginRight="@dimen/margin"
+                    android:padding="@dimen/margin"
+                    android:background="@color/gris_et_bg_ht" />
 
                 <Button
-                    android:id="@+id/B_Buscar"
+                    android:id="@+id/btnSearch"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:layout_gravity="clip_horizontal"
+                    android:padding="@dimen/margin"
                     android:background="@drawable/boton_degradado"
-                    android:drawableTop="@drawable/search"
-                    android:paddingBottom="4.3dp"
-                    android:paddingLeft="18.3dp"
-                    android:paddingRight="18.3dp"
-                    android:paddingTop="10dp" />
+                    android:drawableTop="@drawable/search" />
 
             </LinearLayout>
 
             <TextView
+                android:id="@+id/textBuscadorIncluir"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/textBuscadorIncluir"
+                android:layout_marginBottom="@dimen/margin"
                 android:hint="Si el servicio que está buscando no aparece en la lista, puede proponer que se incluya en nuestra base de datos"
-                android:layout_marginTop="13dp"
-                android:textSize="12sp" />
+                android:textSize="@dimen/text_size_small" />
 
             <CheckBox
-                android:id="@+id/checkServiciosCerca"
+                android:id="@+id/cbCloseHospitals"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"
-                android:text="Buscar hospital cerca de mi"
                 android:buttonTint="@color/azul_tittle_ht"
                 android:textColor="@color/gris_title_ht"
-                android:textSize="12sp" />
+                android:textSize="@dimen/text_size_small"
+                android:text="Buscar hospitales cerca de mi" />
 
             <View
                 android:layout_width="match_parent"
-                android:layout_height="0.6dp"
+                android:layout_height="2dp"
                 android:background="@color/grisDeLinea"
-                android:layout_marginLeft="12.2dp"
-                android:layout_marginRight="12.3dp"
-                android:layout_marginTop="22dp" />
+                android:layout_marginTop="@dimen/margin"
+                android:layout_marginBottom="@dimen/margin"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="14.5dp">
+                android:layout_marginBottom="@dimen/margin">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/filtrar"
                     android:textStyle="bold"
-                    android:textSize="14sp"
                     android:textColor="@color/gris_title_ht"
-                    android:layout_alignParentLeft="true" />
+                    android:textSize="@dimen/text_size_normal" />
 
                 <TextView
+                    android:id="@+id/tvResetFilters"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:id="@+id/limpiar_filtros"
                     android:text="@string/limpiarfiltros"
                     android:textStyle="bold"
                     android:gravity="right"
@@ -120,121 +116,96 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_marginTop="11.6dp">
+                android:orientation="vertical">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    android:layout_marginBottom="@dimen/margin">
 
                     <RelativeLayout
                         android:layout_width="0dp"
                         android:layout_weight="1"
                         android:layout_height="wrap_content"
-                        android:layout_marginRight="5dp">
+                        android:layout_marginRight="@dimen/margin">
 
-                        <Spinner
+                        <com.toptoche.searchablespinnerlibrary.SearchableSpinner
                             android:id="@+id/spCountry"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:padding="8dp"
+                            android:padding="@dimen/margin"
                             android:background="@color/gris_et_bg_ht" />
 
                         <ImageView
-                            android:layout_width="13.8dp"
-                            android:layout_height="7.5dp"
+                            android:layout_width="@dimen/arrow_size"
+                            android:layout_height="@dimen/arrow_size"
                             android:layout_centerVertical="true"
-                            android:layout_marginRight="15dp"
-                            android:background="@drawable/arrow_spinner"
-                            android:layout_alignParentEnd="true"
-                            android:layout_marginEnd="15dp"
-                            android:layout_alignParentRight="true" />
+                            android:layout_alignParentRight="true"
+                            android:layout_marginRight="@dimen/margin"
+                            android:background="@drawable/arrow_spinner" />
 
                     </RelativeLayout>
 
                     <RelativeLayout
                         android:layout_width="0dp"
+                        android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:layout_marginLeft="5dp"
-                        android:layout_height="wrap_content">
+                        android:layout_marginLeft="@dimen/margin">
 
-                        <Spinner
+                        <com.toptoche.searchablespinnerlibrary.SearchableSpinner
                             android:id="@+id/spCity"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:padding="8dp"
+                            android:padding="@dimen/margin"
                             android:background="@color/gris_et_bg_ht" />
 
                         <ImageView
-                            android:layout_width="13.8dp"
-                            android:layout_height="7.5dp"
+                            android:layout_width="@dimen/arrow_size"
+                            android:layout_height="@dimen/arrow_size"
                             android:layout_centerVertical="true"
-                            android:layout_marginEnd="15dp"
-                            android:background="@drawable/arrow_spinner"
                             android:layout_alignParentRight="true"
-                            android:layout_alignParentEnd="true"
-                            android:layout_marginRight="15dp" />
+                            android:layout_marginRight="@dimen/margin"
+                            android:background="@drawable/arrow_spinner" />
 
                     </RelativeLayout>
 
                 </LinearLayout>
 
-                <RelativeLayout
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:layout_height="wrap_content">
-
-                    <ImageView
-                        android:layout_width="13.8dp"
-                        android:layout_height="7.5dp"
-                        android:layout_centerVertical="true"
-                        android:layout_marginEnd="15dp"
-                        android:background="@drawable/arrow_spinner"
-                        android:layout_alignParentRight="true"
-                        android:layout_alignParentEnd="true"
-                        android:layout_marginRight="15dp" />
-
-                </RelativeLayout>
-
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8.7dp">
+                    android:layout_height="wrap_content">
 
                     <RelativeLayout
                         android:layout_width="0dp"
-                        android:layout_weight="1"
                         android:layout_height="wrap_content"
-                        android:layout_marginRight="5dp">
+                        android:layout_weight="1"
+                        android:layout_marginRight="@dimen/margin">
 
                         <Spinner
                             android:id="@+id/spRating"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:padding="8dp"
-                            android:background="@color/gris_et_bg_ht"
                             android:layout_alignParentTop="true"
                             android:layout_alignParentLeft="true"
-                            android:layout_alignParentStart="true" />
+                            android:padding="@dimen/margin"
+                            android:background="@color/gris_et_bg_ht" />
 
                         <ImageView
-                            android:layout_width="13.8dp"
-                            android:layout_height="7.5dp"
+                            android:layout_width="@dimen/arrow_size"
+                            android:layout_height="@dimen/arrow_size"
                             android:layout_centerVertical="true"
-                            android:layout_marginEnd="15dp"
-                            android:background="@drawable/arrow_spinner"
                             android:layout_alignParentRight="true"
-                            android:layout_alignParentEnd="true"
-                            android:layout_marginRight="15dp" />
+                            android:layout_marginRight="@dimen/margin"
+                            android:background="@drawable/arrow_spinner" />
 
                     </RelativeLayout>
 
                     <RelativeLayout
                         android:layout_width="0dp"
-                        android:layout_weight="1"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="5dp">
+                        android:layout_weight="1"
+                        android:layout_marginLeft="@dimen/margin">
 
                         <Spinner
                             android:id="@+id/spActivity"
@@ -244,14 +215,12 @@
                             android:background="@color/gris_et_bg_ht" />
 
                         <ImageView
-                            android:layout_width="13.8dp"
-                            android:layout_height="7.5dp"
+                            android:layout_width="@dimen/arrow_size"
+                            android:layout_height="@dimen/arrow_size"
                             android:layout_centerVertical="true"
-                            android:layout_marginEnd="15dp"
-                            android:background="@drawable/arrow_spinner"
                             android:layout_alignParentRight="true"
-                            android:layout_alignParentEnd="true"
-                            android:layout_marginRight="15dp" />
+                            android:layout_marginRight="@dimen/margin"
+                            android:background="@drawable/arrow_spinner" />
 
                     </RelativeLayout>
 
@@ -260,25 +229,24 @@
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="8.7dp"
                     android:orientation="horizontal">
 
                     <Spinner
                         android:id="@+id/spOption"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="5dp"
-                        android:layout_marginBottom="5dp"
-                        android:padding="8dp"
+                        android:layout_marginTop="@dimen/margin"
+                        android:layout_marginBottom="@dimen/margin"
+                        android:padding="@dimen/margin"
                         android:background="@color/gris_et_bg_ht" />
 
                     <ImageView
-                        android:layout_width="13.8dp"
-                        android:layout_height="7.5dp"
+                        android:layout_width="@dimen/arrow_size"
+                        android:layout_height="@dimen/arrow_size"
                         android:layout_centerVertical="true"
-                        android:layout_marginRight="15dp"
-                        android:background="@drawable/arrow_spinner"
-                        android:layout_alignParentRight="true" />
+                        android:layout_alignParentRight="true"
+                        android:layout_marginRight="@dimen/margin"
+                        android:background="@drawable/arrow_spinner" />
 
                 </RelativeLayout>
 
@@ -300,7 +268,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="right|bottom"
-                android:layout_margin="16dp"
+                android:layout_margin="@dimen/margin"
                 android:src="@mipmap/ic_add_white_24dp"
                 app:elevation="0dp"
                 app:fabSize="mini"

@@ -3,21 +3,21 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:padding="8dp"
+    android:padding="@dimen/margin"
     android:background="@drawable/background_rounded_corners">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:padding="@dimen/margin">
 
         <com.facebook.drawee.view.SimpleDraweeView xmlns:fresco="http://schemas.android.com/apk/res-auto"
             android:id="@+id/img"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:layout_marginRight="16dp"
+            android:layout_width="@dimen/img_size"
+            android:layout_height="@dimen/img_size"
+            android:layout_marginRight="@dimen/margin"
             android:layout_gravity="center_vertical"
-            android:background="@drawable/marco_image_view"
             android:src="@drawable/logocompany"
             fresco:fadeDuration="300"
             fresco:placeholderImage="@drawable/cargando"
@@ -29,24 +29,24 @@
             android:id="@+id/linearLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:layout_marginLeft="@dimen/margin">
 
             <TextView
                 android:id="@+id/tvTitle"
-                fontPath="OpenSans-Italic.ttf"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="@dimen/margin"
                 android:textColor="?attr/colorPrimaryDark"
-                android:textSize="14sp" />
+                android:textSize="@dimen/text_size_normal"
+                fontPath="OpenSans-Italic.ttf"/>
 
             <LinearLayout
                 android:id="@+id/lyAvg"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="8dp" />
+                android:layout_marginTop="@dimen/margin" />
 
         </LinearLayout>
 
@@ -55,20 +55,21 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:padding="@dimen/margin">
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:layout_marginRight="16dp">
+            android:layout_marginRight="@dimen/margin">
 
             <TextView
                 android:id="@+id/tvUsername"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/colorPrimaryText"
-                android:textSize="14sp"
+                android:textSize="@dimen/text_size_large"
                 fontPath="OpenSans-Bold.ttf" />
 
             <TextView
@@ -76,21 +77,22 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/colorPrimaryText"
-                android:textSize="14sp" />
+                android:textSize="@dimen/text_size_normal" />
 
             <TextView
                 android:id="@+id/tvDate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/colorPrimaryText"
-                android:textSize="14sp" />
+                android:textSize="@dimen/text_size_normal" />
 
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:layout_marginLeft="@dimen/margin">
 
             <TextView
                 android:id="@+id/tvHospital"
@@ -98,7 +100,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="3dp"
                 android:textColor="?attr/colorPrimary"
-                android:textSize="14sp"
+                android:textSize="@dimen/text_size_normal"
                 fontPath="OpenSans-Bold.ttf" />
 
             <TextView
@@ -106,7 +108,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/colorPrimaryText"
-                android:textSize="14sp" />
+                android:textSize="@dimen/text_size_normal" />
 
         </LinearLayout>
 
@@ -115,52 +117,59 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="2dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="10dp"
+        android:layout_marginTop="@dimen/margin"
+        android:layout_marginBottom="@dimen/margin"
         android:background="@color/grisDeLinea" />
 
-    <TextView
-        android:id="@+id/tvReview"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textColor="@color/colorPrimaryText"
-        android:textSize="14sp" />
+        android:orientation="vertical"
+        android:padding="@dimen/margin">
 
-    <Button
-        android:id="@+id/btnDetails"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:gravity="center"
-        android:paddingLeft="36dp"
-        android:paddingRight="36dp"
-        android:paddingTop="8dp"
-        android:paddingBottom="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp"
-        android:background="@drawable/background_button_rounded"
-        android:textColor="#FFF"
-        android:textSize="14sp"
-        android:text="VER DETALLE"
-        fontPath="OpenSans-Bold.ttf" />
+        <TextView
+            android:id="@+id/tvReview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorPrimaryText"
+            android:textSize="@dimen/text_size_small" />
+
+        <Button
+            android:id="@+id/btnDetails"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:gravity="center"
+            android:paddingLeft="36dp"
+            android:paddingRight="36dp"
+            android:paddingTop="@dimen/margin"
+            android:paddingBottom="@dimen/margin"
+            android:layout_marginTop="@dimen/margin"
+            android:layout_marginBottom="@dimen/margin"
+            android:background="@drawable/background_button_rounded"
+            android:textColor="#FFF"
+            android:textSize="@dimen/text_size_normal"
+            android:text="VER DETALLE"
+            fontPath="OpenSans-Bold.ttf" />
+
+    </LinearLayout>
 
     <View
         android:layout_width="match_parent"
         android:layout_height="2dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="10dp"
         android:background="@color/grisDeLinea" />
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:padding="@dimen/margin">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:textColor="@color/colorPrimaryText"
-            android:textSize="14sp"
+            android:textSize="@dimen/text_size_normal"
             android:text="Respuesta de la empresa"
             fontPath="OpenSans-Bold.ttf" />
 
@@ -171,7 +180,7 @@
             android:layout_alignParentRight="true"
             android:gravity="center"
             android:textColor="#FFF"
-            android:textSize="14sp"
+            android:textSize="@dimen/text_size_normal"
             android:text="NO"
             fontPath="OpenSans-Bold.ttf" />
 
@@ -180,20 +189,19 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="2dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="10dp"
         android:background="@color/grisDeLinea" />
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:padding="@dimen/margin">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:textColor="@color/colorPrimaryText"
-            android:textSize="14sp"
+            android:textSize="@dimen/text_size_normal"
             android:text="Votos útiles"
             fontPath="OpenSans-Bold.ttf" />
 
@@ -203,9 +211,9 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:gravity="center"
+            android:background="@color/colorPrimaryText"
             android:textColor="#FFF"
-            android:textSize="14sp"
-            android:text="5"
+            android:textSize="@dimen/text_size_normal"
             fontPath="OpenSans-Bold.ttf" />
 
     </RelativeLayout>
@@ -213,8 +221,6 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="2dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="10dp"
         android:background="@color/grisDeLinea" />
 
 </LinearLayout>

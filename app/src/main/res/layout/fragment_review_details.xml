@@ -7,33 +7,36 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="10dp">
+        android:padding="@dimen/margin_large">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"
-            android:layout_marginBottom="5dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="@dimen/margin"
             android:textColor="@color/colorPrimaryText"
-            android:textSize="18sp"
+            android:textSize="@dimen/text_size_header"
             android:text="@string/experiencia"
             fontPath="OpenSans-Bold.ttf" />
 
         <LinearLayout
+            android:id="@+id/mainContent"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:background="@drawable/background_rounded_corners">
+            android:background="@drawable/background_rounded_corners"
+            android:visibility="gone">
 
             <LinearLayout
                 android:id="@+id/lyHeader"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:paddingLeft="8dp"
-                android:paddingRight="8dp"
-                android:paddingTop="16dp"
-                android:paddingBottom="16dp"
+                android:paddingLeft="@dimen/margin"
+                android:paddingRight="@dimen/margin"
+                android:paddingTop="@dimen/margin_large"
+                android:paddingBottom="@dimen/margin_large"
                 android:background="@color/colorPrimary">
 
                 <TextView
@@ -41,7 +44,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="#FFF"
-                    android:textSize="14sp"
+                    android:textSize="@dimen/text_size_normal"
                     fontPath="OpenSans-Bold.ttf" />
 
                 <TextView
@@ -49,7 +52,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="#FFF"
-                    android:textSize="14sp"
+                    android:textSize="@dimen/text_size_normal"
                     fontPath="OpenSans-Semibold.ttf" />
 
             </LinearLayout>
@@ -58,14 +61,16 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:padding="8dp">
+                android:padding="@dimen/margin_large">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:paddingLeft="16dp"
-                    android:paddingRight="16dp">
+                    android:paddingLeft="@dimen/margin_large"
+                    android:paddingRight="@dimen/margin_large"
+                    android:paddingTop="@dimen/margin"
+                    android:paddingBottom="@dimen/margin">
 
                     <TextView
                         android:id="@+id/tvNombreHospital"
@@ -73,9 +78,8 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:gravity="center"
-                        android:layout_marginTop="16dp"
-                        android:textColor="?attr/colorPrimary"
-                        android:textSize="14sp"
+                        android:textColor="@color/colorPrimary"
+                        android:textSize="@dimen/text_size_normal"
                         fontPath="OpenSans-Bold.ttf" />
 
                     <TextView
@@ -85,7 +89,7 @@
                         android:layout_gravity="center"
                         android:gravity="center"
                         android:textColor="@color/colorPrimaryText"
-                        android:textSize="14sp" />
+                        android:textSize="@dimen/text_size_normal" />
 
                     <TextView
                         android:id="@+id/tvTelefono"
@@ -93,9 +97,9 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:gravity="center"
-                        android:layout_marginTop="16dp"
+                        android:layout_marginTop="@dimen/margin_large"
                         android:textColor="@color/colorPrimaryText"
-                        android:textSize="14sp" />
+                        android:textSize="@dimen/text_size_normal" />
 
                     <LinearLayout
                         android:id="@+id/lyAvg"
@@ -104,8 +108,8 @@
                         android:orientation="horizontal"
                         android:layout_gravity="center_horizontal"
                         android:gravity="center_horizontal"
-                        android:layout_marginTop="8dp"
-                        android:layout_marginBottom="8dp"/>
+                        android:layout_marginTop="@dimen/margin"
+                        android:layout_marginBottom="@dimen/margin"/>
 
                     <TextView
                         android:id="@+id/tvDireccion"
@@ -114,7 +118,7 @@
                         android:layout_gravity="center"
                         android:gravity="center"
                         android:textColor="@color/colorPrimaryText"
-                        android:textSize="14sp" />
+                        android:textSize="@dimen/text_size_normal" />
 
                     <TextView
                         android:id="@+id/tvTituloOpinion"
@@ -122,9 +126,9 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:gravity="center"
-                        android:layout_marginTop="16dp"
-                        android:textColor="?attr/colorPrimaryDark"
-                        android:textSize="14sp"
+                        android:layout_marginTop="@dimen/margin_large"
+                        android:textColor="@color/colorPrimaryDark"
+                        android:textSize="@dimen/text_size_normal"
                         fontPath="OpenSans-Italic.ttf" />
 
                 </LinearLayout>
@@ -132,8 +136,8 @@
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="2dp"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginBottom="10dp"
+                    android:layout_marginTop="@dimen/margin_large"
+                    android:layout_marginBottom="@dimen/margin_large"
                     android:background="#ccc" />
 
                 <LinearLayout
@@ -143,9 +147,10 @@
 
                     <com.facebook.drawee.view.SimpleDraweeView xmlns:fresco="http://schemas.android.com/apk/res-auto"
                         android:id="@+id/img"
-                        android:layout_width="100dp"
-                        android:layout_height="100dp"
-                        android:layout_marginRight="24dp"
+                        android:layout_width="@dimen/img_size"
+                        android:layout_height="@dimen/img_size"
+                        android:layout_gravity="center"
+                        android:layout_marginRight="@dimen/margin_large"
                         fresco:fadeDuration="300"
                         fresco:actualImageScaleType="fitXY"
                         fresco:roundAsCircle="true"
@@ -174,7 +179,7 @@
                             android:layout_above="@id/empty"
                             android:layout_alignLeft="@+id/empty"
                             android:textColor="@color/colorPrimaryText"
-                            android:textSize="16sp"
+                            android:textSize="@dimen/text_size_large"
                             fontPath="OpenSans-Bold.ttf" />
 
                         <TextView
@@ -185,7 +190,7 @@
                             android:layout_below="@id/tvUsuario"
                             android:layout_alignLeft="@+id/tvUsuario"
                             android:textColor="@color/colorPrimaryText"
-                            android:textSize="14sp" />
+                            android:textSize="@dimen/text_size_normal" />
 
                         <TextView
                             android:id="@+id/tvFecha"
@@ -194,9 +199,9 @@
                             android:layout_height="wrap_content"
                             android:layout_below="@id/tvUbicacion"
                             android:layout_alignLeft="@+id/tvUbicacion"
-                            android:layout_marginTop="8dp"
+                            android:layout_marginTop="@dimen/margin"
                             android:textColor="@color/colorPrimaryText"
-                            android:textSize="14sp" />
+                            android:textSize="@dimen/text_size_normal" />
 
                     </RelativeLayout>
 
@@ -205,8 +210,8 @@
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="2dp"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginBottom="10dp"
+                    android:layout_marginTop="@dimen/margin_large"
+                    android:layout_marginBottom="@dimen/margin_large"
                     android:background="#ccc" />
 
                 <LinearLayout
@@ -220,9 +225,8 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
                         android:gravity="center_horizontal"
-                        android:layout_marginBottom="16dp"
                         android:textColor="@color/colorPrimaryText"
-                        android:textSize="14sp"
+                        android:textSize="@dimen/text_size_normal"
                         fontPath="OpenSans-Bold.ttf" />
 
                     <TextView
@@ -231,17 +235,17 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
                         android:gravity="center_horizontal"
-                        android:layout_marginLeft="8dp"
-                        android:layout_marginRight="8dp"
-                        android:layout_marginBottom="8dp"
-                        android:textColor="@color/colorPrimaryText" />
+                        android:layout_margin="@dimen/margin"
+                        android:textColor="@color/colorPrimaryText"
+                        android:textSize="@dimen/text_size_small" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
                         android:gravity="center_horizontal"
-                        android:textColor="?attr/colorPrimaryDark"
+                        android:textColor="@color/colorPrimaryDark"
+                        android:textSize="@dimen/text_size_small"
                         android:text="¿Ha sido útil esta información?" />
 
                     <!--
@@ -265,8 +269,8 @@
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="2dp"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginBottom="10dp"
+                    android:layout_marginTop="@dimen/margin_large"
+                    android:layout_marginBottom="@dimen/margin_large"
                     android:background="#ccc" />
 
                 <RelativeLayout
@@ -278,7 +282,7 @@
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
                         android:textColor="@color/colorPrimaryText"
-                        android:textSize="14sp"
+                        android:textSize="@dimen/text_size_normal"
                         android:text="Respuesta de la empresa"
                         fontPath="OpenSans-Bold.ttf" />
 
@@ -289,8 +293,7 @@
                         android:layout_alignParentRight="true"
                         android:gravity="center"
                         android:textColor="#FFF"
-                        android:textSize="14sp"
-                        android:text="NO"
+                        android:textSize="@dimen/text_size_normal"
                         fontPath="OpenSans-Bold.ttf" />
 
                 </RelativeLayout>
@@ -298,8 +301,8 @@
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="2dp"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginBottom="10dp"
+                    android:layout_marginTop="@dimen/margin_large"
+                    android:layout_marginBottom="@dimen/margin_large"
                     android:background="#ccc" />
 
                 <RelativeLayout
@@ -311,7 +314,7 @@
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
                         android:textColor="@color/colorPrimaryText"
-                        android:textSize="14sp"
+                        android:textSize="@dimen/text_size_normal"
                         android:text="Votos útiles"
                         fontPath="OpenSans-Bold.ttf" />
 
@@ -321,9 +324,9 @@
                         android:layout_height="wrap_content"
                         android:layout_alignParentRight="true"
                         android:gravity="center"
+                        android:background="@color/colorPrimaryText"
                         android:textColor="#FFF"
-                        android:textSize="14sp"
-                        android:text="5"
+                        android:textSize="@dimen/text_size_normal"
                         fontPath="OpenSans-Bold.ttf" />
 
                 </RelativeLayout>
@@ -331,8 +334,8 @@
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="2dp"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginBottom="10dp"
+                    android:layout_marginTop="@dimen/margin"
+                    android:layout_marginBottom="@dimen/margin"
                     android:background="#ccc" />
 
             </LinearLayout>

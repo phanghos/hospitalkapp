@@ -19,10 +19,18 @@ public interface ServiceDetailsContract {
         void hideProgress();
         void incrementOffset();
         void initRecyclerView();
+        void showMainContent();
         void showServiceDetails(Service service);
         void setReviews(ArrayList<Review> reviews);
         void showReviews();
         void hideReviews();
+        void launchWriteReviewFragment();
+        void showNetworkError();
+        void showNetworkFailedError();
+        void showPlayServicesError();
+        void showLocationNotAvailableError();
+        void showNoReviewsError();
+        void showUserNotLoggedError();
     }
 
     interface Presenter extends BasePresenter<View> {

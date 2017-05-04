@@ -3,12 +3,14 @@ package org.taitasciore.android.hospitalk;
 import org.taitasciore.android.hospitalk.close.CloseContract;
 import org.taitasciore.android.hospitalk.hospital.HospitalDetailsContract;
 import org.taitasciore.android.hospitalk.hospital.SearchHospitalsContract;
+import org.taitasciore.android.hospitalk.login.LoginContract;
 import org.taitasciore.android.hospitalk.main.LocationContract;
-import org.taitasciore.android.hospitalk.menu.MenuContract;
+import org.taitasciore.android.hospitalk.mainmenu.MainMenuContract;
 import org.taitasciore.android.hospitalk.review.ReviewDetailsContract;
 import org.taitasciore.android.hospitalk.review.ReviewsContract;
 import org.taitasciore.android.hospitalk.service.SearchServicesContract;
 import org.taitasciore.android.hospitalk.service.ServiceDetailsContract;
+import org.taitasciore.android.hospitalk.signup.SignupContract;
 
 /**
  * Created by roberto on 19/04/17.
@@ -17,7 +19,7 @@ import org.taitasciore.android.hospitalk.service.ServiceDetailsContract;
 public class PresenterState {
 
     private LocationContract.Presenter mLocationPresenter;
-    private MenuContract.Presenter mMenuPresenter;
+    private MainMenuContract.Presenter mMenuPresenter;
     private ReviewsContract.Presenter mReviewsPresenter;
     private ReviewDetailsContract.Presenter mReviewDetailsPresenter;
     private CloseContract.Presenter mClosePresenter;
@@ -25,6 +27,8 @@ public class PresenterState {
     private SearchHospitalsContract.Presenter mSearchHospitalsPresenter;
     private SearchServicesContract.Presenter mSearchServicesPresenter;
     private ServiceDetailsContract.Presenter mServiceDetailsPresenter;
+    private SignupContract.Presenter mSignUpPresenter;
+    private LoginContract.Presenter mLoginPresenter;
 
     public LocationContract.Presenter getLocationPresenter() {
         return mLocationPresenter;
@@ -34,11 +38,11 @@ public class PresenterState {
         mLocationPresenter = presenter;
     }
 
-    public MenuContract.Presenter getMenuPresenter() {
+    public MainMenuContract.Presenter getMenuPresenter() {
         return mMenuPresenter;
     }
 
-    public void setMenuPresenter(MenuContract.Presenter presenter) {
+    public void setMenuPresenter(MainMenuContract.Presenter presenter) {
         mMenuPresenter = presenter;
     }
 
@@ -96,5 +100,21 @@ public class PresenterState {
 
     public void setServiceDetailsPresenter(ServiceDetailsContract.Presenter presenter) {
         this.mServiceDetailsPresenter = presenter;
+    }
+
+    public SignupContract.Presenter getSignupPresenter() {
+        return mSignUpPresenter;
+    }
+
+    public void setSignupPresenter(SignupContract.Presenter presenter) {
+        this.mSignUpPresenter = presenter;
+    }
+
+    public LoginContract.Presenter getLoginPresenter() {
+        return mLoginPresenter;
+    }
+
+    public void setLoginPresenter(LoginContract.Presenter presenter) {
+        this.mLoginPresenter = presenter;
     }
 }

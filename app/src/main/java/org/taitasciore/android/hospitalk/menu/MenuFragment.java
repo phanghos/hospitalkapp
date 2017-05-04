@@ -1,139 +1,208 @@
 package org.taitasciore.android.hospitalk.menu;
 
+import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
-import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-import org.taitasciore.android.event.AttachPresenterEvent;
-import org.taitasciore.android.event.RequestLocationEvent;
-import org.taitasciore.android.event.SendLocationEvent;
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
+import com.afollestad.materialdialogs.Theme;
+import com.facebook.AccessToken;
+import com.facebook.login.LoginManager;
+import com.facebook.share.model.ShareLinkContent;
+import com.facebook.share.widget.ShareButton;
+import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.common.api.Status;
+
+import org.taitasciore.android.hospitalk.HospitalkApp;
 import org.taitasciore.android.hospitalk.R;
-import org.taitasciore.android.event.SavePresenterEvent;
-import org.taitasciore.android.hospitalk.close.CloseFragment;
-import org.taitasciore.android.hospitalk.hospital.SearchHospitalsFragment;
-import org.taitasciore.android.hospitalk.review.ReviewsFragment;
-import org.taitasciore.android.hospitalk.service.SearchServicesFragment;
+import org.taitasciore.android.hospitalk.StorageUtils;
+import org.taitasciore.android.hospitalk.login.LoginFragment;
+import org.taitasciore.android.hospitalk.mainmenu.MainMenuFragment;
+import org.taitasciore.android.hospitalk.profile.ProfileFragment;
+import org.taitasciore.android.hospitalk.signup.SignupFragment;
+import org.taitasciore.android.network.HospitalkApi;
 
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 /**
- * Created by roberto on 18/04/17.
+ * Created by roberto on 25/04/17.
  */
 
 public class MenuFragment extends Fragment implements MenuContract.View {
 
-    private double lat;
-    private double lon;
+    @BindView(R.id.btnLogin) Button mBtnLogin;
+    @BindView(R.id.btnShare) ShareButton mBtnShare;
 
-    private MenuContract.Presenter mPresenter;
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setRetainInstance(true);
+    }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_main, container, false);
+        View v = inflater.inflate(R.layout.fragment_menu, container, false);
         ButterKnife.bind(this, v);
+
+        if (StorageUtils.isUserLogged(getActivity())) {
+            mBtnLogin.setText("Ver perfil");
+        } else {
+            mBtnLogin.setText("Iniciar sesión");
+        }
+
         return v;
     }
 
     @Override
     public void onStart() {
         super.onStart();
-        EventBus.getDefault().register(this);
+        initListener();
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        EventBus.getDefault().unregister(this);
-    }
-
-    @Subscribe
-    public void getLocation(SendLocationEvent event) {
-        lat = event.lat;
-        lon = event.lon;
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        EventBus.getDefault().post(new AttachPresenterEvent(this));
-        EventBus.getDefault().post(new RequestLocationEvent());
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        if (mPresenter != null) {
-            mPresenter.unbindView();
-            EventBus.getDefault().post(new SavePresenterEvent(mPresenter));
-        }
+        clearListener();
     }
 
     @Override
     public void bindPresenter(MenuContract.Presenter presenter) {
-        this.mPresenter = presenter;
+
     }
 
     @Override
-    public void launchOpinionsActivity() {
-        if (lat != 0 && lon != 0) {
-            getActivity().getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.container, new ReviewsFragment())
-                    .addToBackStack(null).commit();
-        }
-    }
-
-    @Override
-    public void launchSearchHospitalsActivity() {
+    public void launchMainMenuFragment() {
         getActivity().getSupportFragmentManager().beginTransaction()
-                .replace(R.id.container, new SearchHospitalsFragment())
+                .replace(R.id.container, new MainMenuFragment()).commit();
+    }
+
+    @Override
+    public void launchLoginFragment() {
+        getActivity().getSupportFragmentManager().beginTransaction()
+                .replace(R.id.container, new LoginFragment())
                 .addToBackStack(null).commit();
     }
 
     @Override
-    public void launchWriteOpinionActivity() {
-
-    }
-
-    @Override
-    public void launchSearchServicesActivity() {
+    public void launchSignUpFragment() {
         getActivity().getSupportFragmentManager().beginTransaction()
-                .replace(R.id.container, new SearchServicesFragment())
+                .replace(R.id.container, new SignupFragment())
                 .addToBackStack(null).commit();
     }
 
     @Override
-    public void launchCloseActivity() {
-        if (lat != 0 && lon != 0) {
-            getActivity().getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.container, new CloseFragment())
-                    .addToBackStack(null).commit();
+    public void launchProfileFragment() {
+        getActivity().getSupportFragmentManager().beginTransaction()
+                .replace(R.id.container, new ProfileFragment())
+                .addToBackStack(null).commit();
+    }
+
+    @Override
+    public void showConfirmDialog() {
+        String msg = "";
+
+        if (StorageUtils.isUserLogged(getActivity())) msg = "cerrar sesión";
+
+        MaterialDialog.Builder builder = new MaterialDialog.Builder(getActivity())
+                .theme(Theme.LIGHT)
+                .title("Confirmar")
+                .content("¿Está seguro de que desea salir?")
+                .positiveText("sí")
+                .negativeText("no")
+                .neutralText(msg)
+                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        getActivity().finish();
+                    }
+                })
+                .onNeutral(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        StorageUtils.removeUser(getActivity());
+                        signoutFacebook();
+                        signoutGoogle();
+                        getActivity().finish();
+                    }
+                });
+
+        builder.show();
+    }
+
+    @Override
+    public void initListener() {
+        mBtnShare.setShareContent(new ShareLinkContent.Builder()
+                .setContentUrl(Uri.parse(HospitalkApi.BASE_URL))
+                .setImageUrl(Uri.parse(HospitalkApi.BASE_URL + "public/frontend/images/logo.png"))
+                .setContentTitle("ScoutService.com")
+                .setContentDescription(getResources().getString(R.string.compartir_pagina_scout))
+                .build());
+    }
+
+    @Override
+    public void clearListener() {
+        mBtnShare.setOnClickListener(null);
+    }
+
+    @Override
+    public void shareContent() {
+
+    }
+
+    @Override
+    public void signoutFacebook() {
+        if (AccessToken.getCurrentAccessToken() != null) {
+            LoginManager.getInstance().logOut();
         }
     }
 
-    @OnClick(R.id.ly_opiniones) void onClickedOpiniones() {
-        launchOpinionsActivity();
+    @Override
+    public void signoutGoogle() {
+        final GoogleApiClient googleApiClient = ((HospitalkApp) getActivity()
+                .getApplication()).getGoogleApiClient();
+
+        if (googleApiClient != null && googleApiClient.isConnected()) {
+            Auth.GoogleSignInApi.signOut(googleApiClient).setResultCallback(new ResultCallback<Status>() {
+                @Override
+                public void onResult(@NonNull Status status) {
+                    if (status.isSuccess()) {
+                        ((HospitalkApp) getActivity().getApplication())
+                                .setGoogleApiClient(googleApiClient);
+                    }
+                }
+            });
+        }
     }
 
-    @OnClick(R.id.ly_hospitales) void onClickedHospitales() {
-        launchSearchHospitalsActivity();
+    @OnClick(R.id.btnHome) void onHomeClicked() {
+        launchMainMenuFragment();
     }
 
-    @OnClick(R.id.ly_opinar) void onClickedWriteOpinion() {
-        launchWriteOpinionActivity();
+    @OnClick(R.id.btnLogin) void onLoginClicked() {
+        if (StorageUtils.isUserLogged(getActivity())) {
+            launchProfileFragment();
+        } else {
+            launchLoginFragment();
+        }
     }
 
-    @OnClick(R.id.ly_servicios) void onClickedServices() {
-        launchSearchServicesActivity();
+    @OnClick(R.id.btnSignUp) void onSignUpClicked() {
+        launchSignUpFragment();
     }
 
-    @OnClick(R.id.ly_cerca) void onClickedClose() {
-        launchCloseActivity();
+    @OnClick(R.id.btnLogout) void onLogoutClicked() {
+        showConfirmDialog();
     }
 }

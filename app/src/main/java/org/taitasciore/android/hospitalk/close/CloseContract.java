@@ -29,6 +29,13 @@ public interface CloseContract {
         void setPopularServices(ArrayList<ServiceResponse.Service> list);
         void showPopularServices();
         void hidePopularServices();
+        void addBestRatedHospitals(ArrayList<Hospital> hospitals);
+        void addWorstRatedHospitals(ArrayList<Hospital> hospitals);
+        void addPopularServices(ArrayList<ServiceResponse.Service> services);
+        void showNetworkError();
+        void showNetworkFailedError();
+        void showNoMoreHospitalsError();
+        void showNoMoreServicesError();
     }
 
     interface Presenter extends BasePresenter<View> {

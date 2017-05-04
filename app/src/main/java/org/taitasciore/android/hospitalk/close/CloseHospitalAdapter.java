@@ -1,6 +1,7 @@
 package org.taitasciore.android.hospitalk.close;
 
 import android.app.Activity;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
@@ -9,8 +10,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import org.greenrobot.eventbus.EventBus;
+import org.taitasciore.android.event.LoadMoreBestRatedHospitalsEvent;
+import org.taitasciore.android.event.LoadMoreWorstRatedHospitalsEvent;
 import org.taitasciore.android.hospitalk.R;
 import org.taitasciore.android.hospitalk.StarUtils;
 import org.taitasciore.android.hospitalk.hospital.HospitalDetailsFragment;
@@ -27,12 +32,17 @@ import butterknife.ButterKnife;
 
 public class CloseHospitalAdapter extends RecyclerView.Adapter<CloseHospitalAdapter.HospitalVH> {
 
+    public static final int TYPE_BEST_RATED = 1;
+    public static final int TYPE_WORST_RATED = 2;
+
     private final Activity mContext;
     private final ArrayList<Hospital> mHospitals;
+    private final int mType;
 
-    public CloseHospitalAdapter(Activity context, ArrayList<Hospital> hospitals) {
+    public CloseHospitalAdapter(Activity context, ArrayList<Hospital> hospitals, int type) {
         mContext = context;
         mHospitals = hospitals;
+        mType = type;
     }
 
     @Override
@@ -70,11 +80,38 @@ public class CloseHospitalAdapter extends RecyclerView.Adapter<CloseHospitalAdap
                         .addToBackStack(null).commit();
             }
         });
+
+        if (position == getItemCount() - 1) {
+            holder.fab.setVisibility(View.VISIBLE);
+            holder.fab.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (mType == TYPE_BEST_RATED) {
+                        EventBus.getDefault().post(new LoadMoreBestRatedHospitalsEvent());
+                    } else if (mType == TYPE_WORST_RATED) {
+                        EventBus.getDefault().post(new LoadMoreWorstRatedHospitalsEvent());
+                    }
+                }
+            });
+        } else {
+            holder.fab.setVisibility(View.GONE);
+            holder.fab.setOnClickListener(null);
+        }
     }
 
     @Override
     public int getItemCount() {
         return mHospitals.size();
+    }
+
+    public void add(Hospital h) {
+        mHospitals.add(h);
+        notifyItemInserted(getItemCount());
+        notifyItemRangeChanged(0, getItemCount());
+    }
+
+    public ArrayList<Hospital> getList() {
+        return mHospitals;
     }
 
     static class HospitalVH extends RecyclerView.ViewHolder {
@@ -84,6 +121,7 @@ public class CloseHospitalAdapter extends RecyclerView.Adapter<CloseHospitalAdap
         @BindView(R.id.tvFecha) TextView date;
         @BindView(R.id.btnVer) Button details;
         @BindView(R.id.lyAvg) LinearLayout avg;
+        @BindView(R.id.fab) FloatingActionButton fab;
 
         public HospitalVH(View itemView) {
             super(itemView);

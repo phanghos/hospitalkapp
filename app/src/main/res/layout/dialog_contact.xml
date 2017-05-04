@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/margin"
+        android:background="#fff">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/resolver_como"
+            android:layout_marginTop="13.9dp"
+            android:textSize="12sp" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/margin">
+
+            <Spinner
+                android:id="@+id/spType"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:background="@color/gris_et_bg_ht" />
+
+            <ImageView
+                android:layout_width="@dimen/arrow_size"
+                android:layout_height="@dimen/arrow_size"
+                android:layout_centerVertical="true"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:background="@drawable/arrow_spinner" />
+
+        </RelativeLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin"
+            android:textSize="@dimen/text_size_small"
+            android:text="@string/nombre"/>
+
+        <EditText
+            android:id="@+id/etName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/margin"
+            android:hint="@string/ingrese"
+            android:inputType="textAutoComplete"
+            android:background="@color/gris_et_bg_ht"
+            android:textSize="@dimen/text_size_small" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin"
+            android:textSize="@dimen/text_size_small"
+            android:text="@string/email_contacto"/>
+
+        <EditText
+            android:id="@+id/etMail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/margin"
+            android:hint="@string/ingrese"
+            android:inputType="textAutoComplete"
+            android:background="@color/gris_et_bg_ht"
+            android:textSize="@dimen/text_size_small" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin"
+            android:textSize="@dimen/text_size_small"
+            android:text="@string/empresa_opcional"/>
+
+        <EditText
+            android:id="@+id/etCompany"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/margin"
+            android:hint="@string/ingrese"
+            android:background="@color/gris_et_bg_ht"
+            android:textSize="12sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin"
+            android:textSize="@dimen/text_size_small"
+            android:text="@string/telefono"/>
+
+        <EditText
+            android:id="@+id/etPhone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/margin"
+            android:inputType="phone"
+            android:hint="@string/campo_telefono"
+            android:background="@color/gris_et_bg_ht"
+            android:textSize="@dimen/text_size_small"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin"
+            android:textSize="@dimen/text_size_small"
+            android:text="@string/ayudarlo"/>
+
+        <EditText
+            android:id="@+id/etComment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/margin"
+            android:hint="@string/ingrese"
+            android:inputType="textMultiLine"
+            android:background="@color/gris_et_bg_ht"
+            android:textSize="@dimen/text_size_small"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin"
+            android:textSize="12sp"
+            android:text="@string/campo_obligatorio_form" />
+
+        <!--
+        <Button
+            android:id="@+id/btnSend"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="@dimen/margin_large"
+            android:background="@drawable/boton_azul_opinion"
+            android:textColor="@color/blanco"
+            android:textSize="@dimen/text_size_normal"
+            android:textStyle="bold"
+            android:text="@string/enviar"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:background="@color/grisDeLinea"
+            android:layout_marginTop="@dimen/margin"
+            android:layout_marginBottom="@dimen/margin" />
+
+        <Button
+            android:layout_width="182dp"
+            android:layout_height="wrap_content"
+            android:text="@string/cancelar"
+            android:id="@+id/boton_cancelar_contacto"
+            android:background="@drawable/boton_registrarme"
+            android:textColor="@color/blanco"
+            android:textStyle="bold"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="14.5dp"
+            android:layout_marginBottom="14.5dp" />
+            -->
+
+    </LinearLayout>
+
+</ScrollView>

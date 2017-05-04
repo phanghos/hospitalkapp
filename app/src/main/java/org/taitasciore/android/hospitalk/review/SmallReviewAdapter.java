@@ -1,6 +1,7 @@
 package org.taitasciore.android.hospitalk.review;
 
 import android.app.Activity;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -8,6 +9,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import org.greenrobot.eventbus.EventBus;
+import org.taitasciore.android.event.LoadMoreReviewsEvent;
 import org.taitasciore.android.hospitalk.R;
 import org.taitasciore.android.model.Review;
 
@@ -57,6 +60,18 @@ public class SmallReviewAdapter extends RecyclerView.Adapter<SmallReviewAdapter.
                         .addToBackStack(null).commit();
             }
         });
+
+        if (position == getItemCount() - 1) {
+            holder.fab.setVisibility(View.VISIBLE);
+            holder.fab.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    EventBus.getDefault().post(new LoadMoreReviewsEvent());
+                }
+            });
+        } else {
+            holder.fab.setVisibility(View.GONE);
+        }
     }
 
     @Override
@@ -69,10 +84,15 @@ public class SmallReviewAdapter extends RecyclerView.Adapter<SmallReviewAdapter.
         notifyItemInserted(getItemCount());
     }
 
+    public ArrayList<Review> getList() {
+        return mReviews;
+    }
+
     static class SmallReviewVH extends RecyclerView.ViewHolder {
 
         @BindView(R.id.tvUsr) TextView user;
         @BindView(R.id.tvOpinion) TextView review;
+        @BindView(R.id.fab) FloatingActionButton fab;
 
         public SmallReviewVH(View itemView) {
             super(itemView);

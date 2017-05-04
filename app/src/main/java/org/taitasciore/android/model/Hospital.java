@@ -42,6 +42,10 @@ public class Hospital implements Serializable {
     private String companyCity;
     @SerializedName("rating_detail")
     private ArrayList<RatingDetail> ratingDetail;
+    @SerializedName("company_latitude")
+    private double latitide;
+    @SerializedName("company_longitude")
+    private double longitude;
 
     public int getIdCompany() {
         return idCompany;
@@ -169,6 +173,22 @@ public class Hospital implements Serializable {
 
     public void setHighlightServices(ArrayList<HighlightService> highlightServices) {
         this.highlightServices = highlightServices;
+    }
+
+    public double getLatitide() {
+        return latitide;
+    }
+
+    public void setLatitide(double latitide) {
+        this.latitide = latitide;
+    }
+
+    public double getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(double longitude) {
+        this.longitude = longitude;
     }
 
     public static class RatingDetail implements Serializable {

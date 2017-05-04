@@ -6,98 +6,95 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:padding="@dimen/margin_large">
 
         <TextView
             android:id="@+id/titulo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Buscador de empresas Sector Sanitario"
-            android:textSize="18sp"
-            android:textStyle="bold"
+            android:layout_gravity="center_horizontal"
+            android:gravity="center_horizontal"
+            android:layout_marginBottom="@dimen/margin"
+            android:textSize="@dimen/text_size_header"
             android:textColor="@color/gris_title_ht"
-            android:layout_marginTop="18dp"
-            android:layout_marginLeft="16.7dp"
-            android:layout_marginStart="16.7dp" />
+            android:textStyle="bold"
+            android:text="Buscador de empresas Sector Sanitario"
+            fontPath="OpenSans-Bold.ttf" />
 
         <LinearLayout
+            android:id="@+id/mainContent"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
+            android:padding="@dimen/margin_large"
             android:background="@drawable/fondo_blanco"
-            android:layout_marginLeft="8.7dp"
-            android:layout_marginRight="8.7dp"
-            android:layout_marginTop="12dp"
-            android:padding="8.5dp">
+            android:visibility="gone">
 
             <TextView
                 android:id="@+id/buscador"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Buscar empresa"
-                android:textSize="14sp"
+                android:layout_marginBottom="@dimen/margin"
+                android:textSize="@dimen/text_size_normal"
                 android:textStyle="bold"
-                android:layout_marginTop="5dp" />
+                android:text="Buscar empresa" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginTop="10dp">
+                android:orientation="horizontal">
 
                 <AutoCompleteTextView
+                    android:id="@+id/tvSearch"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:id="@+id/campoBuscador"
-                    android:layout_marginRight="16dp"
-                    android:layout_marginEnd="16dp"
-                    android:background="@color/gris_et_bg_ht"
-                    android:padding="8dp" />
+                    android:layout_marginRight="@dimen/margin"
+                    android:padding="@dimen/margin"
+                    android:background="@color/gris_et_bg_ht" />
 
                 <Button
-                    android:id="@+id/B_Buscar"
+                    android:id="@+id/btnSearch"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_gravity="clip_horizontal"
+                    android:padding="@dimen/margin"
                     android:background="@drawable/boton_degradado"
-                    android:drawableTop="@drawable/search"
-                    android:paddingBottom="4.3dp"
-                    android:paddingLeft="18.3dp"
-                    android:paddingRight="18.3dp"
-                    android:paddingTop="10dp" />
+                    android:drawableTop="@drawable/search" />
 
             </LinearLayout>
 
             <TextView
+                android:id="@+id/textBuscadorIncluir"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/textBuscadorIncluir"
                 android:hint="Si el servicio que estás buscando no aparece en esta lista de los servicios ofrecidos para la empresa,
                 puede proponer que se añada mediante 5 simples datos."
-                android:layout_marginTop="13dp"
-                android:textSize="12sp" />
+                android:layout_marginTop="@dimen/margin"
+                android:textSize="@dimen/text_size_small" />
 
             <Button
-                android:id="@+id/busqueda_boton_mas"
+                android:id="@+id/btnAddService"
                 android:layout_width="wrap_content"
                 android:layout_height="35dp"
-                android:layout_marginTop="16dp"
                 android:layout_gravity="center_horizontal"
                 android:gravity="center"
-                android:paddingLeft="16dp"
-                android:paddingRight="16dp"
+                android:layout_marginTop="@dimen/margin_large"
+                android:layout_marginBottom="@dimen/margin_large"
+                android:paddingLeft="@dimen/margin_large"
+                android:paddingRight="@dimen/margin_large"
                 android:background="@drawable/boton_azul_opinion"
                 android:textColor="#fff"
-                android:textSize="14sp"
+                android:textSize="@dimen/text_size_normal"
                 android:text="AÑADIR SERVICIOS"
                 fontPath="OpenSans-Bold.ttf" />
 
             <View
                 android:layout_width="match_parent"
-                android:layout_height="0.6dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginBottom="16dp"
+                android:layout_height="2dp"
+                android:layout_marginTop="@dimen/margin_large"
+                android:layout_marginBottom="@dimen/margin_large"
                 android:background="@color/grisDeLinea" />
 
             <LinearLayout
@@ -107,11 +104,10 @@
 
                 <com.facebook.drawee.view.SimpleDraweeView xmlns:fresco="http://schemas.android.com/apk/res-auto"
                     android:id="@+id/img"
-                    android:layout_width="100dp"
-                    android:layout_height="100dp"
+                    android:layout_width="@dimen/img_size"
+                    android:layout_height="@dimen/img_size"
                     android:layout_gravity="center_vertical"
-                    android:layout_marginRight="16dp"
-                    android:background="@drawable/marco_image_view"
+                    android:layout_marginRight="@dimen/margin"
                     android:src="@drawable/logocompany"
                     fresco:fadeDuration="300"
                     fresco:placeholderImage="@drawable/cargando"
@@ -122,34 +118,36 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    android:layout_marginLeft="@dimen/margin">
 
                     <TextView
                         android:id="@+id/tvCompanyName"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textSize="14sp"
+                        android:textSize="@dimen/text_size_normal"
                         fontPath="OpenSans-Bold.ttf" />
 
                     <TextView
                         android:id="@+id/tvCompanyCity"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textSize="18sp"
+                        android:textSize="@dimen/text_size_large"
                         fontPath="OpenSans-Bold.ttf" />
 
                     <TextView
                         android:id="@+id/tvActivityName"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="wrap_content"
+                        android:textSize="@dimen/text_size_normal" />
 
                     <LinearLayout
                         android:id="@+id/lyAvg"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
-                        android:layout_marginTop="5dp"
-                        android:layout_marginBottom="5dp" />
+                        android:layout_marginTop="@dimen/margin"
+                        android:layout_marginBottom="@dimen/margin" />
 
                 </LinearLayout>
 
@@ -158,7 +156,8 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="2dp"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="@dimen/margin_large"
+                android:layout_marginBottom="@dimen/margin_large"
                 android:background="@color/grisDeLinea" />
 
             <ToggleButton
@@ -166,23 +165,23 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:textColor="@color/colorPrimaryDark"
                 android:background="@android:color/transparent"
                 android:textAllCaps="false"
                 android:textOff="@string/ver_mapa"
                 android:textOn="@string/ocultar_mapa"
-                android:textSize="14sp"
+                android:textColor="@color/colorPrimaryDark"
+                android:textSize="@dimen/text_size_normal"
                 android:text="Ver mapa" />
 
             <LinearLayout
-                android:id="@+id/lyMapa"
+                android:id="@+id/lyMap"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:visibility="gone">
 
                 <FrameLayout
-                    android:id="@+id/mapFragment"
+                    android:id="@+id/mapContainer"
                     android:layout_width="match_parent"
                     android:layout_height="250dp" />
 
@@ -191,15 +190,14 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="2dp"
-                android:layout_marginTop="10dp"
                 android:background="@color/grisDeLinea" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="8dp">
+                android:layout_marginTop="@dimen/margin"
+                android:layout_marginBottom="@dimen/margin">
 
                 <TextView
                     android:layout_width="0dp"
@@ -207,7 +205,7 @@
                     android:layout_weight="0.3"
                     android:layout_gravity="center_vertical"
                     android:text="Excelente"
-                    android:layout_marginRight="24dp" />
+                    android:layout_marginRight="@dimen/margin" />
 
                 <ProgressBar
                     android:id="@+id/progressExcelente"
@@ -225,7 +223,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:layout_marginBottom="8dp">
+                android:layout_marginBottom="@dimen/margin">
 
                 <TextView
                     android:layout_width="0dp"
@@ -233,7 +231,7 @@
                     android:layout_weight="0.3"
                     android:layout_gravity="center_vertical"
                     android:text="Muy Bueno"
-                    android:layout_marginRight="24dp" />
+                    android:layout_marginRight="@dimen/margin" />
 
                 <ProgressBar
                     android:id="@+id/progressMuyBueno"
@@ -251,7 +249,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:layout_marginBottom="8dp">
+                android:layout_marginBottom="@dimen/margin">
 
                 <TextView
                     android:layout_width="0dp"
@@ -259,7 +257,7 @@
                     android:layout_weight="0.3"
                     android:layout_gravity="center_vertical"
                     android:text="Normal"
-                    android:layout_marginRight="24dp" />
+                    android:layout_marginRight="@dimen/margin" />
 
                 <ProgressBar
                     android:id="@+id/progressNormal"
@@ -277,7 +275,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:layout_marginBottom="8dp">
+                android:layout_marginBottom="@dimen/margin">
 
                 <TextView
                     android:layout_width="0dp"
@@ -285,7 +283,7 @@
                     android:layout_weight="0.3"
                     android:layout_gravity="center_vertical"
                     android:text="Malo"
-                    android:layout_marginRight="24dp" />
+                    android:layout_marginRight="@dimen/margin" />
 
                 <ProgressBar
                     android:id="@+id/progressMalo"
@@ -310,7 +308,7 @@
                     android:layout_weight="0.3"
                     android:layout_gravity="center_vertical"
                     android:text="Muy Malo"
-                    android:layout_marginRight="24dp" />
+                    android:layout_marginRight="@dimen/margin" />
 
                 <ProgressBar
                     android:id="@+id/progressMuyMalo"
@@ -326,21 +324,23 @@
 
             <View
                 android:layout_width="match_parent"
-                android:layout_height="0.6dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginBottom="16dp"
+                android:layout_height="2dp"
+                android:layout_marginTop="@dimen/margin"
+                android:layout_marginBottom="@dimen/margin"
                 android:background="@color/grisDeLinea" />
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin"
+                android:layout_marginBottom="@dimen/margin">
 
                 <ImageView
                     android:id="@+id/ivNotes"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="@dimen/icon_size"
+                    android:layout_height="@dimen/icon_size"
                     android:layout_centerVertical="true"
-                    android:layout_marginRight="8dp"
+                    android:layout_marginRight="@dimen/margin"
                     android:src="@drawable/ic_notes" />
 
                 <TextView
@@ -349,50 +349,50 @@
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:layout_toRightOf="@+id/ivNotes"
-                    android:textColor="?attr/colorPrimary"
-                    android:textSize="14sp"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="@dimen/text_size_normal"
                     android:text="Servicios" />
 
                 <ImageView
                     android:id="@+id/arrowServicios"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="@dimen/icon_size"
+                    android:layout_height="@dimen/icon_size"
                     android:layout_centerVertical="true"
                     android:layout_alignParentRight="true"
                     android:src="@drawable/down_arrow_4" />
 
             </RelativeLayout>
 
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/listServices"
+            <android.support.v4.widget.NestedScrollView
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content">
 
-            <LinearLayout
-                android:id="@+id/lyServicios"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_marginTop="8dp"
-                android:visibility="gone" />
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/listServices"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+            </android.support.v4.widget.NestedScrollView>
 
             <View
                 android:layout_width="match_parent"
-                android:layout_height="0.6dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginBottom="16dp"
+                android:layout_height="2dp"
+                android:layout_marginTop="@dimen/margin"
+                android:layout_marginBottom="@dimen/margin"
                 android:background="@color/grisDeLinea" />
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin"
+                android:layout_marginBottom="@dimen/margin">
 
                 <ImageView
                     android:id="@+id/ivOpinions"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="@dimen/icon_size"
+                    android:layout_height="@dimen/icon_size"
                     android:layout_centerVertical="true"
-                    android:layout_marginRight="8dp"
+                    android:layout_marginRight="@dimen/margin"
                     android:src="@drawable/ic_opinions" />
 
                 <TextView
@@ -401,49 +401,50 @@
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:layout_toRightOf="@+id/ivOpinions"
-                    android:textColor="?attr/colorPrimary"
-                    android:textSize="14sp"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="@dimen/text_size_normal"
                     android:text="Opiniones" />
 
                 <ImageView
                     android:id="@+id/arrowOpiniones"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="@dimen/icon_size"
+                    android:layout_height="@dimen/icon_size"
                     android:layout_centerVertical="true"
                     android:layout_alignParentRight="true"
                     android:src="@drawable/down_arrow_4" />
 
             </RelativeLayout>
 
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/listReviews"
+            <android.support.v4.widget.NestedScrollView
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content">
 
-            <LinearLayout
-                android:id="@+id/lyOpiniones"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:visibility="gone" />
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/listReviews"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+            </android.support.v4.widget.NestedScrollView>
 
             <View
                 android:layout_width="match_parent"
-                android:layout_height="0.6dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginBottom="16dp"
+                android:layout_height="2dp"
+                android:layout_marginTop="@dimen/margin"
+                android:layout_marginBottom="@dimen/margin"
                 android:background="@color/grisDeLinea" />
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin"
+                android:layout_marginBottom="@dimen/margin">
 
                 <ImageView
                     android:id="@+id/ivFotos"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="@dimen/icon_size"
+                    android:layout_height="@dimen/icon_size"
                     android:layout_centerVertical="true"
-                    android:layout_marginRight="8dp"
+                    android:layout_marginRight="@dimen/margin"
                     android:src="@drawable/ic_notes" />
 
                 <TextView
@@ -452,14 +453,14 @@
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:layout_toRightOf="@+id/ivFotos"
-                    android:textColor="?attr/colorPrimary"
-                    android:textSize="14sp"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="@dimen/text_size_normal"
                     android:text="Fotos" />
 
                 <ImageView
                     android:id="@+id/arrowFotos"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="@dimen/icon_size"
+                    android:layout_height="@dimen/icon_size"
                     android:layout_centerVertical="true"
                     android:layout_alignParentRight="true"
                     android:src="@drawable/down_arrow_4" />

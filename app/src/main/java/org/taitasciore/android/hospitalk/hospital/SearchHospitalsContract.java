@@ -31,12 +31,17 @@ public interface SearchHospitalsContract {
         void showActivities(ArrayList<Activity> activities);
         void showHospitals(ArrayList<Hospital> hospitals);
         void addHospitals(ArrayList<Hospital> hospitals);
+        void blockFilter();
+        void unblockFilter();
+        void showNetworkError();
+        void showNetworkFailedError();
     }
 
     interface Presenter extends BasePresenter<View> {
 
         void getCountries();
+        void getCities(String countryId);
         void searchHospitals(String countryId, String cityId, String serviceId, String reviewOrder,
-                             String reviewRank, int offset);
+                             String reviewRank, int offset, String query);
     }
 }

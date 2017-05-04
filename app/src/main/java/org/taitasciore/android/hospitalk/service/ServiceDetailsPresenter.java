@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.observers.DisposableObserver;
 import io.reactivex.schedulers.Schedulers;
+import retrofit2.Response;
 
 /**
  * Created by roberto on 25/04/17.
@@ -47,12 +48,20 @@ public class ServiceDetailsPresenter implements ServiceDetailsContract.Presenter
         mService.getServiceDetails(id)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new DisposableObserver<Service>() {
+                .subscribe(new DisposableObserver<Response<Service>>() {
                     @Override
-                    public void onNext(Service service) {
+                    public void onNext(Response<Service> response) {
+                        Log.i("result code", response.code()+"");
+
                         if (mView != null) {
                             mView.hideProgress();
-                            mView.showServiceDetails(service);
+
+                            if (response.isSuccessful()) {
+                                mView.showServiceDetails(response.body());
+                                mView.showMainContent();
+                            } else {
+                                mView.showNetworkFailedError();
+                            }
                         }
                     }
 
@@ -60,6 +69,7 @@ public class ServiceDetailsPresenter implements ServiceDetailsContract.Presenter
                     public void onError(Throwable e) {
                         if (mView != null) {
                             mView.hideProgress();
+                            mView.showNetworkError();
                         }
                     }
 
@@ -79,15 +89,24 @@ public class ServiceDetailsPresenter implements ServiceDetailsContract.Presenter
         mService.getServiceReviews(id, offset, LIMIT, 1)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new DisposableObserver<ArrayList<Review>>() {
+                .subscribe(new DisposableObserver<Response<ArrayList<Review>>>() {
                     @Override
-                    public void onNext(ArrayList<Review> reviews) {
+                    public void onNext(Response<ArrayList<Review>> response) {
+                        Log.i("result code", response.code()+"");
+
                         if (mView != null) {
                             mView.hideProgress();
-                            if (reviews.size() > 0) {
-                                mView.incrementOffset();
-                                mView.setReviews(reviews);
-                                mView.showReviews();
+
+                            if (response.isSuccessful()) {
+                                if (response.body().size() > 0) {
+                                    mView.incrementOffset();
+                                    mView.setReviews(response.body());
+                                    mView.showReviews();
+                                } else {
+                                    mView.showNoReviewsError();
+                                }
+                            } else {
+                                mView.showNetworkFailedError();
                             }
                         }
                     }
@@ -96,6 +115,7 @@ public class ServiceDetailsPresenter implements ServiceDetailsContract.Presenter
                     public void onError(Throwable e) {
                         if (mView != null) {
                             mView.hideProgress();
+                            mView.showNetworkError();
                         }
                     }
 

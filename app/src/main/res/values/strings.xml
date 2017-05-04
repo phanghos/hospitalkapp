@@ -132,10 +132,10 @@
     <string name="filtrar">Filtrar por </string>
     <string name="limpiarfiltros"><u>Limpiar filtros</u> </string>
     <string name="scoutservices">SCOUTSERVICES©</string>
-    <string name="contacto"><b>Contacto</b></string>
-    <string name="termino"><b>Términos y condiciones generales</b></string>
-    <string name="privacidad"><b>Política de privacidad</b></string>
-    <string name="proteccion"><b>Política de protección de datos</b></string>
+    <string name="contacto">Contacto</string>
+    <string name="termino">Términos y condiciones generales</string>
+    <string name="privacidad">Política de privacidad</string>
+    <string name="proteccion">Política de protección de datos</string>
     <string name="punto">•</string>
     <string name="si">Si</string>
     <string name="no">No</string>
@@ -150,7 +150,7 @@
     <string name="enviar">Enviar</string>
     <string name="actualizarInformacion">Actualizar Perfil</string>
     <string name="ultimas">OPINIONES REALIZADAS</string>
-    <string name="ultimas_sobre_hospitales"><b>ÚLTIMAS OPINIONES REALIZADAS SOBRE HOSPITALES</b></string>
+    <string name="ultimas_sobre_hospitales">Últimas opiniones realizadas sobre hospitales</string>
     <string name="opiniones_recientes"><b>OPINIONES MÁS RECIENTES</b></string>
     <string name="escribe_opinion"><b>Escribe tu opinión</b></string>
     <string name="ver_perfil">Ver Perfil</string>
@@ -197,8 +197,10 @@
 
     <!-- IDS -->
     <!-- <string name="facebook_app_id">226079300911671</string> -->
-    <string name="facebook_app_id">800761173410559</string>
-    <string name="fb_login_protocol_scheme">fb800761173410559</string>
+    <!--<string name="facebook_app_id">800761173410559</string>-->
+    <!--<string name="fb_login_protocol_scheme">fb800761173410559</string>-->
+    <string name="facebook_app_id">199458457239067</string>
+    <string name="fb_login_protocol_scheme">fb199458457239067</string>
 
     <string name="googleMapsKey">AIzaSyDvm9XPjHCJTVIr7UHUYF2wuGcUlOBBajg</string>
     <!--<string name="googleMapsKey">AIzaSyDwsbJNEaQM0f-28MhoOqk-S0QQLU-ORxs</string>-->
@@ -231,7 +233,7 @@
     <string name="accederGoogle">Acceder con Google+</string>
 
     <!--Registro Usuario-->
-    <string name="registro_usuario">Registro Usuario</string>
+    <string name="registro_usuario">Registro usuario</string>
     <string name="informaci_n">Información</string>
     <string name="RU_basica">Básica</string>
     <string name="RU_nombre">Nombre*</string>
@@ -263,6 +265,24 @@
     <string name="footer">Hospitalk© 2016 | Contacto | Términos y condiciones generales\n
     Política de privacidad | Política de protección de datos</string>
 
+    <string name="play_services_error">Compruebe que Google Play Services está habilitado
+        e instalado en su dispositivo</string>
+    <string name="signup_error">Campo obligatorio</string>
+    <string name="network_error">Compruebe su conexión a internet</string>
+    <string name="network_failed_error">Ha ocurrido un error. Intente nuevamente</string>
+    <string name="user_not_logged_error">Debe iniciar sesión para opinar</string>
+    <string name="location_not_available_error">Ubicación no disponible</string>
+    <string name="facebook_login_error">Error al iniciar sesión con Facebook</string>
+    <string name="google_login_error">Error al iniciar sesión con Google</string>
+    <string name="review_not_approved_error">Su opinión no ha sido aprobado aún</string>
+    <string name="location_error">No se pudo obtener su ubicación actual</string>
+    <string name="send_review_success">Su opinión fue enviada exitosamente</string>
+    <string name="location_not_determined_error">Su ubicación actual no ha sido determinada aún</string>
+    <string name="update_profile_success">Su perfil fue actualizado exitosamente</string>
+    <string name="user_not_available">No se pudo obtener la información del usuario</string>
+    <string name="email_format_error">Correo electrónico inválido</string>
+    <string name="signup_success">Registro exitoso</string>
+    <string name="email_response_error">El correo electrónico ya está en uso</string>
 
 </resources>
 

@@ -37,9 +37,9 @@ public class Review implements Serializable {
     @SerializedName("rating_value")
     private int ratingValue;
     @SerializedName("rating_helpful_votes")
-    private String ratingHelpfulVotes;
+    private int ratingHelpfulVotes;
     @SerializedName("company_answer")
-    private String companyAnswer;
+    private int companyAnswer;
     @SerializedName("service_city_name")
     private String serviceCityName;
     @SerializedName("company_activity_name")
@@ -157,19 +157,19 @@ public class Review implements Serializable {
         this.ratingValue = ratingValue;
     }
 
-    public String getRatingHelpfulVotes() {
+    public int getRatingHelpfulVotes() {
         return ratingHelpfulVotes;
     }
 
-    public void setRatingHelpfulVotes(String ratingHelpfulVotes) {
+    public void setRatingHelpfulVotes(int ratingHelpfulVotes) {
         this.ratingHelpfulVotes = ratingHelpfulVotes;
     }
 
-    public String getCompanyAnswer() {
+    public int getCompanyAnswer() {
         return companyAnswer;
     }
 
-    public void setCompanyAnswer(String companyAnswer) {
+    public void setCompanyAnswer(int companyAnswer) {
         this.companyAnswer = companyAnswer;
     }
 

@@ -3,7 +3,7 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginTop="16dp">
+    android:layout_margin="8dp">
 
     <TextView
         android:id="@+id/tvServiceName"
@@ -58,12 +58,16 @@
         android:text="VER MÁS"
         fontPath="OpenSans-Bold.ttf" />
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="2dp"
+    <android.support.design.widget.FloatingActionButton
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_below="@+id/btnVerMas"
-        android:layout_marginTop="16dp"
-        android:layout_marginBottom="16dp"
-        android:background="@color/grisDeLinea" />
+        android:layout_alignParentRight="true"
+        android:src="@mipmap/ic_add_white_24dp"
+        app:elevation="0dp"
+        app:fabSize="mini" />
 
 </RelativeLayout>

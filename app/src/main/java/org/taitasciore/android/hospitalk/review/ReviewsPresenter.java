@@ -1,5 +1,7 @@
 package org.taitasciore.android.hospitalk.review;
 
+import android.util.Log;
+
 import org.taitasciore.android.model.Review;
 import org.taitasciore.android.network.HospitalkService;
 
@@ -8,6 +10,7 @@ import java.util.ArrayList;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.observers.DisposableObserver;
 import io.reactivex.schedulers.Schedulers;
+import retrofit2.Response;
 
 /**
  * Created by roberto on 18/04/17.
@@ -42,13 +45,24 @@ public class ReviewsPresenter implements ReviewsContract.Presenter {
         mService.getReviews(offset, LIMIT, 1, lat, lon)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new DisposableObserver<ArrayList<Review>>() {
+                .subscribe(new DisposableObserver<Response<ArrayList<Review>>>() {
                     @Override
-                    public void onNext(ArrayList<Review> reviews) {
+                    public void onNext(Response<ArrayList<Review>> response) {
+                        Log.i("result code", response.code()+"");
+
                         if (mView != null) {
                             mView.hideProgress();
-                            mView.setReviews(reviews);
-                            mView.incrementOffset();
+
+                            if (response.isSuccessful()) {
+                                if (response.body().size() > 0) {
+                                    mView.showReviews(response.body());
+                                    mView.incrementOffset();
+                                } else {
+                                    mView.showNoMoreReviewsError();
+                                }
+                            } else {
+                                mView.showNetworkFailedError();
+                            }
                         }
                     }
 
@@ -56,6 +70,7 @@ public class ReviewsPresenter implements ReviewsContract.Presenter {
                     public void onError(Throwable e) {
                         if (mView != null) {
                             mView.hideProgress();
+                            mView.showNetworkError();
                         }
                     }
 

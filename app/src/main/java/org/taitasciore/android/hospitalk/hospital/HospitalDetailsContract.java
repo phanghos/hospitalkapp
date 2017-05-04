@@ -20,6 +20,7 @@ public interface HospitalDetailsContract {
         void hideProgress();
         void incrementServicesOffset();
         void incrementReviewsOffset();
+        void showMainContent();
         void showHospitalDetails(Hospital hospital);
         void setServices(ArrayList<ServiceResponse.Service> list);
         void showServices();
@@ -27,6 +28,14 @@ public interface HospitalDetailsContract {
         void setReviews(ArrayList<Review> list);
         void showReviews();
         void hideReviews();
+        void launchNewServiceFragment();
+        void showNetworkError();
+        void showNetworkFailedError();
+        void showPlayServicesError();
+        void showLocationNotAvailableError();
+        void showNoServicesError();
+        void showNoReviewsError();
+        void showUserNotLoggedError();
     }
 
     interface Presenter extends BasePresenter<View> {

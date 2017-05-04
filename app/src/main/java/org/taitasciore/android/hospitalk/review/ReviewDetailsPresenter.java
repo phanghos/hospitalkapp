@@ -9,6 +9,7 @@ import org.taitasciore.android.network.HospitalkService;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.observers.DisposableObserver;
 import io.reactivex.schedulers.Schedulers;
+import retrofit2.Response;
 
 /**
  * Created by roberto on 19/04/17.
@@ -43,13 +44,24 @@ public class ReviewDetailsPresenter implements ReviewDetailsContract.Presenter {
         mService.getReviewDetails(id)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new DisposableObserver<ReviewResponse>() {
+                .subscribe(new DisposableObserver<Response<ReviewResponse>>() {
                     @Override
-                    public void onNext(ReviewResponse reviewResponse) {
-                        Review review = reviewResponse.getRating();
+                    public void onNext(Response<ReviewResponse> response) {
+                        Log.i("response code", response.code()+"");
+
                         if (mView != null) {
                             mView.hideProgress();
-                            mView.showReviewInfo(review);
+
+                            if (response.isSuccessful()) {
+                                Review review = response.body().getRating();
+                                mView.hideProgress();
+                                mView.showReviewInfo(review);
+                                mView.showMainContent();
+                            } else if (response.code() == 404) {
+                                mView.showReviewNotApprovedError();
+                            } else {
+                                mView.showNetworkFailedError();
+                            }
                         }
                     }
 
@@ -57,6 +69,7 @@ public class ReviewDetailsPresenter implements ReviewDetailsContract.Presenter {
                     public void onError(Throwable e) {
                         if (mView != null) {
                             mView.hideProgress();
+                            mView.showNetworkError();
                         }
                     }
 

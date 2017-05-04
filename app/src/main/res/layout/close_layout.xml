@@ -7,14 +7,14 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="16dp">
+        android:padding="@dimen/margin_large">
 
         <ImageView
             android:id="@+id/arrow"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="@dimen/icon_size"
+            android:layout_height="@dimen/icon_size"
             android:layout_centerVertical="true"
-            android:layout_marginRight="24dp"
+            android:layout_marginRight="@dimen/margin_large"
             android:src="@drawable/down_arrow_4" />
 
         <TextView
@@ -24,24 +24,20 @@
             android:layout_centerVertical="true"
             android:layout_toRightOf="@id/arrow"
             android:textColor="@color/colorPrimaryText"
-            android:textSize="14sp"
-            fontPath="OpenSans-Bold.ttf" />
+            android:textSize="@dimen/text_size_large" />
 
     </RelativeLayout>
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/list"
+    <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:visibility="gone" />
+        android:layout_height="wrap_content">
 
-    <!--
-    <LinearLayout
-        android:id="@+id/lyExpandable"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:visibility="gone" />
-        -->
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone" />
+
+    </android.support.v4.widget.NestedScrollView>
 
 </LinearLayout>

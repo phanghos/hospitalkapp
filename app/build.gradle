@@ -41,17 +41,32 @@ dependencies {
     compile 'com.squareup.retrofit2:adapter-rxjava2:2.2.0'
     // EventBus
     compile 'org.greenrobot:eventbus:3.0.0'
+    // Facebook SDK
+    compile ('com.facebook.android:facebook-android-sdk:4.21.0') {
+        //exclude group: 'com.parse.bolts', module: 'bolts-android'
+    }
     // Fresco
     compile 'com.facebook.fresco:fresco:1.2.0'
     // Google Maps API
     compile 'com.google.android.gms:play-services-maps:10.2.1'
     // Google Location API
     compile 'com.google.android.gms:play-services-location:10.2.1'
+    // Google+ API
+    compile 'com.google.android.gms:play-services-plus:10.2.1'
+    // Google Auth API
+    compile 'com.google.android.gms:play-services-auth:10.2.1'
     // Calligraphy
     compile 'uk.co.chrisjenx:calligraphy:2.2.0'
-
+    // Material dialogs
+    compile 'com.afollestad.material-dialogs:core:0.9.4.4'
+    // Apache Commons
+    compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.0'
+    compile group: 'commons-validator', name: 'commons-validator', version: '1.4.0'
+    // RecyclerView divider
+    compile 'com.bignerdranch.android:simple-item-decoration:1.0.0'
     // MultiDex
     compile 'com.android.support:multidex:1.0.1'
+    compile project(path: ':searchablespinnerlibrary')
 }
 
-//apply plugin: 'com.google.gms.google-services'
+apply plugin: 'com.google.gms.google-services'

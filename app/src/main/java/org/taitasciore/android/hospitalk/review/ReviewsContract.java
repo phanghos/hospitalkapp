@@ -16,9 +16,12 @@ public interface ReviewsContract {
 
         void showProgress();
         void hideProgress();
-        void setReviews(ArrayList<Review> reviews);
-        void addReviews(ArrayList<Review> reviews);
+        void initAdapter();
+        void showReviews(ArrayList<Review> reviews);
         void incrementOffset();
+        void showNetworkError();
+        void showNetworkFailedError();
+        void showNoMoreReviewsError();
     }
 
     interface Presenter extends BasePresenter<View> {

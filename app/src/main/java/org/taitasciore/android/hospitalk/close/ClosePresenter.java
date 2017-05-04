@@ -1,5 +1,7 @@
 package org.taitasciore.android.hospitalk.close;
 
+import android.util.Log;
+
 import org.taitasciore.android.model.Hospital;
 import org.taitasciore.android.model.ServiceResponse;
 import org.taitasciore.android.network.HospitalkService;
@@ -9,6 +11,7 @@ import java.util.ArrayList;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.observers.DisposableObserver;
 import io.reactivex.schedulers.Schedulers;
+import retrofit2.Response;
 
 /**
  * Created by roberto on 18/04/17.
@@ -37,20 +40,35 @@ public class ClosePresenter implements CloseContract.Presenter {
     }
 
     @Override
-    public void getBestRatedHospitals(int offset, double lat, double lon) {
+    public void getBestRatedHospitals(final int offset, double lat, double lon) {
         mView.showProgress();
 
         mService.getBestRatedHospitals(offset, LIMIT, 1, lat, lon)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new DisposableObserver<ArrayList<Hospital>>() {
+                .subscribe(new DisposableObserver<Response<ArrayList<Hospital>>>() {
                     @Override
-                    public void onNext(ArrayList<Hospital> hospitals) {
+                    public void onNext(Response<ArrayList<Hospital>> response) {
+                        Log.i("result code", response.code()+"");
+
                         if (mView != null) {
                             mView.hideProgress();
-                            mView.setBestRatedHospitals(hospitals);
-                            mView.showBestRatedHospitals();
-                            mView.incrementBestRatedOffset();
+
+                            if (response.isSuccessful()) {
+                                if (response.body().size() > 0) {
+                                    if (offset == 0) {
+                                        mView.setBestRatedHospitals(response.body());
+                                        mView.showBestRatedHospitals();
+                                    } else {
+                                        mView.addBestRatedHospitals(response.body());
+                                    }
+                                    mView.incrementBestRatedOffset();
+                                } else {
+                                    mView.showNoMoreHospitalsError();
+                                }
+                            } else {
+                                mView.showNetworkFailedError();
+                            }
                         }
                     }
 
@@ -58,6 +76,7 @@ public class ClosePresenter implements CloseContract.Presenter {
                     public void onError(Throwable e) {
                         if (mView != null) {
                             mView.hideProgress();
+                            mView.showNetworkError();
                         }
                     }
 
@@ -69,20 +88,35 @@ public class ClosePresenter implements CloseContract.Presenter {
     }
 
     @Override
-    public void getWorstRatedHospitals(int offset, double lat, double lon) {
+    public void getWorstRatedHospitals(final int offset, double lat, double lon) {
         mView.showProgress();
 
         mService.getWorstRatedHospitals(offset, LIMIT, 1, lat, lon)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new DisposableObserver<ArrayList<Hospital>>() {
+                .subscribe(new DisposableObserver<Response<ArrayList<Hospital>>>() {
                     @Override
-                    public void onNext(ArrayList<Hospital> hospitals) {
+                    public void onNext(Response<ArrayList<Hospital>> response) {
+                        Log.i("result code", response.code()+"");
+
                         if (mView != null) {
                             mView.hideProgress();
-                            mView.setWorstRatedHospitals(hospitals);
-                            mView.showWorstRatedHospitals();
-                            mView.incrementWorstRatedOffset();
+
+                            if (response.isSuccessful()) {
+                                if (response.body().size() > 0) {
+                                    if (offset == 0) {
+                                        mView.setWorstRatedHospitals(response.body());
+                                        mView.showWorstRatedHospitals();
+                                    } else {
+                                        mView.addWorstRatedHospitals(response.body());
+                                    }
+                                    mView.incrementWorstRatedOffset();
+                                } else {
+                                    mView.showNoMoreHospitalsError();
+                                }
+                            } else {
+                                mView.showNetworkFailedError();
+                            }
                         }
                     }
 
@@ -90,6 +124,7 @@ public class ClosePresenter implements CloseContract.Presenter {
                     public void onError(Throwable e) {
                         if (mView != null) {
                             mView.hideProgress();
+                            mView.showNetworkError();
                         }
                     }
 
@@ -101,20 +136,35 @@ public class ClosePresenter implements CloseContract.Presenter {
     }
 
     @Override
-    public void getPopularServices(int offset, double lat, double lon) {
+    public void getPopularServices(final int offset, double lat, double lon) {
         mView.showProgress();
 
         mService.getPopularServices(offset, LIMIT, 1, lat, lon)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new DisposableObserver<ServiceResponse>() {
+                .subscribe(new DisposableObserver<Response<ServiceResponse>>() {
                     @Override
-                    public void onNext(ServiceResponse serviceResponse) {
+                    public void onNext(Response<ServiceResponse> response) {
+                        Log.i("result code", response.code()+"");
+
                         if (mView != null) {
                             mView.hideProgress();
-                            mView.setPopularServices(serviceResponse.getServices());
-                            mView.showPopularServices();
-                            mView.incrementPopularServicesOffset();
+
+                            if (response.isSuccessful()) {
+                                if (response.body().getServices().size() > 0) {
+                                    if (offset == 0) {
+                                        mView.setPopularServices(response.body().getServices());
+                                        mView.showPopularServices();
+                                    } else {
+                                        mView.addPopularServices(response.body().getServices());
+                                    }
+                                    mView.incrementPopularServicesOffset();
+                                } else {
+                                    mView.showNoMoreServicesError();
+                                }
+                            } else {
+                                mView.showNetworkFailedError();
+                            }
                         }
                     }
 
@@ -122,6 +172,7 @@ public class ClosePresenter implements CloseContract.Presenter {
                     public void onError(Throwable e) {
                         if (mView != null) {
                             mView.hideProgress();
+                            mView.showNetworkError();
                         }
                     }
 
