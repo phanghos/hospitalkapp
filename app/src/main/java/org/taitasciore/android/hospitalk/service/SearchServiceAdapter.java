@@ -3,6 +3,7 @@ package org.taitasciore.android.hospitalk.service;
 import android.app.Activity;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -52,7 +53,7 @@ public class SearchServiceAdapter extends RecyclerView.Adapter<SearchServiceAdap
         holder.reviews.setText(s.getOpinions() + " opiniones");
         StarUtils.resetStars(holder.avg);
         StarUtils.addStars(mContext, 5, holder.avg);
-        StarUtils.fillStars(mContext, s.getAverage(), holder.avg);
+        StarUtils.fillStars(mContext, s.getAverage() / 2, holder.avg);
 
         holder.details.setOnClickListener(new View.OnClickListener() {
             @Override

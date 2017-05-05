@@ -9,6 +9,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -111,12 +112,14 @@ public class CloseFragment extends Fragment implements CloseContract.View {
     public void onStart() {
         super.onStart();
         EventBus.getDefault().register(this);
+        initListeners();
     }
 
     @Override
     public void onStop() {
         super.onStop();
         EventBus.getDefault().unregister(this);
+        clearListeners();
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -321,45 +324,6 @@ public class CloseFragment extends Fragment implements CloseContract.View {
         mArrowBest = (ImageView) mLyBest.findViewById(R.id.arrow);
         mArrowWorst = (ImageView) mLyWorst.findViewById(R.id.arrow);
         mArrowPopular = (ImageView) mLyPopular.findViewById(R.id.arrow);
-
-        mArrowBest.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (mBestRated == null) {
-                    mPresenter.getBestRatedHospitals(mOffsetBest, lat, lon);
-                } else if (mRecyclerViewBest.getVisibility() == View.GONE) {
-                    showBestRatedHospitals();
-                } else {
-                    hideBestRatedHospitals();
-                }
-            }
-        });
-
-        mArrowWorst.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (mWorstRated == null) {
-                    mPresenter.getWorstRatedHospitals(mOffsetWorst, lat, lon);
-                } else if (mRecyclerViewWorst.getVisibility() == View.GONE) {
-                    showWorstRatedHospitals();
-                } else {
-                    hideWorstRatedHospitals();
-                }
-            }
-        });
-
-        mArrowPopular.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (mPopularServices == null) {
-                    mPresenter.getPopularServices(mOffsetPopular, lat, lon);
-                } else if (mRecyclerViewPopular.getVisibility() == View.GONE) {
-                    showPopularServices();
-                } else {
-                    hidePopularServices();
-                }
-            }
-        });
     }
 
     private void initRecyclerViews() {
@@ -379,5 +343,58 @@ public class CloseFragment extends Fragment implements CloseContract.View {
         mRecyclerViewBest.addItemDecoration(new DividerItemDecoration(divider));
         mRecyclerViewWorst.addItemDecoration(new DividerItemDecoration(divider));
         mRecyclerViewPopular.addItemDecoration(new DividerItemDecoration(divider));
+    }
+
+    private void initListeners() {
+        mLyBest.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.i("current pos", lat + " - " + lon);
+
+                if (mBestRated == null) {
+                    mPresenter.getBestRatedHospitals(mOffsetBest, lat, lon);
+                } else if (mRecyclerViewBest.getVisibility() == View.GONE) {
+                    showBestRatedHospitals();
+                } else {
+                    hideBestRatedHospitals();
+                }
+            }
+        });
+
+        mLyWorst.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.i("current pos", lat + " - " + lon);
+
+                if (mWorstRated == null) {
+                    mPresenter.getWorstRatedHospitals(mOffsetWorst, lat, lon);
+                } else if (mRecyclerViewWorst.getVisibility() == View.GONE) {
+                    showWorstRatedHospitals();
+                } else {
+                    hideWorstRatedHospitals();
+                }
+            }
+        });
+
+        mLyPopular.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.i("current pos", lat + " - " + lon);
+
+                if (mPopularServices == null) {
+                    mPresenter.getPopularServices(mOffsetPopular, lat, lon);
+                } else if (mRecyclerViewPopular.getVisibility() == View.GONE) {
+                    showPopularServices();
+                } else {
+                    hidePopularServices();
+                }
+            }
+        });
+    }
+
+    private void clearListeners() {
+        mLyBest.setOnClickListener(null);
+        mLyWorst.setOnClickListener(null);
+        mLyPopular.setOnClickListener(null);
     }
 }

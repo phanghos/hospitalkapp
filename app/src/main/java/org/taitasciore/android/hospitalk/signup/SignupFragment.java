@@ -675,8 +675,9 @@ public class SignupFragment extends Fragment implements SignupContract.View {
     }
 
     @Override
-    public void showSignupSuccess() {
-        Toast.makeText(getActivity(), getString(R.string.signup_success), Toast.LENGTH_SHORT).show();
+    public void showSignupSuccess(String email) {
+        String msg = "Se envió un email a " + email + ". Por favor confirmar para validar usuario";
+        Toast.makeText(getActivity(), msg, Toast.LENGTH_SHORT).show();
         getActivity().onBackPressed();
     }
 }

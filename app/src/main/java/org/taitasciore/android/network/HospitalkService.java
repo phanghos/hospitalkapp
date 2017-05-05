@@ -19,7 +19,6 @@ import java.util.ArrayList;
 
 import io.reactivex.Observable;
 import okhttp3.OkHttpClient;
-import okhttp3.ResponseBody;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
@@ -141,12 +140,17 @@ public class HospitalkService {
         return mApi.getActivities();
     }
 
-    public Observable<Response<SearchResponse>> getCompanies(String countryId) {
-        return mApi.getCompanies(countryId);
+    public Observable<Response<SearchResponse>> getCompaniesFromCountry(String countryId) {
+        return mApi.getCompaniesFromCountry(countryId);
     }
 
-    public Observable<Response<SearchResponse>> getCompanies(String countryId, String stateId, String cityId) {
-        return mApi.getCompanies(countryId, stateId, cityId);
+    public Observable<Response<ArrayList<Hospital>>> getCompaniesWithActivity(
+            String activityId, String query) {
+        return mApi.getCompaniesWithActivity(activityId, query);
+    }
+
+    public Observable<Response<SearchResponse>> getCompaniesFromCountry(String countryId, String stateId, String cityId) {
+        return mApi.getCompaniesFromCountry(countryId, stateId, cityId);
     }
 
     public Observable<Response<ServiceResponse>> getServices() {

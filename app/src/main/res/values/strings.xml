@@ -283,6 +283,7 @@
     <string name="email_format_error">Correo electrónico inválido</string>
     <string name="signup_success">Registro exitoso</string>
     <string name="email_response_error">El correo electrónico ya está en uso</string>
+    <string name="country_not_selected_error">Debe seleccionar un país primero</string>
 
 </resources>
 

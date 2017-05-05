@@ -214,7 +214,7 @@ public class SignupPresenter implements SignupContract.Presenter {
     }
 
     @Override
-    public void register(UserRegistration user) {
+    public void register(final UserRegistration user) {
         if (!validate(user)) return;
 
         Log.i("debug", "updating profile for user " + user.getId() + "...");
@@ -246,7 +246,7 @@ public class SignupPresenter implements SignupContract.Presenter {
                             mView.hideProgress();
 
                             if (response.isSuccessful()) {
-                                mView.showSignupSuccess();
+                                mView.showSignupSuccess(user.getMail());
                             } else if (response.code() == 400) {
                                 mView.showEmailResponseError();
                             } else {

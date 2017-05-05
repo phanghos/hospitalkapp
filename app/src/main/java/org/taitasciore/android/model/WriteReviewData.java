@@ -8,11 +8,28 @@ import java.util.ArrayList;
 
 public class WriteReviewData {
 
+    private ArrayList<Activity> activities;
+    private ArrayList<Hospital> companies;
     private ArrayList<ServiceResponse.Service> services;
     private ArrayList<LocationResponse.Country> countries;
     private ArrayList<LocationResponse.State> states;
     private ArrayList<LocationResponse.City> cities;
-    private ArrayList<Hospital> companies;
+
+    public ArrayList<Activity> getActivities() {
+        return activities;
+    }
+
+    public void setActivities(ArrayList<Activity> activities) {
+        this.activities = activities;
+    }
+
+    public ArrayList<Hospital> getCompanies() {
+        return companies;
+    }
+
+    public void setCompanies(ArrayList<Hospital> companies) {
+        this.companies = companies;
+    }
 
     public ArrayList<ServiceResponse.Service> getServices() {
         return services;
@@ -44,13 +61,5 @@ public class WriteReviewData {
 
     public void setCities(ArrayList<LocationResponse.City> cities) {
         this.cities = cities;
-    }
-
-    public ArrayList<Hospital> getCompanies() {
-        return companies;
-    }
-
-    public void setCompanies(ArrayList<Hospital> companies) {
-        this.companies = companies;
     }
 }

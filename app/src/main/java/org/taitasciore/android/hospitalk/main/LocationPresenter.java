@@ -58,6 +58,7 @@ public class LocationPresenter implements LocationContract.Presenter {
                                 mView.showPing();
                                 mView.updateLocation(country.getWebcode(), city.getCityname());
                                 mView.setCountry(country.getCountryid());
+                                mView.setLocation(city.getLatitude(), city.getLongitude());
                             } else {
                                 mView.showPing();
                                 mView.updateLocation("ES", "Madrid");
@@ -71,6 +72,8 @@ public class LocationPresenter implements LocationContract.Presenter {
                         if (mView != null) {
                             mView.showPing();
                             mView.updateLocation("ES", "Madrid");
+                            mView.setCountry("ESP");
+                            mView.setLocation(40.4116767, -3.7130291);
                             mView.showNetworkError();
                         }
                     }

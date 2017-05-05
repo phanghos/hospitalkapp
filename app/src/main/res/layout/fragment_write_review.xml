@@ -79,12 +79,22 @@
                 android:layout_marginBottom="4dp" />
 
             <TextView
-                android:layout_width="fill_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8.4dp"
                 android:textSize="12sp"
                 android:text="@string/nombre_de_empresa_buscar" />
 
+            <AutoCompleteTextView
+                android:id="@+id/tvCompanies"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/margin"
+                android:background="@color/gris_et_bg_ht"
+                android:hint="Empresa"
+                android:textSize="@dimen/text_size_small" />
+
+            <!--
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
@@ -107,6 +117,7 @@
                     android:layout_alignParentRight="true" />
 
             </RelativeLayout>
+            -->
 
             <TextView
                 android:layout_width="match_parent"

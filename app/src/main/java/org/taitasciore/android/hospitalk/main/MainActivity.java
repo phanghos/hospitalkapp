@@ -268,6 +268,13 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     @Override
+    public void setLocation(double lat, double lon) {
+        this.lat = lat;
+        this.lon = lon;
+        Log.i("actual position", lat + " - " + lon);
+    }
+
+    @Override
     public void setSpans() {
         String footer = mTvFooter.getText().toString();
         Log.i("footer", footer);
@@ -413,8 +420,8 @@ public class MainActivity extends AppCompatActivity implements
 
     @Override
     public void onLocationChanged(Location location) {
-        lat = location.getLatitude();
-        lon = location.getLongitude();
+        double lat = location.getLatitude();
+        double lon = location.getLongitude();
         Log.i("position", lat + " - " + lon);
         EventBus.getDefault().post(new SendLocationEvent(lat, lon));
         if (!mDeterminedLocation) mLocationPresenter.getLocation(lat, lon);

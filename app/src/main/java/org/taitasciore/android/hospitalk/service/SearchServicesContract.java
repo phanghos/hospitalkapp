@@ -33,6 +33,7 @@ public interface SearchServicesContract {
         void addServices(ArrayList<ServiceResponse.Service> hospitals);
         void blockFilter();
         void unblockFilter();
+        void showCountryNotSelectedError();
         void showNetworkError();
         void showNetworkFailedError();
     }

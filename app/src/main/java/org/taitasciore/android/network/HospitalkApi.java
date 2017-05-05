@@ -126,10 +126,15 @@ public interface HospitalkApi {
     Observable<Response<ArrayList<Activity>>> getActivities();
 
     @GET("company/list")
-    Observable<Response<SearchResponse>> getCompanies(@Query("id_country") String countryId);
+    Observable<Response<SearchResponse>> getCompaniesFromCountry(@Query("id_country") String countryId);
+
+    @GET("company/search")
+    Observable<Response<ArrayList<Hospital>>> getCompaniesWithActivity(
+            @Query("id_activity") String activityId,
+            @Query("q") String query);
 
     @GET("company/list")
-    Observable<Response<SearchResponse>> getCompanies(
+    Observable<Response<SearchResponse>> getCompaniesFromCountry(
             @Query("id_country") String countryId,
             @Query("id_state") String stateId,
             @Query("id_city") String cityId);
@@ -153,7 +158,7 @@ public interface HospitalkApi {
     Observable<Response<SearchResponse>> searchServices(
             @Query("id_country") String countryId,
             @Query("id_city") String cityId,
-            @Query("id_activity") String serviceId,
+            @Query("id_service") String serviceId,
             @Query("order_reviews") String reviewOrder,
             @Query("rank_reviews") String reviewRank,
             @Query("offset") int offset,
@@ -210,9 +215,9 @@ public interface HospitalkApi {
     @POST("rating/create")
     Observable<Response<SendReviewResponse>> sendReview(
             @Field("id_user") int userId,
-            @Field("id_service") int activityId,
-            @Field("id_company") int companyId,
-            @Field("id_companies_services") int serviceId,
+            @Field("id_service") String activityId,
+            @Field("id_company") String companyId,
+            @Field("id_companies_services") String serviceId,
             @Field("rating_title") String title,
             @Field("rating_review") String description,
             @Field("rating_value") int value,

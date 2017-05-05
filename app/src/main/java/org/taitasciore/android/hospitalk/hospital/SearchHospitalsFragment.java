@@ -99,9 +99,9 @@ public class SearchHospitalsFragment extends Fragment implements SearchHospitals
 
     @BindView(R.id.spCountry) SearchableSpinner mSpCountry;
     @BindView(R.id.spCity) SearchableSpinner mSpCity;
-    @BindView(R.id.spRating) Spinner mSpRating;
+    @BindView(R.id.spOrder) Spinner mSpOrder;
     @BindView(R.id.spActivity) Spinner mSpActivity;
-    @BindView(R.id.spOption) Spinner mSpOption;
+    @BindView(R.id.spRank) Spinner mSpRank;
 
     public static SearchHospitalsFragment newInstance(String query) {
         SearchHospitalsFragment f = new SearchHospitalsFragment();
@@ -157,8 +157,8 @@ public class SearchHospitalsFragment extends Fragment implements SearchHospitals
     public void onResume() {
         super.onResume();
 
-        mSpOption.setSelection(mReviewOrderPos, false);
-        mSpRating.setSelection(mReviewRankPos, false);
+        mSpOrder.setSelection(mReviewOrderPos, false);
+        mSpRank.setSelection(mReviewRankPos, false);
 
         if (mCountries == null) {
             mPresenter.getCountries();
@@ -235,7 +235,7 @@ public class SearchHospitalsFragment extends Fragment implements SearchHospitals
     }
 
     @OnClick(R.id.fab) void onFabClicked() {
-        search();
+        search(false);
     }
 
     @Override
@@ -277,7 +277,7 @@ public class SearchHospitalsFragment extends Fragment implements SearchHospitals
         mAdapterRatings = new ArrayAdapter<>(
                 getActivity(), android.R.layout.simple_spinner_item, ratings);
         mAdapterRatings.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        mSpRating.setAdapter(mAdapterRatings);
+        mSpOrder.setAdapter(mAdapterRatings);
 
         String[] option = {
                 getString(R.string.valoracion),
@@ -288,7 +288,7 @@ public class SearchHospitalsFragment extends Fragment implements SearchHospitals
         mAdapterOptions = new ArrayAdapter<>(
                 getActivity(), android.R.layout.simple_spinner_item, option);
         mAdapterOptions.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        mSpOption.setAdapter(mAdapterOptions);
+        mSpRank.setAdapter(mAdapterOptions);
 
         mAdapter = new SearchHospitalAdapter(getActivity());
         mRecyclerView.setAdapter(mAdapter);
@@ -325,18 +325,22 @@ public class SearchHospitalsFragment extends Fragment implements SearchHospitals
         mSpCountry.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int pos, long l) {
+                mOffset = 0;
+                mCountryPos = pos;
+
                 if (pos > 0) {
                     mChangedCountry = true;
-                    mOffset = 0;
                     mCountryId = mCountries.get(pos - 1).getCountryid();
-                    mCountryPos = pos;
-                    mCityId = "";
-                    mCityPos = 0;
-                    mSpCity.setSelection(0, false);
                     Log.i("country id", mCountryId);
-                    if (mQuery.equals("")) mPresenter.getCities(mCountryId);
-                    else search();
+                    search(true);
+                } else {
+                    mChangedCountry = true;
+                    mCountryId = "";
                 }
+
+                mCityId = "";
+                mCityPos = 0;
+                mSpCity.setSelection(0, false);
             }
 
             @Override
@@ -348,12 +352,22 @@ public class SearchHospitalsFragment extends Fragment implements SearchHospitals
         mSpCity.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int pos, long l) {
+                mOffset = 0;
+                mCityPos = pos;
+
                 if (pos > 0) {
-                    mOffset = 0;
-                    mCityId = mCities.get(pos - 1).getIdCity();
-                    mCityPos = pos;
-                    Log.i("city id", mCityId + "");
-                    search();
+                    if (mCountryId != null && !mCountryId.isEmpty()) {
+                        mCityId = mCities.get(pos - 1).getIdCity();
+                        Log.i("city id", mCityId + "");
+                        if (!mChangedCountry) search(false);
+                    } else {
+                        showCountryNotSelectedError();
+                    }
+                } else {
+                    mCityId = "";
+                    if (mCountryId != null && !mCountryId.isEmpty() && !mChangedCountry) {
+                        search(false);
+                    }
                 }
             }
 
@@ -366,12 +380,20 @@ public class SearchHospitalsFragment extends Fragment implements SearchHospitals
         mSpActivity.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int pos, long l) {
+                mOffset = 0;
+                mActivityPos = pos;
+
                 if (pos > 0) {
-                    mOffset = 0;
-                    mActivityId = mActivities.get(pos - 1).getIdActivity();
-                    mActivityPos = pos;
-                    Log.i("activity id", mActivityId + "");
-                    search();
+                    if (mCountryId != null && !mCountryId.isEmpty()) {
+                        mActivityId = mActivities.get(pos - 1).getIdActivity();
+                        Log.i("activity id", mActivityId + "");
+                        search(false);
+                    } else {
+                        showCountryNotSelectedError();
+                    }
+                } else {
+                    mActivityId = "";
+                    if (mCountryId != null && !mCountryId.isEmpty()) search(false);
                 }
             }
 
@@ -381,32 +403,49 @@ public class SearchHospitalsFragment extends Fragment implements SearchHospitals
             }
         });
 
-        mSpRating.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        mSpOrder.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int pos, long l) {
+                mOffset = 0;
+                mReviewOrderPos = pos;
+
                 if (pos > 0) {
-                    mOffset = 0;
+                    if (mCountryId != null && !mCountryId.isEmpty()) {
+                        if (pos == 1) mReviewOrder = "ASC";
+                        else mReviewOrder = "DESC";
+                        search(false);
+                    } else {
+                        showCountryNotSelectedError();
+                    }
+                } else {
+                    mReviewOrder = "";
+                    if (mCountryId != null && !mCountryId.isEmpty()) search(false);
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+
+        mSpRank.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int pos, long l) {
+                mOffset = 0;
+                mReviewRankPos = pos;
+
+                if (pos > 0) {
                     mReviewRank = pos+"";
-                    mReviewRankPos = pos;
-                    search();
-                }
-            }
 
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-
-            }
-        });
-
-        mSpOption.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int pos, long l) {
-                if (pos > 0) {
-                    mOffset = 0;
-                    if (pos == 1) mReviewOrder = "ASC";
-                    else mReviewOrder = "DESC";
-                    mReviewOrderPos = pos;
-                    search();
+                    if (mCountryId != null) {
+                        search(false);
+                    } else {
+                        showCountryNotSelectedError();
+                    }
+                } else {
+                    mReviewRank = "";
+                    if (mCountryId != null && !mCountryId.isEmpty()) search(false);
                 }
             }
 
@@ -433,10 +472,12 @@ public class SearchHospitalsFragment extends Fragment implements SearchHospitals
 
                 mSpCountry.setSelection(0, false);
                 mSpCity.setSelection(0, false);
-                mSpRating.setSelection(0, false);
+                mSpOrder.setSelection(0, false);
                 mSpActivity.setSelection(0, false);
-                mSpOption.setSelection(0, false);
+                mSpRank.setSelection(0, false);
                 mTvSearch.setText("");
+                mAdapter = new SearchHospitalAdapter(getActivity());
+                mRecyclerView.setAdapter(mAdapter);
             }
         });
     }
@@ -446,9 +487,9 @@ public class SearchHospitalsFragment extends Fragment implements SearchHospitals
         mCbCloseHospitals.setOnCheckedChangeListener(null);
         mSpCountry.setOnItemSelectedListener(null);
         mSpCity.setOnItemSelectedListener(null);
-        mSpOption.setOnItemSelectedListener(null);
+        mSpRank.setOnItemSelectedListener(null);
         mSpActivity.setOnItemSelectedListener(null);
-        mSpRating.setOnItemSelectedListener(null);
+        mSpOrder.setOnItemSelectedListener(null);
         mTvResetFilters.setOnClickListener(null);
     }
 
@@ -460,7 +501,22 @@ public class SearchHospitalsFragment extends Fragment implements SearchHospitals
     @Override
     public void showCountries(ArrayList<LocationResponse.Country> countries) {
         mCountries = countries;
-        for (LocationResponse.Country c : countries) mAdapterCountries.add(c.getCountryname());
+        mAdapterCountries.clear();
+        mAdapterCountries.add("País");
+        for (LocationResponse.Country c : countries) {
+            if (c != null && c.getCountryname() != null && !c.getCountryname().isEmpty()) {
+                mAdapterCountries.add(c.getCountryname());
+            }
+        }
+        if (mCountryPos == 0 && mCountries != null) {
+            EventBus.getDefault().post(new RequestCountryEvent());
+            int pos = getCountryPosition(mCountryId);
+
+            if (pos > -1) {
+                mCountryPos = pos + 1;
+                mSpCountry.setSelection(mCountryPos, false);
+            }
+        }
     }
 
     @Override
@@ -468,7 +524,11 @@ public class SearchHospitalsFragment extends Fragment implements SearchHospitals
         mCities = cities;
         mAdapterCities.clear();
         mAdapterCities.add("Ciudad");
-        for (City c : cities) mAdapterCities.add(c.getCityName());
+        for (City c : cities) {
+            if (c != null && c.getCityName() != null && !c.getCityName().isEmpty()) {
+                mAdapterCities.add(c.getCityName());
+            }
+        }
 
         if (mChangedCountry) {
 
@@ -480,7 +540,11 @@ public class SearchHospitalsFragment extends Fragment implements SearchHospitals
         mActivities = activities;
         mAdapterActivities.clear();
         mAdapterActivities.add("Actividad");
-        for (Activity a : activities) mAdapterActivities.add(a.getActivityName());
+        for (Activity a : activities) {
+            if (a != null && a.getActivityName() != null && !a.getActivityName().isEmpty()) {
+                mAdapterActivities.add(a.getActivityName());
+            }
+        }
 
         if (mChangedCountry) {
 
@@ -499,7 +563,9 @@ public class SearchHospitalsFragment extends Fragment implements SearchHospitals
     public void addHospitals(ArrayList<Hospital> hospitals) {
         mChangedCountry = false;
         try {
-            for (Hospital h : hospitals) mAdapter.add(h);
+            for (Hospital h : hospitals) {
+                if (h != null) mAdapter.add(h);
+            }
             mHospitals = mAdapter.getList();
         } catch (ConcurrentModificationException e){}
     }
@@ -515,6 +581,11 @@ public class SearchHospitalsFragment extends Fragment implements SearchHospitals
     }
 
     @Override
+    public void showCountryNotSelectedError() {
+        Toast.makeText(getActivity(), getString(R.string.country_not_selected_error), Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
     public void showNetworkError() {
         Toast.makeText(getActivity(), getString(R.string.network_error), Toast.LENGTH_SHORT).show();
     }
@@ -527,14 +598,27 @@ public class SearchHospitalsFragment extends Fragment implements SearchHospitals
     @OnClick(R.id.btnSearch) void onSearchClicked() {
         String query = mTvSearch.getText().toString();
         if (!query.isEmpty()) {
-            mQuery = query;
-            search();
+            if (mCountryId != null && !mCountryId.isEmpty()) {
+                mQuery = query;
+                search(mCities == null);
+            } else {
+                showCountryNotSelectedError();
+            }
         }
     }
 
-    private void search() {
-        mPresenter.searchHospitals(
-                mCountryId, mCityId, mActivityId, mReviewOrder, mReviewRank, mOffset, mQuery);
+    private void search(boolean cities) {
+        if (mCountryId != null && !mCountryId.isEmpty()) {
+            if (cities) {
+                mPresenter.searchHospitalsAndCities(
+                        mCountryId, mCityId, mActivityId, mReviewOrder, mReviewRank, mOffset, mQuery);
+            } else {
+                mPresenter.searchHospitals(
+                        mCountryId, mCityId, mActivityId, mReviewOrder, mReviewRank, mOffset, mQuery);
+            }
+        } else {
+            showCountryNotSelectedError();
+        }
     }
 
     private int getCountryPosition(String countryId) {

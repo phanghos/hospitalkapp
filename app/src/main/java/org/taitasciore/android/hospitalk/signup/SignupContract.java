@@ -52,7 +52,7 @@ public interface SignupContract {
         void showGoogleLoginError();
         void showNetworkError();
         void showNetworkFailedError();
-        void showSignupSuccess();
+        void showSignupSuccess(String email);
     }
 
     interface Presenter extends BasePresenter<View> {

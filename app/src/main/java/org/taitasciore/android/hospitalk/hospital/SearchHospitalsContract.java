@@ -33,6 +33,7 @@ public interface SearchHospitalsContract {
         void addHospitals(ArrayList<Hospital> hospitals);
         void blockFilter();
         void unblockFilter();
+        void showCountryNotSelectedError();
         void showNetworkError();
         void showNetworkFailedError();
     }
@@ -41,6 +42,8 @@ public interface SearchHospitalsContract {
 
         void getCountries();
         void getCities(String countryId);
+        void searchHospitalsAndCities(String countryId, String cityId, String serviceId, String reviewOrder,
+                                      String reviewRank, int offset, String query);
         void searchHospitals(String countryId, String cityId, String serviceId, String reviewOrder,
                              String reviewRank, int offset, String query);
     }

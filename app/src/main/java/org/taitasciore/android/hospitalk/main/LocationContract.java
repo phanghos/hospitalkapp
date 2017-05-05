@@ -16,6 +16,7 @@ public interface LocationContract {
         void showHeaderLoading();
         void updateLocation(String code, String city);
         void setCountry(String countryId);
+        void setLocation(double lat, double lon);
         void setSpans();
         void showContactDialog();
         void showFooterDialog(FooterDialogFragment f);

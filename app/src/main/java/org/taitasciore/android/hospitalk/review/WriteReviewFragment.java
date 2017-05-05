@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -42,7 +43,6 @@ import org.taitasciore.android.model.NewReview;
 import org.taitasciore.android.model.ServiceResponse;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -56,13 +56,14 @@ public class WriteReviewFragment extends Fragment implements WriteReviewContract
 
     public static final int REQUEST_UPLOAD_IMAGE = 002;
 
-    private int mActivityId;
+    private String mActivityId = "";
     private int mActivityPos;
-    private int mCompanyId;
+    private String mCompanyId = "";
+    private String mCompanyName = "";
     private int mCompanyPos;
-    private int mServiceId;
+    private String mServiceId = "";
     private int mServicePos;
-    private String mCountryId;
+    private String mCountryId = "";
     private int mCountryPos;
     private String mStateId = "";
     private int mStatePos;
@@ -92,8 +93,8 @@ public class WriteReviewFragment extends Fragment implements WriteReviewContract
     private ProgressDialog mDialog;
 
     @BindView(R.id.lyAvg) LinearLayout mLyAvg;
+    @BindView(R.id.tvCompanies) AutoCompleteTextView mTvCompanies;
     @BindView(R.id.spActivity) Spinner mSpActivity;
-    @BindView(R.id.spCompany) Spinner mSpCompany;
     @BindView(R.id.spService) Spinner mSpService;
     @BindView(R.id.spCountry) SearchableSpinner mSpCountry;
     @BindView(R.id.spState) SearchableSpinner mSpState;
@@ -144,23 +145,18 @@ public class WriteReviewFragment extends Fragment implements WriteReviewContract
     public void onResume() {
         super.onResume();
 
-        if (mServices == null || mCountries == null) {
-            mPresenter.getServicesAndCountries();
+        if (mActivities == null || mCountries == null) {
+            mPresenter.getActivitiesAndCountries();
         } else {
-            showServices(mServices);
+            showActivities(mActivities);
             showCountries(mCountries);
-            mSpService.setSelection(mServicePos, false);
+            mSpActivity.setSelection(mActivityPos, false);
             mSpCountry.setSelection(mCountryPos, false);
         }
 
-        if (mActivities != null) {
-            showActivities(mActivities);
-            mSpActivity.setSelection(mActivityPos, false);
-        }
-
-        if (mCompanies != null) {
-            showCompanies(mCompanies);
-            mSpCompany.setSelection(mCompanyPos, false);
+        if (mServices != null) {
+            showServices(mServices);
+            mSpService.setSelection(mServicePos, false);
         }
 
         if (mStates != null) {
@@ -184,7 +180,7 @@ public class WriteReviewFragment extends Fragment implements WriteReviewContract
     public void onStop() {
         super.onStop();
         mActivityPos = mSpActivity.getSelectedItemPosition();
-        mCompanyPos = mSpCompany.getSelectedItemPosition();
+        //mCompanyPos = mSpCompany.getSelectedItemPosition();
         mServicePos = mSpService.getSelectedItemPosition();
         mCountryPos = mSpCountry.getSelectedItemPosition();
         mStatePos = mSpState.getSelectedItemPosition();
@@ -270,7 +266,7 @@ public class WriteReviewFragment extends Fragment implements WriteReviewContract
 
     @Override
     public void initAdapters() {
-        List<String> list = new ArrayList<>();
+        ArrayList<String> list = new ArrayList<>();
         list.add("Actividad");
         mAdapterActivity = new ArrayAdapter<>(
                 getActivity(), android.R.layout.simple_spinner_item, list);
@@ -278,11 +274,10 @@ public class WriteReviewFragment extends Fragment implements WriteReviewContract
         mSpActivity.setAdapter(mAdapterActivity);
 
         list = new ArrayList<>();
-        list.add("Empresa");
         mAdapterCompany = new ArrayAdapter<>(
-                getActivity(), android.R.layout.simple_spinner_item, list);
-        mAdapterCompany.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        mSpCompany.setAdapter(mAdapterCompany);
+                getActivity(), android.R.layout.simple_list_item_1, list);
+        mAdapterCompany.setNotifyOnChange(true);
+        mTvCompanies.setAdapter(mAdapterCompany);
 
         list = new ArrayList<>();
         list.add("Servicio");
@@ -319,9 +314,10 @@ public class WriteReviewFragment extends Fragment implements WriteReviewContract
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int pos, long l) {
                 if (pos > 0) {
-                    mActivityId = Integer.parseInt(mActivities.get(pos - 1).getIdActivity());
+                    mActivityId = mActivities.get(pos - 1).getIdActivity();
+                    Log.i("activity id", mActivityId);
                 } else {
-                    mActivityId = 0;
+                    mActivityId = "";
                 }
 
                 mActivityPos = pos;
@@ -333,22 +329,41 @@ public class WriteReviewFragment extends Fragment implements WriteReviewContract
             }
         });
 
-        mSpCompany.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        mTvCompanies.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int length) {
+                if (length >= 3) {
+                    String query = mTvCompanies.getText().toString();
+                    mAdapterCompany.clear();
+                    mAdapterCompany.add(query + " (Crear Empresa)");
+                    mAdapterActivity.notifyDataSetChanged();
+
+                    if (!mActivityId.isEmpty()) {
+                        mPresenter.getCompanies(mActivityId, query);
+                    }
+                } else {
+                    mAdapterCompany.clear();
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
+
+        mTvCompanies.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int pos, long l) {
                 if (pos > 0) {
-                    Hospital company = mCompanies.get(pos - 1);
-                    mCompanyId = company.getIdCompany();
-
-                    ArrayList<Activity> activities = new ArrayList<>();
-                    Activity act = new Activity();
-                    act.setIdActivity(company.getIdActivity());
-                    act.setActivityName(company.getActivityName());
-                    activities.add(act);
-                    showActivities(activities);
-                    mSpActivity.setSelection(0, true);
+                    mCompanyId = mCompanies.get(pos - 1).getIdCompany()+"";
                 } else {
-                    mCompanyId = 0;
+                    mCompanyId = "";
                 }
 
                 mCompanyPos = pos;
@@ -364,9 +379,9 @@ public class WriteReviewFragment extends Fragment implements WriteReviewContract
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int pos, long l) {
                 if (pos > 0) {
-                    mServiceId = mServices.get(pos - 1).getIdCompaniesServices();
+                    mServiceId = mServices.get(pos - 1).getIdCompaniesServices()+"";
                 } else {
-                    mServiceId = 0;
+                    mServiceId = "";
                 }
 
                 mServicePos = pos;
@@ -383,9 +398,19 @@ public class WriteReviewFragment extends Fragment implements WriteReviewContract
             public void onItemSelected(AdapterView<?> adapterView, View view, int pos, long l) {
                 if (pos > 0) {
                     mCountryId = mCountries.get(pos - 1).getCountryid();
-                    mCountryPos = pos;
-                    mPresenter.getStatesAndCompanies(mCountryId, mStateId, mCityId);
+                    Log.i("country id", mCountryId+"");
+                    mPresenter.getStates(mCountryId);
+                    mStateId = "";
+                    mStatePos = 0;
+                    mCityId = "";
+                    mCityPos = 0;
+                    mSpState.setSelection(0, false);
+                    mSpCity.setSelection(0, false);
+                } else {
+                    mCountryId = "";
                 }
+
+                mCountryPos = pos;
             }
 
             @Override
@@ -399,15 +424,19 @@ public class WriteReviewFragment extends Fragment implements WriteReviewContract
             public void onItemSelected(AdapterView<?> adapterView, View view, int pos, long l) {
                 if (pos > 0) {
                     mStateId = mStates.get(pos - 1).getStateid();
-                    mStatePos = pos;
-                    mPresenter.getCitiesAndCompanies(mCountryId, mStateId, mCityId);
+                    Log.i("state id", mStateId+"");
+
+                    if (!mCountryId.isEmpty()) mPresenter.getCities(mCountryId, mStateId);
+                    else showCountryNotSelectedError();
+
+                    mCityId = "";
+                    mCityPos = 0;
+                    mSpCity.setSelection(0, false);
                 } else {
                     mStateId = "";
                 }
 
-                if (mCountryId != null) {
-
-                }
+                mStatePos = pos;
             }
 
             @Override
@@ -421,8 +450,8 @@ public class WriteReviewFragment extends Fragment implements WriteReviewContract
             public void onItemSelected(AdapterView<?> adapterView, View view, int pos, long l) {
                 if (pos > 0) {
                     mCityId = mCities.get(pos - 1).getCityid();
+                    Log.i("city id", mCityId+"");
                     mCityPos = pos;
-                    mPresenter.getCompanies(mCountryId, mStateId, mCityId);
                 } else {
                     mCityId = "";
                 }
@@ -461,7 +490,7 @@ public class WriteReviewFragment extends Fragment implements WriteReviewContract
     @Override
     public void clearListeners() {
         mSpActivity.setOnItemSelectedListener(null);
-        mSpCompany.setOnItemSelectedListener(null);
+        mTvCompanies.setOnItemSelectedListener(null);
         mSpService.setOnItemSelectedListener(null);
         mSpCountry.setOnItemSelectedListener(null);
         mSpState.setOnItemSelectedListener(null);
@@ -475,19 +504,18 @@ public class WriteReviewFragment extends Fragment implements WriteReviewContract
     @Override
     public void showActivities(ArrayList<Activity> activities) {
         mActivities = activities;
-        mAdapterActivity.clear();
-        mAdapterActivity.add("Actividad");
         for (Activity a : activities) mAdapterActivity.add(a.getActivityName());
     }
 
     @Override
     public void showCompanies(ArrayList<Hospital> companies) {
         mCompanies = companies;
-        mAdapterCompany.clear();
-        mAdapterCompany.add("Empresa");
+        Log.i("size", companies.size()+"");
         for (Hospital h : companies) {
             mAdapterCompany.add(h.getCompanyName());
+            mAdapterActivity.notifyDataSetChanged();
         }
+        mTvCompanies.showDropDown();
     }
 
     @Override
@@ -632,6 +660,11 @@ public class WriteReviewFragment extends Fragment implements WriteReviewContract
     public void showSendReviewSuccess() {
         Toast.makeText(getActivity(), getString(R.string.send_review_success), Toast.LENGTH_SHORT).show();
         getActivity().onBackPressed();
+    }
+
+    @Override
+    public void showCountryNotSelectedError() {
+        Toast.makeText(getActivity(), getString(R.string.country_not_selected_error), Toast.LENGTH_SHORT).show();
     }
 
     @Override

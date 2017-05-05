@@ -49,17 +49,19 @@ public interface WriteReviewContract {
         void showUserNotLoggedError();
         void showMenu();
         void showSendReviewSuccess();
+        void showCountryNotSelectedError();
         void showNetworkError();
         void showNetworkFailedError();
     }
 
     interface Presenter extends BasePresenter<View> {
 
+        void getActivitiesAndCountries();
         void getServicesAndCountries();
-        void getCompanies(String countryId, String stateId, String cityId);
+        void getCompanies(String activityId, String query);
         void getCountries();
-        void getStatesAndCompanies(String countryId, String stateId, String cityId);
-        void getCitiesAndCompanies(String countryId, String stateId, String cityId);
+        void getStates(String countryId);
+        void getCities(String countryId, String stateId);
         boolean validate(NewReview review);
         void sendReview(NewReview review);
     }

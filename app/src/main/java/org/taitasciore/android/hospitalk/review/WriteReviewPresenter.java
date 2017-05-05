@@ -2,15 +2,15 @@ package org.taitasciore.android.hospitalk.review;
 
 import android.util.Log;
 
+import org.taitasciore.android.model.Activity;
+import org.taitasciore.android.model.Hospital;
 import org.taitasciore.android.model.LocationResponse;
 import org.taitasciore.android.model.NewReview;
 import org.taitasciore.android.model.SearchResponse;
-import org.taitasciore.android.model.SendReviewResponse;
 import org.taitasciore.android.model.ServiceResponse;
 import org.taitasciore.android.model.WriteReviewData;
 import org.taitasciore.android.network.HospitalkService;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
@@ -21,7 +21,6 @@ import io.reactivex.functions.BiFunction;
 import io.reactivex.observers.DisposableObserver;
 import io.reactivex.schedulers.Schedulers;
 import okhttp3.OkHttpClient;
-import okhttp3.ResponseBody;
 import retrofit2.Response;
 
 /**
@@ -32,6 +31,7 @@ public class WriteReviewPresenter implements WriteReviewContract.Presenter {
 
     private WriteReviewContract.View mView;
     private HospitalkService mService;
+    private boolean mRequestInProgress;
 
     public WriteReviewPresenter(WriteReviewContract.View view) {
         bindView(view);
@@ -51,6 +51,64 @@ public class WriteReviewPresenter implements WriteReviewContract.Presenter {
     @Override
     public void unbindView() {
         mView = null;
+    }
+
+    @Override
+    public void getActivitiesAndCountries() {
+        Observable<Response<ArrayList<Activity>>> activities = mService.getActivities();
+        Observable<Response<ArrayList<LocationResponse.Country>>> countries = mService.getCountries();
+
+        mView.showProgress();
+
+        Observable.zip(activities, countries, new BiFunction<Response<ArrayList<Activity>>,
+                Response<ArrayList<LocationResponse.Country>>, Response<WriteReviewData>>() {
+            @Override
+            public Response<WriteReviewData> apply(
+                    @NonNull Response<ArrayList<Activity>> activities,
+                    @NonNull Response<ArrayList<LocationResponse.Country>> countries) throws Exception {
+                if (activities.isSuccessful() && countries.isSuccessful()) {
+                    WriteReviewData data = new WriteReviewData();
+                    data.setActivities(activities.body());
+                    data.setCountries(countries.body());
+                    return Response.success(data);
+                } else {
+                    return Response.error(400, null);
+                }
+            }
+        })
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new DisposableObserver<Response<WriteReviewData>>() {
+                    @Override
+                    public void onNext(Response<WriteReviewData> response) {
+                        Log.i("result code", response.code()+"");
+
+                        if (mView != null) {
+                            mView.hideProgress();
+
+                            if (response.isSuccessful()) {
+                                WriteReviewData data = response.body();
+                                mView.showActivities(data.getActivities());
+                                mView.showCountries(data.getCountries());
+                            } else {
+                                mView.showNetworkFailedError();
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        if (mView != null) {
+                            mView.hideProgress();
+                            mView.showNetworkError();
+                        }
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
     }
 
     @Override
@@ -112,25 +170,20 @@ public class WriteReviewPresenter implements WriteReviewContract.Presenter {
     }
 
     @Override
-    public void getCompanies(String countryId, String stateId, String cityId) {
-        Log.i("debug", "fetching companies for country " + countryId + " state " +
-                stateId + " city " + cityId + "...");
+    public void getCompanies(String activityId, String query) {
+        Log.i("debug", "fetching companies with activity " + activityId + "...");
 
-        mView.showProgress();
-
-        mService.getCompanies(countryId, stateId, cityId)
+        mService.getCompaniesWithActivity(activityId, query)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new DisposableObserver<Response<SearchResponse>>() {
+                .subscribe(new DisposableObserver<Response<ArrayList<Hospital>>>() {
                     @Override
-                    public void onNext(Response<SearchResponse> response) {
-                        Log.i("result code", response.code()+"");
+                    public void onNext(Response<ArrayList<Hospital>> response) {
+                        Log.i("result code", response.code() + "");
 
                         if (mView != null) {
-                            mView.hideProgress();
-
                             if (response.isSuccessful()) {
-                                mView.showCompanies(response.body().getCompanies());
+                                mView.showCompanies(response.body());
                             } else {
                                 mView.showNetworkFailedError();
                             }
@@ -140,7 +193,6 @@ public class WriteReviewPresenter implements WriteReviewContract.Presenter {
                     @Override
                     public void onError(Throwable e) {
                         if (mView != null) {
-                            mView.hideProgress();
                             mView.showNetworkError();
                         }
                     }
@@ -190,45 +242,24 @@ public class WriteReviewPresenter implements WriteReviewContract.Presenter {
     }
 
     @Override
-    public void getStatesAndCompanies(String countryId, String stateId, String cityId) {
-        Log.i("debug", "fetching states and companies for country " + countryId + "...");
-
-        Observable<Response<ArrayList<LocationResponse.State>>> obsStates = mService.getStates(countryId);
-        Observable<Response<SearchResponse>> obsCompanies = mService.getCompanies(countryId, stateId, cityId);
+    public void getStates(String countryId) {
+        Log.i("debug", "fetching states for country " + countryId + "...");
 
         mView.showProgress();
 
-        Observable.zip(obsStates, obsCompanies, new BiFunction<Response<ArrayList<LocationResponse.State>>,
-                Response<SearchResponse>, Response<WriteReviewData>>() {
-            @Override
-            public Response<WriteReviewData> apply(@NonNull Response<ArrayList<LocationResponse.State>> states,
-                                         @NonNull Response<SearchResponse> searchResponse) throws Exception {
-                if (states.isSuccessful() && searchResponse.isSuccessful()) {
-                    WriteReviewData data = new WriteReviewData();
-                    data.setStates(states.body());
-                    data.setCompanies(searchResponse.body().getCompanies());
-                    return Response.success(data);
-                } else {
-                    return Response.error(400, null);
-                }
-            }
-        })
+        mService.getStates(countryId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new DisposableObserver<Response<WriteReviewData>>() {
+                .subscribe(new DisposableObserver<Response<ArrayList<LocationResponse.State>>>() {
                     @Override
-                    public void onNext(Response<WriteReviewData> response) {
+                    public void onNext(Response<ArrayList<LocationResponse.State>> response) {
                         Log.i("result code", response.code()+"");
 
                         if (mView != null) {
                             mView.hideProgress();
 
-                            if (response.isSuccessful()) {
-                                mView.showStates(response.body().getStates());
-                                mView.showCompanies(response.body().getCompanies());
-                            } else {
-                                mView.showNetworkFailedError();
-                            }
+                            if (response.isSuccessful()) mView.showStates(response.body());
+                            else mView.showNetworkFailedError();
                         }
                     }
 
@@ -248,46 +279,24 @@ public class WriteReviewPresenter implements WriteReviewContract.Presenter {
     }
 
     @Override
-    public void getCitiesAndCompanies(String countryId, String stateId, String cityId) {
-        Log.i("debug", "fetching cities and companies for country " + countryId +
-                " and state " + stateId + "...");
-
-        Observable<Response<ArrayList<LocationResponse.City>>> obsCities = mService.getCities(countryId, stateId);
-        Observable<Response<SearchResponse>> obsCompanies = mService.getCompanies(countryId, stateId, cityId);
+    public void getCities(String countryId, String stateId) {
+        Log.i("debug", "fetching cities for country " + countryId + " and state " + stateId + "...");
 
         mView.showProgress();
 
-        Observable.zip(obsCities, obsCompanies, new BiFunction<Response<ArrayList<LocationResponse.City>>,
-                Response<SearchResponse>, Response<WriteReviewData>>() {
-            @Override
-            public Response<WriteReviewData> apply(@NonNull Response<ArrayList<LocationResponse.City>> cities,
-                                         @NonNull Response<SearchResponse> searchResponse) throws Exception {
-                if (cities.isSuccessful() && searchResponse.isSuccessful()) {
-                    WriteReviewData data = new WriteReviewData();
-                    data.setCities(cities.body());
-                    data.setCompanies(searchResponse.body().getCompanies());
-                    return Response.success(data);
-                } else {
-                    return Response.error(400, null);
-                }
-            }
-        })
+        mService.getCities(countryId, stateId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new DisposableObserver<Response<WriteReviewData>>() {
+                .subscribe(new DisposableObserver<Response<ArrayList<LocationResponse.City>>>() {
                     @Override
-                    public void onNext(Response<WriteReviewData> response) {
+                    public void onNext(Response<ArrayList<LocationResponse.City>> response) {
                         Log.i("result code", response.code()+"");
 
                         if (mView != null) {
                             mView.hideProgress();
 
-                            if (response.isSuccessful()) {
-                                mView.showCities(response.body().getCities());
-                                mView.showCompanies(response.body().getCompanies());
-                            } else {
-                                mView.showNetworkFailedError();
-                            }
+                            if (response.isSuccessful()) mView.showCities(response.body());
+                            else mView.showNetworkFailedError();
                         }
                     }
 
@@ -310,15 +319,15 @@ public class WriteReviewPresenter implements WriteReviewContract.Presenter {
     public boolean validate(NewReview review) {
         boolean valid = true;
 
-        if (review.getActivity() == 0) {
+        if (review.getActivity().isEmpty()) {
             mView.showActivityError();
             valid = false;
         }
-        if (review.getCompany() == 0) {
+        if (review.getCompany().isEmpty()) {
             mView.showCompanyError();
             valid = false;
         }
-        if (review.getService() == 0) {
+        if (review.getService().isEmpty()) {
             mView.showServiceError();
             valid = false;
         }
@@ -341,6 +350,8 @@ public class WriteReviewPresenter implements WriteReviewContract.Presenter {
     @Override
     public void sendReview(NewReview review) {
         if (!validate(review)) return;
+
+        /*
 
         mView.showProgress();
 
@@ -381,6 +392,6 @@ public class WriteReviewPresenter implements WriteReviewContract.Presenter {
 
                     }
                 });
-
+                */
     }
 }

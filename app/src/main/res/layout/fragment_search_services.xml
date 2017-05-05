@@ -182,7 +182,7 @@
                         android:layout_marginRight="@dimen/margin">
 
                         <Spinner
-                            android:id="@+id/spRating"
+                            android:id="@+id/spOrder"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_alignParentTop="true"
@@ -231,7 +231,7 @@
                     android:orientation="horizontal">
 
                     <Spinner
-                        android:id="@+id/spOption"
+                        android:id="@+id/spRank"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/margin"

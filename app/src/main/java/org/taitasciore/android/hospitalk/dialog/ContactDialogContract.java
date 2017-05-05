@@ -16,7 +16,9 @@ public interface ContactDialogContract {
         void hideProgress();
         void showNameError();
         void showEmailError();
+        void showEmailFormatError();
         void showPhoneError();
+        void showPhoneLengthError();
         void showCommentError();
     }
 

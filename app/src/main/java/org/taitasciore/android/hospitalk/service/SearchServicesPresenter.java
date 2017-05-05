@@ -82,6 +82,12 @@ public class SearchServicesPresenter implements SearchServicesContract.Presenter
     @Override
     public void searchServices(String countryId, String cityId, String serviceId,
                                 String reviewOrder, String reviewRank, final int offset, String query) {
+        Log.i("country", countryId);
+        Log.i("city", cityId);
+        Log.i("service", serviceId);
+        Log.i("order", reviewOrder);
+        Log.i("rank", reviewRank);
+        Log.i("query", query);
         Log.i("debug", "fetching services...");
 
         mView.showProgress();
@@ -103,13 +109,18 @@ public class SearchServicesPresenter implements SearchServicesContract.Presenter
                                 ArrayList<City> cities = response.body().getCities();
                                 ArrayList<ServiceFilter> servicesFilter = response.body().getServicesFilter();
 
-                                mView.showCities(cities);
-                                mView.showServicesFilter(servicesFilter);
-                                if (offset == 0) mView.showServices(services);
-                                else mView.addServices(services);
+                                if (cities != null) mView.showCities(cities);
+                                if (servicesFilter != null) mView.showServicesFilter(servicesFilter);
+
+                                if (offset == 0 && services != null) {
+                                    mView.showServices(services);
+                                } else if (services != null) {
+                                    mView.addServices(services);
+                                }
+
                                 mView.incrementOffset();
 
-                                if (services.size() > 0) mView.showFab();
+                                if (services != null && services.size() > 0) mView.showFab();
                                 else mView.showNoResultsMessage();
                             } else {
                                 mView.showNetworkFailedError();

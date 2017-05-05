@@ -4,7 +4,6 @@ import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -33,7 +32,7 @@ public class ContactDialogFragment extends DialogFragment implements ContactDial
 
     @BindView(R.id.spType) Spinner mSpType;
     @BindView(R.id.etName) EditText mEtName;
-    @BindView(R.id.etMail) EditText mEtMail;
+    @BindView(R.id.etMail) EditText mEtEmail;
     @BindView(R.id.etCompany) EditText mEtCompany;
     @BindView(R.id.etPhone) EditText mEtPhone;
     @BindView(R.id.etComment) EditText mEtComment;
@@ -65,7 +64,7 @@ public class ContactDialogFragment extends DialogFragment implements ContactDial
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                         NewContact contact = new NewContact();
                         contact.setName(mEtName.getText().toString());
-                        contact.setEmail(mEtMail.getText().toString());
+                        contact.setEmail(mEtEmail.getText().toString());
                         contact.setComment(mEtCompany.getText().toString());
                         contact.setPhone(mEtPhone.getText().toString());
                         contact.setComment(mEtComment.getText().toString());
@@ -105,21 +104,31 @@ public class ContactDialogFragment extends DialogFragment implements ContactDial
 
     @Override
     public void showNameError() {
-
+        mEtName.setError(getString(R.string.signup_error));
     }
 
     @Override
     public void showEmailError() {
+        mEtEmail.setError(getString(R.string.signup_error));
+    }
 
+    @Override
+    public void showEmailFormatError() {
+        mEtEmail.setError(getString(R.string.email_format_error));
     }
 
     @Override
     public void showPhoneError() {
+        mEtPhone.setError(getString(R.string.signup_error));
+    }
 
+    @Override
+    public void showPhoneLengthError() {
+        mEtPhone.setError("El campo debe tener al menos 9 caracteres");
     }
 
     @Override
     public void showCommentError() {
-
+        mEtComment.setError(getString(R.string.signup_error));
     }
 }

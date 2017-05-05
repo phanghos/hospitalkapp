@@ -7,17 +7,18 @@ package org.taitasciore.android.model;
 public class NewReview {
 
     private int user;
-    private int activity;
-    private int company;
-    private int service;
+    private String activity;
+    private String company;
+    private String service;
     private String country;
-    private int state;
-    private int city;
+    private String state;
+    private String city;
     private String title;
     private String description;
-    private int value;
     private String image;
+    private int value;
     private boolean acceptedConditions;
+
 
     public int getUser() {
         return user;
@@ -27,27 +28,27 @@ public class NewReview {
         this.user = user;
     }
 
-    public int getActivity() {
+    public String getActivity() {
         return activity;
     }
 
-    public void setActivity(int activity) {
+    public void setActivity(String activity) {
         this.activity = activity;
     }
 
-    public int getCompany() {
+    public String getCompany() {
         return company;
     }
 
-    public void setCompany(int company) {
+    public void setCompany(String company) {
         this.company = company;
     }
 
-    public int getService() {
+    public String getService() {
         return service;
     }
 
-    public void setService(int service) {
+    public void setService(String service) {
         this.service = service;
     }
 
@@ -59,19 +60,19 @@ public class NewReview {
         this.country = country;
     }
 
-    public int getState() {
+    public String getState() {
         return state;
     }
 
-    public void setState(int state) {
+    public void setState(String state) {
         this.state = state;
     }
 
-    public int getCity() {
+    public String getCity() {
         return city;
     }
 
-    public void setCity(int city) {
+    public void setCity(String city) {
         this.city = city;
     }
 
@@ -91,20 +92,20 @@ public class NewReview {
         this.description = description;
     }
 
-    public int getValue() {
-        return value;
-    }
-
-    public void setValue(int value) {
-        this.value = value;
-    }
-
     public String getImage() {
         return image;
     }
 
     public void setImage(String image) {
         this.image = image;
+    }
+
+    public int getValue() {
+        return value;
+    }
+
+    public void setValue(int value) {
+        this.value = value;
     }
 
     public boolean getAcceptedConditions() {

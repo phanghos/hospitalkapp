@@ -2,6 +2,7 @@ package org.taitasciore.android.hospitalk.dialog;
 
 import android.util.Log;
 
+import org.apache.commons.validator.routines.EmailValidator;
 import org.taitasciore.android.model.NewContact;
 import org.taitasciore.android.network.HospitalkService;
 
@@ -41,9 +42,21 @@ public class ContactDialogPresenter implements ContactDialogContract.Presenter {
             valid = false;
             mView.showEmailError();
         }
+        if (contact.getEmail() != null && !contact.getEmail().isEmpty()) {
+            EmailValidator validator = EmailValidator.getInstance();
+
+            if (!validator.isValid(contact.getEmail())) {
+                valid = false;
+                mView.showEmailError();
+            }
+        }
         if (contact.getPhone().isEmpty()) {
             valid = false;
             mView.showPhoneError();
+        }
+        if (contact.getPhone() != null && contact.getPhone().length() < 9) {
+            valid = false;
+            mView.showPhoneLengthError();
         }
         if (contact.getComment().isEmpty()) {
             valid = false;

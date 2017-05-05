@@ -101,9 +101,9 @@ public class SearchServicesFragment extends Fragment implements SearchServicesCo
 
     @BindView(R.id.spCountry) SearchableSpinner mSpCountry;
     @BindView(R.id.spCity) SearchableSpinner mSpCity;
-    @BindView(R.id.spRating) Spinner mSpRating;
+    @BindView(R.id.spOrder) Spinner mSpOrder;
     @BindView(R.id.spActivity) Spinner mSpActivity;
-    @BindView(R.id.spOption) Spinner mSpOption;
+    @BindView(R.id.spRank) Spinner mSpRank;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -151,8 +151,8 @@ public class SearchServicesFragment extends Fragment implements SearchServicesCo
     public void onResume() {
         super.onResume();
 
-        mSpOption.setSelection(mReviewOrderPos, false);
-        mSpRating.setSelection(mReviewRankPos, false);
+        mSpOrder.setSelection(mReviewOrderPos, false);
+        mSpRank.setSelection(mReviewRankPos, false);
 
         if (mCountries == null) {
             mPresenter.getCountries();
@@ -266,7 +266,7 @@ public class SearchServicesFragment extends Fragment implements SearchServicesCo
         mAdapterRatings = new ArrayAdapter<>(
                 getActivity(), android.R.layout.simple_spinner_item, ratings);
         mAdapterRatings.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        mSpRating.setAdapter(mAdapterRatings);
+        mSpOrder.setAdapter(mAdapterRatings);
 
         String[] option = {
                 getString(R.string.valoracion),
@@ -277,7 +277,7 @@ public class SearchServicesFragment extends Fragment implements SearchServicesCo
         mAdapterOptions = new ArrayAdapter<>(
                 getActivity(), android.R.layout.simple_spinner_item, option);
         mAdapterOptions.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        mSpOption.setAdapter(mAdapterOptions);
+        mSpRank.setAdapter(mAdapterOptions);
 
         mAdapter = new SearchServiceAdapter(getActivity());
         mRecyclerView.setAdapter(mAdapter);
@@ -314,17 +314,22 @@ public class SearchServicesFragment extends Fragment implements SearchServicesCo
         mSpCountry.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int pos, long l) {
+                mOffset = 0;
+                mCountryPos = pos;
+
                 if (pos > 0) {
                     mChangedCountry = true;
-                    mOffset = 0;
                     mCountryId = mCountries.get(pos - 1).getCountryid();
-                    mCountryPos = pos;
-                    mCityId = "";
-                    mCityPos = 0;
-                    mSpCity.setSelection(0, false);
                     Log.i("country id", mCountryId);
                     search();
+                } else {
+                    mChangedCountry = true;
+                    mCountryId = "";
                 }
+
+                mCityId = "";
+                mCityPos = 0;
+                mSpCity.setSelection(0, false);
             }
 
             @Override
@@ -336,12 +341,22 @@ public class SearchServicesFragment extends Fragment implements SearchServicesCo
         mSpCity.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int pos, long l) {
+                mOffset = 0;
+                mCityPos = pos;
+
                 if (pos > 0) {
-                    mOffset = 0;
-                    mCityId = mCities.get(pos - 1).getIdCity();
-                    mCityPos = pos;
-                    Log.i("city id", mCityId + "");
-                    search();
+                    if (mCountryId != null && !mCountryId.isEmpty()) {
+                        mCityId = mCities.get(pos - 1).getIdCity();
+                        Log.i("city id", mCityId + "");
+                        if (!mChangedCountry) search();
+                    } else {
+                        showCountryNotSelectedError();
+                    }
+                } else {
+                    mCityId = "";
+                    if (mCountryId != null && !mCountryId.isEmpty() && !mChangedCountry) {
+                        search();
+                    }
                 }
             }
 
@@ -354,12 +369,20 @@ public class SearchServicesFragment extends Fragment implements SearchServicesCo
         mSpActivity.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int pos, long l) {
+                mOffset = 0;
+                mActivityPos = pos;
+
                 if (pos > 0) {
-                    mOffset = 0;
-                    mActivityId = mServicesFilter.get(pos - 1).getIdService();
-                    mActivityPos = pos;
-                    Log.i("service filter id", mActivityId + "");
-                    search();
+                    if (mCountryId != null && !mCountryId.isEmpty()) {
+                        mActivityId = mServicesFilter.get(pos - 1).getIdService();
+                        Log.i("activity id", mActivityId + "");
+                        search();
+                    } else {
+                        showCountryNotSelectedError();
+                    }
+                } else {
+                    mActivityId = "";
+                    if (mCountryId != null && !mCountryId.isEmpty()) search();
                 }
             }
 
@@ -369,32 +392,49 @@ public class SearchServicesFragment extends Fragment implements SearchServicesCo
             }
         });
 
-        mSpRating.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        mSpOrder.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int pos, long l) {
+                mOffset = 0;
+                mReviewOrderPos = pos;
+
                 if (pos > 0) {
-                    mOffset = 0;
+                    if (mCountryId != null && !mCountryId.isEmpty()) {
+                        if (pos == 1) mReviewOrder = "ASC";
+                        else mReviewOrder = "DESC";
+                        search();
+                    } else {
+                        showCountryNotSelectedError();
+                    }
+                } else {
+                    mReviewOrder = "";
+                    if (mCountryId != null && !mCountryId.isEmpty()) search();
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+
+        mSpRank.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int pos, long l) {
+                mOffset = 0;
+                mReviewRankPos = pos;
+
+                if (pos > 0) {
                     mReviewRank = pos+"";
-                    mReviewRankPos = pos;
-                    search();
-                }
-            }
 
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-
-            }
-        });
-
-        mSpOption.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int pos, long l) {
-                if (pos > 0) {
-                    mOffset = 0;
-                    if (pos == 1) mReviewOrder = "ASC";
-                    else mReviewOrder = "DESC";
-                    mReviewOrderPos = pos;
-                    search();
+                    if (mCountryId != null) {
+                        search();
+                    } else {
+                        showCountryNotSelectedError();
+                    }
+                } else {
+                    mReviewRank = "";
+                    if (mCountryId != null && !mCountryId.isEmpty()) search();
                 }
             }
 
@@ -421,10 +461,12 @@ public class SearchServicesFragment extends Fragment implements SearchServicesCo
 
                 mSpCountry.setSelection(0, false);
                 mSpCity.setSelection(0, false);
-                mSpRating.setSelection(0, false);
+                mSpOrder.setSelection(0, false);
                 mSpActivity.setSelection(0, false);
-                mSpOption.setSelection(0, false);
+                mSpRank.setSelection(0, false);
                 mTvSearch.setText("");
+                mAdapter = new SearchServiceAdapter(getActivity());
+                mRecyclerView.setAdapter(mAdapter);
             }
         });
     }
@@ -434,9 +476,9 @@ public class SearchServicesFragment extends Fragment implements SearchServicesCo
         mCbCloseServices.setOnCheckedChangeListener(null);
         mSpCountry.setOnItemSelectedListener(null);
         mSpCity.setOnItemSelectedListener(null);
-        mSpOption.setOnItemSelectedListener(null);
+        mSpRank.setOnItemSelectedListener(null);
         mSpActivity.setOnItemSelectedListener(null);
-        mSpRating.setOnItemSelectedListener(null);
+        mSpOrder.setOnItemSelectedListener(null);
         mTvResetFilters.setOnClickListener(null);
     }
 
@@ -448,7 +490,20 @@ public class SearchServicesFragment extends Fragment implements SearchServicesCo
     @Override
     public void showCountries(ArrayList<LocationResponse.Country> countries) {
         mCountries = countries;
-        for (LocationResponse.Country c : countries) mAdapterCountries.add(c.getCountryname());
+        for (LocationResponse.Country c : countries) {
+            if (c != null && c.getCountryname() != null && !c.getCountryname().isEmpty()) {
+                mAdapterCountries.add(c.getCountryname());
+            }
+        }
+        if (mCountryPos == 0 && mCountries != null) {
+            EventBus.getDefault().post(new RequestCountryEvent());
+            int pos = getCountryPosition(mCountryId);
+
+            if (pos > -1) {
+                mCountryPos = pos;
+                mSpCountry.setSelection(pos + 1, false);
+            }
+        }
     }
 
     @Override
@@ -456,7 +511,11 @@ public class SearchServicesFragment extends Fragment implements SearchServicesCo
         mCities = cities;
         mAdapterCities.clear();
         mAdapterCities.add("Ciudad");
-        for (City c : cities) mAdapterCities.add(c.getCityName());
+        for (City c : cities) {
+            if (c != null && c.getCityName() != null && !c.getCityName().isEmpty()) {
+                mAdapterCities.add(c.getCityName());
+            }
+        }
 
         if (mChangedCountry) {
 
@@ -468,7 +527,11 @@ public class SearchServicesFragment extends Fragment implements SearchServicesCo
         mServicesFilter = servicesFilter;
         mAdapterActivities.clear();
         mAdapterActivities.add("Servicio");
-        for (ServiceFilter sf : servicesFilter) mAdapterActivities.add(sf.getServiceName());
+        for (ServiceFilter sf : servicesFilter) {
+            if (sf != null && sf.getServiceName() != null && !sf.getServiceName().isEmpty()) {
+                mAdapterActivities.add(sf.getServiceName());
+            }
+        }
 
         if (mChangedCountry) {
 
@@ -487,7 +550,9 @@ public class SearchServicesFragment extends Fragment implements SearchServicesCo
     public void addServices(ArrayList<ServiceResponse.Service> services) {
         mChangedCountry = false;
         try {
-            for (ServiceResponse.Service s : services) mAdapter.add(s);
+            for (ServiceResponse.Service s : services) {
+                if (s != null) mAdapter.add(s);
+            }
             mServices = mAdapter.getList();
         } catch (ConcurrentModificationException e){}
     }
@@ -503,6 +568,11 @@ public class SearchServicesFragment extends Fragment implements SearchServicesCo
     }
 
     @Override
+    public void showCountryNotSelectedError() {
+        Toast.makeText(getActivity(), getString(R.string.country_not_selected_error), Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
     public void showNetworkError() {
         Toast.makeText(getActivity(), getString(R.string.network_error), Toast.LENGTH_SHORT).show();
     }
@@ -515,8 +585,12 @@ public class SearchServicesFragment extends Fragment implements SearchServicesCo
     @OnClick(R.id.btnSearch) void onSearchClicked() {
         String query = mTvSearch.getText().toString();
         if (!query.isEmpty()) {
-            mQuery = query;
-            search();
+            if (mCountryId != null && !mCountryId.isEmpty()) {
+                mQuery = query;
+                search();
+            } else {
+                showCountryNotSelectedError();
+            }
         }
     }
 

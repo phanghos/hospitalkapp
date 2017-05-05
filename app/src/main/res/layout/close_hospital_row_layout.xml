@@ -3,9 +3,7 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingLeft="@dimen/margin_large"
-    android:paddingRight="@dimen/margin_large"
-    android:paddingBottom="@dimen/margin_large">
+    android:padding="@dimen/margin_large">
 
     <TextView
         android:id="@+id/tvNombreHospital"
@@ -14,7 +12,7 @@
         android:layout_centerHorizontal="true"
         android:gravity="center_horizontal"
         android:layout_marginBottom="@dimen/margin"
-        android:textSize="@dimen/text_size_normal"
+        android:textSize="@dimen/text_size_large"
         android:textColor="@color/colorPrimaryText"
         fontPath="OpenSans-Bold.ttf" />
 

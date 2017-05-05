@@ -55,7 +55,7 @@ public class CloseHospitalAdapter extends RecyclerView.Adapter<CloseHospitalAdap
     @Override
     public void onBindViewHolder(HospitalVH holder, int position) {
         final Hospital h = mHospitals.get(position);
-        holder.name.setText(h.getComapnyName());
+        holder.name.setText(h.getCompanyName());
 
         int textColor = -1;
         String type = h.getType();
